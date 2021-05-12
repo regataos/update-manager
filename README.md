@@ -1,2 +1,2 @@
-# update-manager
-Regata OS Update Manager
+# Regata OS Update Manager
+Application created to manage updates on Regata OS.
