@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Regata OS Update</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="./../css/roboto-style.css">
+	<link rel="stylesheet" type="text/css" href="./../css/style.css">
+	<script type="text/javascript" src="./../js/jquery.min.js"></script>
+	<script type="text/javascript" src="./../js/fas-icons.js"></script>
+	<script type="text/javascript" src="./../js/list-updated.js"></script>
+	<script type="text/javascript" src="./../js/settings.js"></script>
+	<script type="text/javascript" src="./../js/translations/language.js"></script>
+
+	<!-- Display content when everything is ready -->
+	<script type="text/javascript">
+		$(function(){
+			$("#loadscreen").fadeOut("slow");
+		});
+
+		$(function(){
+			$(".blocks").fadeIn("slow");
+		});
+	</script>
+</head>
+<body>
+    <div id='loadscreen'></div>
+
+    <div class="main">
+        <div class="div1-settings">
+            <h1>Regata OS Update</h1>
+			<div class="div1-sub">
+            	<div class="apps-settings">Settings</div>
+			</div>
+		</div>
+
+        <div class="div2-settings">
+			<div class="up-apps-auto">Automatic updates</div>
+			<div class="up-apps-auto-select">
+				<select class="selectnav" id="select-update" onchange="select_auto_update()">
+					<option class="selectnav-option up-on" value="1">Update the system automatically</option>
+					<option class="selectnav-option up-off" value="2">Do not update the system automatically</option>
+				</select>
+			</div>
+		</div>
+    </div>
+</body>
+</html>

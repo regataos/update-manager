@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Create cache and configuration directory
+if test ! -e "/tmp/regataos-update"; then
+	mkdir -p "/tmp/regataos-update"
+	chmod 777 "/tmp/regataos-update"
+	chmod 777 /tmp/regataos-update/*
+else
+	chmod 777 "/tmp/regataos-update"
+	chmod 777 /tmp/regataos-update/*
+fi
+
+if test ! -e "/tmp/regataos-update/config"; then
+	ln -sf "$HOME/.config/regataos-update" "/tmp/regataos-update/config"
+fi
+
+# Run application
+if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
+	regataosupdate --disable-gpu /opt/regataos-update-manager
+else
+	regataosupdate /opt/regataos-update-manager
+fi

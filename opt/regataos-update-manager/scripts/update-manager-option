@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# This script saves the settings for the Update Manager application
+
+# Create the application settings folder
+if test ! -e "$HOME/.config/regataos-update"; then
+    mkdir -p "$HOME/.config/regataos-update/"
+fi
+
+if test ! -e "/tmp/regataos-update/config"; then
+    mkdir -p "/tmp/regataos-update/"
+
+    ln -s "$HOME/.config/regataos-update" "/tmp/regataos-update/config"
+fi
+
+# Apply the automatic update configuration
+function update1() {
+    if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
+        sed -i 's/autoupdate=2/autoupdate=1/' "$HOME/.config/regataos-update/regataos-update.conf"
+    else
+        echo "autoupdate=1" > "$HOME/.config/regataos-update/regataos-update.conf"
+    fi
+}
+
+function update2() {
+    if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
+        sed -i 's/autoupdate=1/autoupdate=2/' "$HOME/.config/regataos-update/regataos-update.conf"
+    else
+        echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
+    fi
+}
+
+# Run options
+case $1 in
+    "-update-1") update1
+        ;;
+    "-update-2") update2
+        ;;
+   *) echo "Invalid option!"
+      exit 1
+      ;;
+esac

@@ -1,0 +1,798 @@
+@font-face {
+    font-family: "Oxygen";
+    src: url('fonts/Oxygen.otf') format('truetype');
+}
+
+body {
+    font-family: Oxygen;
+    font-weight: 300;
+	background: #fff;
+    padding: 0;
+    margin: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #b4b6b8;
+}
+::-webkit-scrollbar {
+    width: 10px;
+    background: #b4b6b8;
+}
+::-webkit-scrollbar-thumb {
+    background: #74777a;
+	border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #3fb0e8;
+}
+
+a {
+    color: #2d78d6ff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+img {
+    pointer-events: none;
+}
+
+ul {
+    margin: 0px;
+    list-style-image: url(../images/icon-list.png);
+}
+
+.sidebar {
+    display: block;
+    position: fixed;
+    background-color: #e5e5e5;
+    text-align: left;
+    transition: all 0.3s ease-in-out;
+    top: 0px;
+    left: 0px;
+    width: 56px;
+    height: 100%;
+    padding: 0px 0px 14px 0px;
+    user-select: none;
+    float: left;
+    z-index: 30000;
+    -webkit-box-shadow: 0px 0px 1px 0px rgba(8, 13, 18, 0.34);
+    box-shadow: 0px 0px 1px 0px rgba(8, 13, 18, 0.34);
+}
+
+.ul-sidebar {
+    padding-left: 0px;
+    margin-top: 20px;
+}
+
+.sidebar .ul-sidebar li {
+    cursor: pointer;
+    background-color: #e5e5e5;
+    transition: all 0.3s ease-in-out;
+    color: #d2d5da;
+    font-family: 'Roboto', sans-serif;
+	width: 56px;
+    margin-top: 0px;
+	margin-left: 0px;
+    margin-bottom: 0px;
+	padding-top: 17px;
+	padding-bottom: 17px;
+}
+
+li.historic {
+    display: none;
+}
+
+.link-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+	height: 28px;
+    font-size: 18px;
+	text-decoration: none;
+	color: #333 !important;
+    border-left: 4px solid #e5e5e5;
+    transition: all 0.3s ease-in-out;
+	padding-top: 2px;
+    padding-left: 5px;
+	padding-bottom: 2px;
+}
+
+.sidebar .ul-sidebar li:hover {
+	width: 56px;
+    background-color: #cacaca;
+    color: #d2d5da;
+}
+
+.sidebar .ul-sidebar li:hover .link-items {
+    border-left: 4px solid #2d78d6ff !important;
+}
+
+.link-items:hover {
+    border-left: 4px solid #2d78d6ff !important;
+}
+
+.link-items p {
+	color: #333 !important;
+    font-size: 18px;
+    overflow: hidden;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-bottom: 0px;
+}
+
+.div-iframe {
+    position: fixed;
+    float: left;
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ease-in-out;
+}
+
+.iframe {
+	overflow:hidden;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	height:100%;
+	width:100%;
+	top:0px;
+	left:0px;
+	right:0px;
+    bottom:0px;
+}
+
+/* Display content when everything is ready */
+#loadscreen {
+	display: block;
+	width: 100%;
+	height: 400px;
+	position: absolute;
+	background-color: #fff;
+	z-index: 40000;
+}
+
+.main {
+    max-width: 738px;
+    padding-left: 56px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 60px;
+}
+
+.div1 {
+    position: relative;
+    height: 170px;
+    margin-bottom: 0px;
+}
+
+.div1-sub {
+    position: relative;
+    width: 500px;
+    height: 41px;
+}
+
+.div1-updated {
+    position: relative;
+    height: 140px;
+    margin-bottom: 0px;
+}
+
+.div2 {
+    display: none;
+    position: relative;
+    max-width: 738px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.div2-updated {
+    display: block;
+    position: relative;
+    max-width: 738px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.div2-settings {
+    display: block;
+    position: relative;
+    max-width: 738px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.up-apps-auto{
+    float: left;
+    font-size: 17px;
+    width: 100%;
+}
+
+#select-update {
+    font-size: 14px;
+    font-family: Oxygen;
+    font-weight: 300;
+    width: 300px;
+    height: 33px;
+    padding-left: 5px;
+    margin-top: 5px;
+}
+
+select:focus + .focus {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border: 2px solid var(--select-focus);
+    border-radius: inherit;
+}
+
+h1 {
+    font-size: 26px;
+    font-weight: 300;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.update-all {
+    display: none;
+    position: relative;
+    float: right;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.update-all-button1 {
+    display: block;
+    font: 17px 'Roboto', sans-serif;
+    font-weight: 400;
+    text-align: center;
+    width: 110px;
+    color: #fff;
+    cursor: pointer;
+    background-color: #058a58;
+    background-position: center;
+    border-radius: 0px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    padding: 14px;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.update-all-button1:hover {
+    background: #057148 radial-gradient(circle, transparent 1%, #057148 1%) center/15000%;
+}
+
+.update-all-button1:active {
+    background-color: #089e66;
+    background-size: 100%;
+    transition: all 0s;
+}
+
+.update-all-button2 {
+    display: none;
+    font: 17px 'Roboto', sans-serif;
+    font-weight: 400;
+    text-align: center;
+    width: 110px;
+    color: #333;
+    cursor: pointer;
+    background-color: #ccc;
+    background-position: center;
+    border-radius: 0px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+    padding: 14px;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.update-all-button2:hover {
+    background: #b5b5b5 radial-gradient(circle, transparent 1%, #b5b5b5 1%) center/15000%;
+}
+
+.update-all-button2:active {
+    background-color: #dadada;
+    background-size: 100%;
+    transition: all 0s;
+}
+
+.apps-updated {
+    display: block;
+    position: relative;
+    float: left;
+    width: 600px;
+    font-size: 20px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.apps-settings {
+    display: block;
+    position: relative;
+    float: left;
+    width: 600px;
+    font-size: 20px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.check-up {
+    display: none;
+    position: relative;
+    float: left;
+    width: 600px;
+    font-size: 20px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.loading {
+    display: none;
+    position: relative;
+    width: 110px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.loader {
+    border: 10px solid #eaeaea;
+    border-radius: 50%;
+    border-top: 10px solid #058a58;
+    width: 90px;
+    height: 90px;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+.updated_system {
+    display: none;
+    position: relative;
+    width: 120px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.updated_system_img {
+    display: block;
+    position: relative;
+	height: 120px;
+	width: 120px;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.no-up {
+    display: none;
+    position: relative;
+    float: left;
+    width: 600px;
+    font-size: 20px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.show-updates {
+    position: relative;
+    margin-right: 250px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.yes-up {
+    display: none;
+    position: relative;
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.updated {
+    display: none;
+    position: relative;
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 8px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.updated-img {
+    display: none;
+    position: relative;
+    float: left;
+	height: 22px;
+	width: 22px;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+    margin-top: 8px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.updates-app-number {
+    display: none;
+    position: relative;
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.updates-package-number {
+    float: right;
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.auto-update-status {
+    display: none;
+    position: relative;
+    float: left;
+    width: 500px;
+    color: #575757;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.search-update-status {
+    display: none;
+    position: relative;
+    float: left;
+    width: 500px;
+    color: #575757;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.block-app-fictitious {
+    position: relative;
+    background-color: #fff;
+    width: 738px;
+    height: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.block-app {
+    position: relative;
+    top: 0px;
+    background-color: #f4f4f4;
+    width: 100%;
+    height: 49px;
+    z-index: 30000;
+    margin-bottom: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.block-app:hover {
+    background-color: #eaeaea;
+    -webkit-box-shadow: 0px 0px 1px 0px rgba(8, 13, 18, 0.34);
+    box-shadow: 0px 0px 1px 0px rgba(8, 13, 18, 0.34);
+}
+
+.other-updates {
+    background-color: #f4f4f4;
+    height: 49px;
+    margin-bottom: 50px;
+    padding-top: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 15px;
+    -webkit-transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.other-updates:hover {
+    background-color: #eaeaea;
+    -webkit-box-shadow: 0px 0px 1px 0px rgba(8, 13, 18, 0.34);
+    box-shadow: 0px 0px 1px 0px rgba(8, 13, 18, 0.34);
+}
+
+.app-name {
+    float: left;
+    font-size: 19px;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.app-status-pending, .app-status-download, .app-status-install, .app-status-concluded {
+    display: none;
+    float: left;
+    font-size: 15px;
+    color: #575757;
+    margin-top: 11px;
+    margin-right: 10px;
+}
+
+.app-status-percentage {
+    display: none;
+    float: left;
+    font-size: 15px;
+    margin-top: 11px;
+    color: #575757;
+}
+
+.total-download-percentage {
+    display: none;
+    float: left;
+    font-size: 15px;
+    margin-top: 11px;
+    margin-right: 5px;
+    color: #575757;
+}
+
+.icon-app {
+	display: block;
+	float: left;
+	height: 45px;
+	width: 45px;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+    margin-top: 2px;
+	margin-right: 15px;
+    margin-left: 30px;
+}
+
+.update-app {
+    float: right;
+    cursor: pointer;
+    color: #fff;
+    font: 16px 'Roboto', sans-serif;
+    background-color: #058a58;
+    background-position: center;
+    border-radius: 0px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    padding: 13px;
+    margin-top: 3px;
+    margin-right: 30px;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.update-app:hover {
+    background: #057148 radial-gradient(circle, transparent 1%, #057148 1%) center/15000%;
+}
+
+.update-app:active {
+    background-color: #089e66;
+    background-size: 100%;
+    transition: all 0s;
+}
+
+.update-other {
+    float: right;
+    cursor: pointer;
+    color: #fff;
+    font: 16px 'Roboto', sans-serif;
+    background-color: #058a58;
+    background-position: center;
+    border-radius: 0px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    padding: 13px;
+    margin-top: 3px;
+    margin-right: 30px;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.update-other:hover {
+    background: #057148 radial-gradient(circle, transparent 1%, #057148 1%) center/15000%;
+}
+
+.update-other:active {
+    background-color: #089e66;
+    background-size: 100%;
+    transition: all 0s;
+}
+
+.cancel-app {
+    display: none;
+    float: right;
+    cursor: pointer;
+    color: #333;
+    font: 16px 'Roboto', sans-serif;
+    background-color: #ccc;
+    background-position: center;
+    border-radius: 0px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+    padding: 13px;
+    margin-top: 3px;
+    margin-right: 30px;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.cancel-app:hover {
+    background: #b5b5b5 radial-gradient(circle, transparent 1%, #b5b5b5 1%) center/15000%;
+}
+
+.cancel-app:active {
+    background-color: #dadada;
+    background-size: 100%;
+    transition: all 0s;
+}
+
+.open-app {
+    float: right;
+    cursor: pointer;
+    color: #fff;
+    font: 16px 'Roboto', sans-serif;
+    background-color: #058a58;
+    background-position: center;
+    border-radius: 0px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    padding: 13px 18px;
+    margin-top: 3px;
+    margin-right: 30px;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.open-app:hover {
+    background: #057148 radial-gradient(circle, transparent 1%, #057148 1%) center/15000%;
+}
+
+.open-app:active {
+    background-color: #089e66;
+    background-size: 100%;
+    transition: all 0s;
+}
+
+.update-app-auto {
+    float: right;
+    color: #222;
+    font: 16px 'Roboto', sans-serif;
+    background-color: #cecece;
+    border: 2px solid #cecece;
+    border-radius: 0px;
+    padding: 8px 15px;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.more-details {
+    float: left;
+    cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.show-details {
+	display: flex;
+}
+
+.hide-details {
+    display: none;
+}
+
+.more-details .fa {
+    float: left;
+}
+
+.more-details-text {
+    float: left;
+    margin-left: 5px;
+}
+
+.more-details-contents {
+    display: none;
+    position: relative;
+    float: left;
+    width: 667px;
+    height: 165px;
+    overflow: auto;
+    clear: both;
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+}
+
+@-webkit-keyframes animatebottom {
+    from { bottom:-30px; opacity:0 } 
+    to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+    from{ bottom:-30px; opacity:0 } 
+    to{ bottom:0; opacity:1 }
+}
+
+/* responsive */
+@media screen and (max-width: 810px) {
+    .main {
+        min-width: 584px;
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+    }
+    .more-details-contents {
+        width: 512px !important;
+    }
+}
+
+@media screen and (max-width: 710px) {
+    .app-name {
+        max-width: 8ch;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}

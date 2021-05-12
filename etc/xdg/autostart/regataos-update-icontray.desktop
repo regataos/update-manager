@@ -1,0 +1,12 @@
+[Desktop Entry]
+Exec=sleep 5; if test ! -e "/usr/bin/calamares"; then if ping -c 1 www.google.com.br ; then cd /opt/regataos-update-manager/tray-icon/; ./check-update.py; fi fi
+OnlyShowIn=KDE;
+Type=Service
+MimeType=
+Terminal=false
+X-KDE-autostart-after=root
+X-KDE-StartupNotify=false
+X-KDE-autostart-condition=AutoStart:true
+Icon=system-run
+GenericName=Launch the Update Manager icon in the system system tray
+Name=Regata OS Update Icon Tray

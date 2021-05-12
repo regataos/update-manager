@@ -1,0 +1,121 @@
+#!/bin/bash
+
+# Choose the translation of the icon in the system
+# tray according to the user's language
+function check_up_title() {
+    language=$(echo $LANG)
+
+    if [[ $language == *"pt_BR"* ]]; then
+        echo "Verificando atualizações..."
+
+    elif [[ $language == *"pt_PT"* ]]; then
+        echo "Checking for updates..."
+
+    elif [[ $language == *"en_US"* ]]; then
+        echo "Checking for updates..."
+
+    else
+        echo "Checking for updates..."
+    fi
+}
+
+function available_up_title() {
+    language=$(echo $LANG)
+
+    if [[ $language == *"pt_BR"* ]]; then
+        if test -e "/tmp/regataos-update/number-apps.txt"; then
+            echo "Atualizações disponíveis! $(cat /tmp/regataos-update/number-apps.txt)"
+        else
+            echo "Atualizações disponíveis!"
+        fi
+
+    elif [[ $language == *"pt_PT"* ]]; then
+        if test -e "/tmp/regataos-update/number-apps.txt"; then
+            echo "Atualizações disponíveis! $(cat /tmp/regataos-update/number-apps.txt)"
+        else
+            echo "Atualizações disponíveis!"
+        fi
+
+    elif [[ $language == *"en_US"* ]]; then
+        if test -e "/tmp/regataos-update/number-apps.txt"; then
+            echo "Updates available! $(cat /tmp/regataos-update/number-apps.txt)"
+        else
+            echo "Updates available!"
+        fi
+
+    else
+        if test -e "/tmp/regataos-update/number-apps.txt"; then
+            echo "Updates available! $(cat /tmp/regataos-update/number-apps.txt)"
+        else
+            echo "Updates available!"
+        fi
+    fi
+}
+
+function install_up_title() {
+    language=$(echo $LANG)
+
+    if [[ $language == *"pt_BR"* ]]; then
+        echo "Instalando atualizações..."
+
+    elif [[ $language == *"pt_PT"* ]]; then
+        echo "Instalando atualizações..."
+
+    elif [[ $language == *"en_US"* ]]; then
+        echo "Installing updates..."
+
+    else
+        echo "Installing updates..."
+    fi
+}
+
+function open_up_mg() {
+    language=$(echo $LANG)
+
+    if [[ $language == *"pt_BR"* ]]; then
+        echo "Abrir o gerenciador de atualizações"
+
+    elif [[ $language == *"pt_PT"* ]]; then
+        echo "Abrir o gerenciador de atualizações"
+
+    elif [[ $language == *"en_US"* ]]; then
+        echo "Open update manager"
+
+    else
+        echo "Open update manager"
+    fi
+}
+
+function update_sys() {
+    language=$(echo $LANG)
+
+    if [[ $language == *"pt_BR"* ]]; then
+        echo "Instalar atualizações"
+
+    elif [[ $language == *"pt_PT"* ]]; then
+        echo "Instalar atualizações"
+
+    elif [[ $language == *"en_US"* ]]; then
+        echo "Install updates"
+
+    else
+        echo "Install updates"
+    fi
+}
+
+# Run options
+case $1 in
+    "-check-up-title") check_up_title
+      ;;
+    "-available-up-title") available_up_title
+      ;;
+    "-install-up-title") install_up_title
+      ;;
+    "-open-up-mg") open_up_mg
+      ;;
+    "-update-sys") update_sys
+      ;;
+   *) echo "Invalid option!"
+      exit 1
+      ;;
+esac

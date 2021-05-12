@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Regata OS Update</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="./../css/roboto-style.css">
+	<link rel="stylesheet" type="text/css" href="./../css/style.css">
+	<script type="text/javascript" src="./../js/jquery.min.js"></script>
+	<script type="text/javascript" src="./../js/fas-icons.js"></script>
+	<script type="text/javascript" src="./../js/index.js"></script>
+	<script type="text/javascript" src="./../js/functions.js"></script>
+	<script type="text/javascript" src="./../js/translations/language.js"></script>
+	<script type="text/javascript" src="./../js/list-updates.js"></script>
+
+	<!-- Display content when everything is ready -->
+	<script type="text/javascript">
+		$(function(){
+			$("#loadscreen").fadeOut("slow");
+		});
+
+		$(function(){
+			$(".blocks").fadeIn("slow");
+		});
+	</script>
+</head>
+<body>
+    <div id='loadscreen'></div>
+
+    <div class="main">
+        <div class="div1">
+            <h1>Regata OS Update</h1>
+			<div class="div1-sub">
+            	<div class="check-up">Checking for updates...</div>
+            	<div class="no-up">There are no updates available.</div>
+            	<div class="updated">Updated!</div><div class="updated-img" style="background-image:url(../images/updated-system.png);"></div>
+            	<div class="show-updates"><div class="yes-up">Updates available!</div><div class="updates-app-number"></div></div>
+			</div>
+			<div class="search-update-status">This may take a few minutes!</div>
+			<div class="auto-update-status not-up-auto">Automatic update disabled.</div>
+			<div class="auto-update-status yes-update-auto">Automatic update enabled.</div>
+			<div class="update-all">
+				<div class="update-all-button1" onclick="install_all_apps();">Update all</div>
+				<div class="update-all-button2" onclick="cancel_all_apps();">Cancel</div>
+			</div>
+        </div>
+
+        <div class="div2" id="all-apps">
+			<div class="block-app-fictitious"></div>
+		</div>
+
+		<div class="loading">
+			<div class="loader"></div>
+		</div>
+
+		<div class="updated_system">
+			<div class="updated_system_img" style="background-image:url(../images/updated-system.png);"></div>
+		</div>
+
+        <div class="div2">
+            <div class="other-updates">
+				<div class="icon-app" style="background-image:url(../images/other-updates.png); width: 31px; height: 31px; margin-top: 10px; margin-left: 17px; margin-right: 22px;"></div>
+                <div class="app-name" style="margin-top: 7px;">Other updates  <div class="updates-package-number"></div></div>
+
+				<div class="more-details show-details" onclick="show_details();">
+					<i class="fa fa-caret-right" style="font-size:24px; margin-left: 6px;"></i>
+					<div class="more-details-text">More details</div>
+				</div>
+				<div class="more-details hide-details" onclick="hide_details();">
+					<i class="fa fa-caret-down" style="font-size:24px"></i>
+					<div class="more-details-text">More details</div>
+				</div>
+				<div id="pending-other-updates" class="app-status-pending">Pending...</div>
+				<div id="downloading-other-updates" class="app-status-download">Downloading...</div>
+				<div id="installing-other-updates" class="app-status-install">Installing...</div>
+				<div id="concluded-other-updates" class="app-status-concluded">Concluded!</div>
+				<div id="percentage-other-updates" class="app-status-percentage"></div>
+                <div id="update-app-other-updates" class="update-other" style="margin-right: 10px;" onclick="install_other_updates();">Update</div>
+
+				<div class="more-details-contents"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

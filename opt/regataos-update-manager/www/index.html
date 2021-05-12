@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Regata OS Update</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="css/roboto-style.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/fas-icons.js"></script>
+	<script type="text/javascript" src="js/functions.js"></script>
+	<script type="text/javascript" src="js/search-update.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/pages.js"></script>
+    <script type="text/javascript" src="js/translations/language.js"></script>
+
+    <!-- Update software repositories -->
+    <script type="text/javascript">
+		check_updates();
+    </script>
+</head>
+<body>
+
+	<div class="sidebar">
+		<ul class="ul-sidebar">
+            <li class="li-sidebar home" onclick="go_home();" title="Updates">
+                <a class="link-items" onclick="go_home();">
+                    <!-- <i class="fas fa-home" style="display: none;"></i> -->
+                    <img class="icones-menu" style="margin-left: 3px; height: 32px;" src="images/img-sidebar/home.png"/>
+                    <p style="margin-left: 13px;"></p>
+                </a>
+            </li>
+            <li class="li-sidebar historic" onclick="go_historic();" title="Update history">
+                <a class="link-items" onclick="go_historic();">
+                    <!-- <i class="fas fa-home" style="display: none;"></i> -->
+                    <img class="icones-menu" style="margin-left: 3px; height: 32px;" src="images/img-sidebar/historic.png"/>
+                    <p style="margin-left: 10px;"></p>
+                </a>
+            </li>
+            <li class="li-sidebar settings" onclick="go_settings();" title="Settings">
+                <a class="link-items" onclick="go_settings();">
+                    <!-- <i class="fas fa-paint-brush" style="margin-left: 1px;" style="display: none;"></i> -->
+                    <img class="icones-menu" style="margin-left: 3px; height: 33px;" src="images/img-sidebar/settings.png"/>
+                    <p style="margin-left: 10px;"></p>
+                </a>
+            </li>
+        </ul>
+	</div>
+
+	<div class="div-iframe">
+        <iframe src="pages/home.html" allowfullscreen frameborder="0" class="iframe" id="main-iframe"></iframe>
+    </div>
+
+</body>
+</html>
