@@ -52,16 +52,28 @@ else
 	    chmod 777 /var/log/regataos-logs/*
     fi
 
+    # Create file with current status
+    auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+    if [[ $(echo "$auto_up_config") == *"3"* ]]; then
+        echo "never-updates" > "/tmp/regataos-update/status.txt";
+    else
+        echo "check-updates" > "/tmp/regataos-update/status.txt";
+    fi
+
     if test ! -e "/tmp/regataos-update/config"; then
 	    ln -sf "$HOME/.config/regataos-update" "/tmp/regataos-update/config"
     fi
 
     echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"
     echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"
-
     rm -f "/var/log/regataos-logs/updated-apps.txt"
-    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -check-up
-    sudo /opt/regataos-update-manager/scripts/regataos-up.sh -search-up
+
+    # Check for updates
+    auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+    if [[ $(echo "$auto_up_config") != *"3"* ]]; then
+        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -check-up
+        sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+    fi
 
     # First update check completed
     if test -e  "/tmp/regataos-update/package-list.txt"; then
@@ -126,7 +138,7 @@ else
                 sudo -S /opt/regataos-update-manager/scripts/regataos-up-other-up.sh & ps -C install-update.py > "/dev/null"; if [ $? = 1 ]; then  cd "/opt/regataos-update-manager/tray-icon/"; python install-update.py; fi
             fi
 
-        else
+        elif [[ $(echo "$auto_up_config") == *"2"* ]]; then
             killall check-update.py
             /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -show-up
 
@@ -135,11 +147,30 @@ else
                 cd /opt/regataos-update-manager/tray-icon/
                 ./alert-update.py
             fi
+
+        elif [[ $(echo "$auto_up_config") == *"3"* ]]; then
+            echo "Nothing to do ..."
+
+        else
+            echo "Nothing to do ..."
         fi
 
     else
-        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -no-up
-        killall check-update.py
+        auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+        if [[ $(echo "$auto_up_config") == *"1"* ]]; then
+            /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -no-up
+            killall check-update.py
+
+        elif [[ $(echo "$auto_up_config") == *"2"* ]]; then
+            /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -no-up
+            killall check-update.py
+
+        elif [[ $(echo "$auto_up_config") == *"3"* ]]; then
+            echo "Nothing to do ..."
+
+        else
+            echo "Nothing to do ..."
+        fi
     fi
 
     # Start the Regata OS Update Manager's service

@@ -4,6 +4,14 @@
 # local cache of software repositories, list available package updates and
 # install new software versions.
 
+# Create and configure permissions on the "/var/log/regataos-logs/" directory
+if test ! -e "/var/log/regataos-logs"; then
+    mkdir -p "/var/log/regataos-logs"
+    chmod 777 "/var/log/regataos-logs"
+else
+    chmod 777 "/var/log/regataos-logs"
+fi
+
 # Update the local cache of the repositories and list the available updates.
 function search_update() {
 # If the Calamares Installer is installed, just exit
@@ -41,7 +49,14 @@ if test ! -e "/tmp/regataos-update/update-specific-in-progress.txt"; then
     fi
 
     # Create file with current status
-    echo "check-updates" > "/tmp/regataos-update/status.txt";
+    auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+    if [[ $(echo "$auto_up_config") == *"3"* ]]; then
+        echo "never-updates" > "/tmp/regataos-update/status.txt";
+        exit 0;
+
+    else
+        echo "check-updates" > "/tmp/regataos-update/status.txt";
+    fi
 
     {
     export LC_ALL="en_US.UTF-8"
@@ -198,11 +213,51 @@ function update_packages() {
     exit
 }
 
+# Check update settings
+function check_up_config() {
+    auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+    if [[ $(echo "$auto_up_config") == *"3"* ]]; then
+        if test ! -e "/tmp/regataos-update"; then
+            mkdir -p "/tmp/regataos-update"
+            chmod 777 "/tmp/regataos-update"
+            chmod 777 /tmp/regataos-update/*
+        else
+            chmod 777 "/tmp/regataos-update"
+            chmod 777 /tmp/regataos-update/*
+        fi
+
+        echo "never-updates" > "/tmp/regataos-update/status.txt";
+        exit 0;
+
+    else
+        search_update
+    fi
+}
+
+# Stop update
+function stop_update() {
+    echo "never-updates" > "/tmp/regataos-update/status.txt"
+    rm -f "/tmp/regataos-update/all-auto-update.txt"
+	echo "" > "/tmp/regataos-update/stop-all-update.txt"
+	sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh
+
+    ps -C rpm > /dev/null
+    if [ $? = 1 ]
+    then
+        killall zypper
+        killall regataos-up.sh
+        echo "never-updates" > "/tmp/regataos-update/status.txt"
+        exit 0;
+    fi
+}
+
 # Run options
 case $1 in
-    "-search-up") search_update
+    "-check-up-config") check_up_config
         ;;
     "-install-up") update_packages
+        ;;
+    "-stop-up") stop_update
         ;;
    *) echo "Invalid option!"
       exit 1

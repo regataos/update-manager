@@ -19,6 +19,7 @@ $(document).ready(function() {
 	// Descriptions
 	$(".check-up").text("Checking for updates...");
 	$(".no-up").text("There are no updates available.");
+	$(".never-up").text("Never look for system updates!");
 	$(".yes-up").text("Updates available!");
 	$(".updated").text("Updated!");
 	$(".search-update-status").text("This may take a few minutes!");
@@ -48,7 +49,8 @@ $(document).ready(function() {
 	$(".apps-settings").text("Settings");
 	$(".up-apps-auto").text("Automatic updates");
 	$(".selectnav .up-on").text("Update the system automatically");
-	$(".selectnav .up-off").text("Do not update the system automatically");
+	$(".selectnav .up-only").text("Just check for system updates");
+	$(".selectnav .up-off").text("Never check for updates");
 });
 }
 

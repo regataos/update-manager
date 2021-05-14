@@ -25,6 +25,10 @@ function up_system() {
     notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Installing updates..." "Automatic update is enabled."
 }
 
+function upd_system() {
+    notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Updated system!" "The system has been successfully updated."
+}
+
 # Run options
 case $1 in
     "-check-up") check_update
@@ -34,6 +38,8 @@ case $1 in
     "-show-up") show_update
         ;;
     "-up-system") up_system
+        ;;
+    "-upd-system") upd_system
         ;;
    *) echo "Invalid option!"
       exit 1

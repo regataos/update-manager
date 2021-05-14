@@ -8,8 +8,18 @@ function check_updates() {
         fs.access("/tmp/regataos-update/status.txt", (err) => {
         if (!err) {
             var status = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
-            if ((status.indexOf("check-updates") > -1) == "0") {
-                var command = "sudo /opt/regataos-update-manager/scripts/regataos-up.sh -search-up";
+            if ((status.indexOf("never-updates") > -1) == "1") {
+                var command = 'echo "never-updates" > "/tmp/regataos-update/status.txt"';
+                console.log(command);
+                exec(command,function(error,call,errlog){
+                });
+
+            } else if ((status.indexOf("check-updates") > -1) == "1") {
+                var command = "Zypper is already looking for updates...";
+                console.log(command);
+
+            } else {
+                var command = "sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config";
                 console.log(command);
                 exec(command,function(error,call,errlog){
                 });
@@ -17,10 +27,19 @@ function check_updates() {
             return;
 
         } else {
-            var command = "sudo /opt/regataos-update-manager/scripts/regataos-up.sh -search-up";
-            console.log(command);
-            exec(command,function(error,call,errlog){
-            });
+            var update_config = fs.readFileSync("/tmp/regataos-update/config/regataos-update.conf", "utf8");
+            if ((update_config.indexOf("autoupdate=3") > -1) == "1") {
+                var command = 'echo "never-updates" > "/tmp/regataos-update/status.txt"';
+                console.log(command);
+                exec(command,function(error,call,errlog){
+                });
+
+            } else {
+                var command = "sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config";
+                console.log(command);
+                exec(command,function(error,call,errlog){
+                });
+            }
         }
         })
     return;

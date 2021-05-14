@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=sleep 5; if test ! -e "/usr/bin/calamares"; then if ping -c 1 www.google.com.br ; then cd /opt/regataos-update-manager/tray-icon/; ./check-update.py; fi fi
+Exec=/opt/regataos-update-manager/scripts/check-up-icontray.sh
 OnlyShowIn=KDE;
 Type=Service
 MimeType=

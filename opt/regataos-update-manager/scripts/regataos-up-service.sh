@@ -10,10 +10,21 @@ if ! ping -c 1 www.google.com.br ; then
     echo "Offline!"
 
 else
+    # Create file with current status
+    auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+    if [[ $(echo "$auto_up_config") == *"3"* ]]; then
+        echo "never-updates" > "/tmp/regataos-update/status.txt";
+    else
+        echo "check-updates" > "/tmp/regataos-update/status.txt";
+    fi
+
 	ps -C "regataos-up-all.sh | regataos-up-specific.sh | regataos-other-up.sh | regataos-up-other-up.sh | regataos-cancel-up-specific.sh | regataos-up-cancel-all.sh | regataosgcs | zypper | magma | steam | UbisoftConnect.exe | Launcher.exe | Origin.exe | GalaxyClient.exe | EpicGamesLauncher.exe | Battle.net.exe" > /dev/null
 	if [ $? = 1 ]; then
         # Check for updates
-        sudo /opt/regataos-update-manager/scripts/regataos-up.sh -search-up
+        auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+        if [[ $(echo "$auto_up_config") != *"3"* ]]; then
+            sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+        fi
 
         # First update check completed
         if test -e  "/tmp/regataos-update/package-list.txt"; then
@@ -61,18 +72,18 @@ else
 			        rm -f "/tmp/regataos-update/all-auto-update.txt"
                     rm -f "/tmp/regataos-update/stop-all-update.txt"
 
-			        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -up-system
 	                sudo -S /opt/regataos-update-manager/scripts/regataos-up-all.sh & ps -C install-update.py > "/dev/null"; if [ $? = 1 ]; then  cd "/opt/regataos-update-manager/tray-icon/"; python install-update.py; fi
+                    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
 
                 else
                     echo "other-updates" > "/tmp/regataos-update/list-apps-queue.txt"
 	                rm -f "/tmp/regataos-update/stop-all-update.txt"
 
-			        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -up-system
 	                sudo -S /opt/regataos-update-manager/scripts/regataos-up-other-up.sh & ps -C install-update.py > "/dev/null"; if [ $? = 1 ]; then  cd "/opt/regataos-update-manager/tray-icon/"; python install-update.py; fi
+                    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
                 fi
 
-            else
+            elif [[ $(echo "$auto_up_config") == *"2"* ]]; then
                 killall check-update.py
                 /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -show-up
 
@@ -81,11 +92,13 @@ else
                     cd /opt/regataos-update-manager/tray-icon/
                     ./alert-update.py
                 fi
+
+            elif [[ $(echo "$auto_up_config") == *"3"* ]]; then
+                echo "Nothing to do ..."
+
+            else
+                echo "Nothing to do ..."
             fi
-        
-        else
-            /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -no-up
-            killall check-update.py
         fi
     fi
 fi

@@ -12,6 +12,9 @@ function check_auto_update_config() {
 
         } else if ((stdout.indexOf("2") > -1) == "1") {
             $("#select-update").val(2);
+
+        } else if ((stdout.indexOf("3") > -1) == "1") {
+            $("#select-update").val(3);
         }
         });
     return;

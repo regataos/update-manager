@@ -1,7 +1,7 @@
 Name: regataos-update-manager
-Version: 1.0
+Version: 1.2
 Release: 0
-Url: http://www.regataos.com.br/
+Url: https://github.com/regataos/update-manager
 Summary: Regata OS Update Manager
 Group: System/GUI/KDE
 BuildRequires: xz

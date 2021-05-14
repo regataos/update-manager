@@ -16,18 +16,50 @@ fi
 # Apply the automatic update configuration
 function update1() {
     if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
-        sed -i 's/autoupdate=2/autoupdate=1/' "$HOME/.config/regataos-update/regataos-update.conf"
+        autoupdate_value=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+        sed -i "s/$autoupdate_value/1/" "$HOME/.config/regataos-update/regataos-update.conf"
     else
         echo "autoupdate=1" > "$HOME/.config/regataos-update/regataos-update.conf"
+    fi
+
+    if test ! -e "/tmp/regataos-update/already_updated.txt"; then
+        rm -f "/tmp/regataos-update/status.txt"
+        sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+    else
+        echo "show-updates" > "/tmp/regataos-update/status.txt"
     fi
 }
 
 function update2() {
     if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
-        sed -i 's/autoupdate=1/autoupdate=2/' "$HOME/.config/regataos-update/regataos-update.conf"
+        autoupdate_value=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+        sed -i "s/$autoupdate_value/2/" "$HOME/.config/regataos-update/regataos-update.conf"
     else
         echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
     fi
+
+    if test ! -e "/tmp/regataos-update/already_updated.txt"; then
+        rm -f "/tmp/regataos-update/status.txt"
+        sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+    else
+        echo "show-updates" > "/tmp/regataos-update/status.txt"
+    fi
+}
+
+function update3() {
+    if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
+        autoupdate_value=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+        sed -i "s/$autoupdate_value/3/" "$HOME/.config/regataos-update/regataos-update.conf"
+    else
+        echo "autoupdate=3" > "$HOME/.config/regataos-update/regataos-update.conf"
+    fi
+
+    echo "never-updates" > "/tmp/regataos-update/status.txt"
+    rm -f "/tmp/regataos-update/all-auto-update.txt"
+	echo "" > "/tmp/regataos-update/stop-all-update.txt"
+	sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh
+    sudo /opt/regataos-update-manager/scripts/regataos-up.sh -stop-up
+    echo "never-updates" > "/tmp/regataos-update/status.txt"
 }
 
 # Run options
@@ -35,6 +67,8 @@ case $1 in
     "-update-1") update1
         ;;
     "-update-2") update2
+        ;;
+    "-update-3") update3
         ;;
    *) echo "Invalid option!"
       exit 1

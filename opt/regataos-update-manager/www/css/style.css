@@ -155,7 +155,6 @@ li.historic {
 
 .main {
     max-width: 738px;
-    padding-left: 56px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 60px;
@@ -164,6 +163,7 @@ li.historic {
 .div1 {
     position: relative;
     height: 170px;
+    padding-left: 10px;
     margin-bottom: 0px;
 }
 
@@ -199,10 +199,15 @@ li.historic {
     animation-duration: .5s;
 }
 
+.div1-settings {
+    padding-left: 10px;
+}
+
 .div2-settings {
     display: block;
     position: relative;
     max-width: 738px;
+    padding-left: 10px;
     -webkit-animation-name: animatebottom;
     -webkit-animation-duration: .5s;
     animation-name: animatebottom;
@@ -396,6 +401,29 @@ h1 {
 	background-repeat: no-repeat;
 }
 
+.never_update_system {
+    display: none;
+    position: relative;
+    width: 146px;
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.never_update_system_img {
+    display: block;
+    position: relative;
+	width: 146px;
+	height: 200px;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
 @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }
@@ -407,6 +435,18 @@ h1 {
 }
 
 .no-up {
+    display: none;
+    position: relative;
+    float: left;
+    width: 600px;
+    font-size: 20px;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.never-up {
     display: none;
     position: relative;
     float: left;

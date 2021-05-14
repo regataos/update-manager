@@ -44,11 +44,28 @@ function current_status() {
     if (!err) {
         var current_status = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
 
-        if ((current_status.indexOf("check-updates") > -1) == "1") {
+        if ((current_status.indexOf("never-updates") > -1) == "1") {
             $(".update-all").css("display", "none");
             $(".yes-up").css("display", "none");
             $(".no-up").css("display", "none");
             $(".updated_system").css("display", "none");
+            $(".main").css("margin-bottom", "0px");
+            $(".never-up").css("display", "block");
+            $(".never_update_system").css("display", "block");
+            $(".div2").css("display", "none");
+            $(".search-update-status").css("display", "none");
+            $(".auto-update-status").css("display", "none");
+            $(".check-up").css("display", "none");
+            $(".loading").css("display", "none");
+
+        } else if ((current_status.indexOf("check-updates") > -1) == "1") {
+            $(".update-all").css("display", "none");
+            $(".yes-up").css("display", "none");
+            $(".no-up").css("display", "none");
+            $(".updated_system").css("display", "none");
+            $(".main").css("margin-bottom", "60px");
+            $(".never-up").css("display", "none");
+            $(".never_update_system").css("display", "none");
             $(".div2").css("display", "none");
             $(".search-update-status").css("display", "block");
             $(".auto-update-status").css("display", "none");
@@ -60,6 +77,9 @@ function current_status() {
             $(".yes-up").css("display", "block");
             $(".no-up").css("display", "none");
             $(".updated_system").css("display", "none");
+            $(".main").css("margin-bottom", "60px");
+            $(".never-up").css("display", "none");
+            $(".never_update_system").css("display", "none");
             $(".div2").css("display", "block");
             $(".search-update-status").css("display", "none");
 
@@ -86,6 +106,9 @@ function current_status() {
             $(".yes-up").css("display", "none");
             $(".no-up").css("display", "block");
             $(".updated_system").css("display", "block");
+            $(".main").css("margin-bottom", "60px");
+            $(".never-up").css("display", "none");
+            $(".never_update_system").css("display", "none");
             $(".div2").css("display", "none");
             $(".search-update-status").css("display", "none");
             $(".auto-update-status").css("display", "none");
@@ -93,6 +116,7 @@ function current_status() {
             $(".loading").css("display", "none");
 
             clearInterval(current_status_timer);
+
         }
     return;
     }
@@ -317,10 +341,13 @@ const exec = require('child_process').exec;
 
 fs.access('/tmp/regataos-update/status.txt', (err) => {
 if (!err) {
-
     var current_status = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
     if ((current_status.indexOf("no-updates") > -1) == "1") {
         clearInterval(progress_other_up);
+
+    } else if ((current_status.indexOf("never-updates") > -1) == "1") {
+        clearInterval(progress_other_up);
+
     } else {
 
     fs.access('/var/log/regataos-logs/regataos-other-updates.log', (err) => {
@@ -378,8 +405,8 @@ if (!err) {
 			});
         } 
     }
-}); 
-}
+    }); 
+    }
 
 return;
 }
