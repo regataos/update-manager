@@ -23,8 +23,12 @@ function update1() {
     fi
 
     if test ! -e "/tmp/regataos-update/already_updated.txt"; then
-        rm -f "/tmp/regataos-update/status.txt"
-        sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+        ps -C zypper > /dev/null
+        if [ $? = 1 ]; then
+            rm -f "/tmp/regataos-update/status.txt"
+            sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+        fi
+
     else
         echo "show-updates" > "/tmp/regataos-update/status.txt"
     fi
@@ -39,8 +43,12 @@ function update2() {
     fi
 
     if test ! -e "/tmp/regataos-update/already_updated.txt"; then
-        rm -f "/tmp/regataos-update/status.txt"
-        sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+        ps -C zypper > /dev/null
+        if [ $? = 1 ]; then
+            rm -f "/tmp/regataos-update/status.txt"
+            sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+        fi
+
     else
         echo "show-updates" > "/tmp/regataos-update/status.txt"
     fi
