@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/opt/regataos-update-manager/scripts/check-up-icontray.sh
+Exec=sleep 5; /opt/regataos-update-manager/scripts/check-up-icontray.sh
 OnlyShowIn=KDE;
 Type=Service
 MimeType=
