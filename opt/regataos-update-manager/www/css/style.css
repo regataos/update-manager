@@ -154,16 +154,16 @@ li.historic {
 }
 
 .main {
-    max-width: 738px;
+    max-width: 750px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 60px;
+    padding-left: 56px;
 }
 
 .div1 {
     position: relative;
     height: 170px;
-    padding-left: 10px;
     margin-bottom: 0px;
 }
 
@@ -182,7 +182,7 @@ li.historic {
 .div2 {
     display: none;
     position: relative;
-    max-width: 738px;
+    max-width: 750px;
     -webkit-animation-name: animatebottom;
     -webkit-animation-duration: .5s;
     animation-name: animatebottom;
@@ -192,22 +192,16 @@ li.historic {
 .div2-updated {
     display: block;
     position: relative;
-    max-width: 738px;
+    max-width: 750px;
     -webkit-animation-name: animatebottom;
     -webkit-animation-duration: .5s;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
-
-.div1-settings {
-    padding-left: 10px;
-}
-
 .div2-settings {
     display: block;
     position: relative;
-    max-width: 738px;
-    padding-left: 10px;
+    max-width: 750px;
     -webkit-animation-name: animatebottom;
     -webkit-animation-duration: .5s;
     animation-name: animatebottom;
@@ -546,7 +540,7 @@ h1 {
 .block-app-fictitious {
     position: relative;
     background-color: #fff;
-    width: 738px;
+    width: 750px;
     height: 0px;
     margin-bottom: 0px;
     padding-top: 0px;
