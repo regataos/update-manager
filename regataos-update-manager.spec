@@ -1,5 +1,5 @@
 Name: regataos-update-manager
-Version: 1.3
+Version: 1.4
 Release: 0
 Url: https://github.com/regataos/update-manager
 Summary: Regata OS Update Manager
