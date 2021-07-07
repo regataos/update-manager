@@ -73,7 +73,7 @@ if test ! -e "/tmp/regataos-update/update-specific-in-progress.txt"; then
     } 2>&1 | tee "/var/log/regataos-logs/regataos-list-updates.log";
 
     sed -i 's/ - x86_64//' "/var/log/regataos-logs/regataos-list-updates.log"
-    package_list=$(cat /var/log/regataos-logs/regataos-list-updates.log | awk '{print $5}' | sed -n '6,$p');
+    package_list=$(cat /var/log/regataos-logs/regataos-list-updates.log | awk '{print $5}' | sed -n '5,$p');
     echo "$package_list" > "/tmp/regataos-update/package-list.txt";
 
     for i in /opt/regataos-store/apps-list/*.json; do

@@ -36,6 +36,22 @@ function update_all_apps() {
     echo "" > "/tmp/regataos-update/update-specific-in-progress.txt"
 
     # Prepare package download link
+    repoUrl="$repo_link"
+    if [[ $repoUrl == *"[mainRepositoryUrl]"* ]]; then
+        repo_link="$(grep -r mainRepositoryUrl= /usr/share/regataos/regatas-base-version.txt | cut -d'=' -f 2-)"
+
+    elif [[ $repoUrl == *"[basedOnVersion]"* ]]; then
+        basedOnVersion="$(grep -r basedOnVersion= /usr/share/regataos/regatas-base-version.txt | cut -d'=' -f 2-)"
+        repo_link=$(echo $repoUrl | sed "s,\[basedOnVersion\],$basedOnVersion,")
+
+    elif [[ $repoUrl == *"[basedOn]"* ]]; then
+        basedOn="$(grep -r basedOn= /usr/share/regataos/regatas-base-version.txt | cut -d'=' -f 2-)"
+        repo_link=$(echo $repoUrl | sed "s,\[basedOn\],$basedOn,")
+
+    else
+        repo_link="$repoUrl"
+    fi
+
     if [ -z $download_link ];then
         version=$(zypper info $package_name | grep Ver | awk '{print $3}')
         app_download_file_name="$package_name-$version.$architecture.rpm"
@@ -149,8 +165,8 @@ if test -e "$json_filename_dir"; then
     app_nickname="$(grep -R '"nickname":' $json_filename_dir | awk '{print $2}' | sed 's/"\|,//g')"
 	package_name="$(grep -R '"package":' $json_filename_dir | awk '{print $2}' | sed 's/"\|,//g')"
     architecture="$(grep -R '"architecture":' $json_filename_dir | awk '{print $2}' | sed 's/"\|,//g')"
-    repo_link="$(grep -R '"repository_url":' $json_filename_dir | awk '{print $2}' | sed 's/"\|,//g')"
     download_link="$(grep -R '"download_link":' $json_filename_dir | awk '{print $2}' | sed 's/"\|,//g')"
+    repo_link="$(grep -R '"repository_url":' $json_filename_dir | awk '{print $2}' | sed 's/"\|,//g')"
 
     if [[ $(grep -r "$package_name" "/tmp/regataos-update/apps-list.txt") == *"$package_name"* ]]; then
         if [[ $(grep -r "$app_nickname" "/tmp/regataos-update/installing-application.txt") != *"$app_nickname"* ]]; then
