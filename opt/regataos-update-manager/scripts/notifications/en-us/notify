@@ -14,10 +14,10 @@ function show_update() {
         if [ $(echo $number_update | sed 's/(\|)//g') -gt 1 ]; then
             notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Updates available $number_update!" "Automatic updates are disabled."
         else
-            notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Update available $number_update!" "Automatic updates are disabled."
+            notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Update available!" "Automatic updates are disabled."
         fi
 	else
-		notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Update available $number_update!" "Automatic updates are disabled."
+		notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Update available!" "Automatic updates are disabled."
     fi
 }
 
