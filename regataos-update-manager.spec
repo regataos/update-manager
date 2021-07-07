@@ -10,9 +10,9 @@ BuildRequires: update-desktop-files
 BuildRequires: hicolor-icon-theme
 BuildRequires: -post-build-checks
 Requires: xz
-Requires: magma >= 5.52.2-lp152.6.1
-Requires: regataos-base >= 20.1.2-lp152.7.1
-Requires: regataos-store >= 5.3-lp152.36.1
+Requires: magma >= 5.52.2
+Requires: regataos-base >= 21.0.1
+Requires: regataos-store >= 21.0
 Conflicts: plasma5-pk-updates
 License: MIT
 Source1: %{name}-%{version}.tar.xz
