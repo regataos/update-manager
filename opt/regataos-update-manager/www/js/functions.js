@@ -1,127 +1,119 @@
 // This function lists the updates available automatically
 function install_all_apps() {
-const exec = require('child_process').exec;
-const fs = require('fs');
+	const exec = require('child_process').exec;
+	const fs = require('fs');
 
-var files = [];
+	var files = [];
 
-// Read the app store's JSON files
-fs.readdirSync("/opt/regataos-store/apps-list").forEach(files => {
-fs.readFile("/opt/regataos-store/apps-list/" +files , "utf8", function(err, data) {
-if(!err) {
-var apps = JSON.parse(data);
+	// Read the app store's JSON files
+	fs.readdirSync("/opt/regataos-store/apps-list").forEach(files => {
+	fs.readFile("/opt/regataos-store/apps-list/" +files , "utf8", function(err, data) {
+	if(!err) {
+		var apps = JSON.parse(data);
 
-for (var i = 0; i < apps.length; i++) {
+		for (var i = 0; i < apps.length; i++) {
+			var package_name = apps[i].package;
+			var list_apps_update = fs.readFileSync("/tmp/regataos-update/apps-list.txt", "utf8");
 
-	var package_name = apps[i].package;
-	var list_apps_update = fs.readFileSync("/tmp/regataos-update/apps-list.txt", "utf8");
-
-	if ((list_apps_update.indexOf(package_name) > -1) == "1") {
-
-		if (fs.existsSync('/tmp/regataos-update/installing-application.txt')) {
-        	var nickname = apps[i].nickname;
-			var installing = fs.readFileSync("/tmp/regataos-update/installing-application.txt", "utf8");
-
-			if ((installing.indexOf(nickname) > -1) == "0") {
-
-				if (fs.existsSync('/tmp/regataos-update/list-apps-queue.txt')) {
+			if ((list_apps_update.indexOf(package_name) > -1) == "1") {
+				if (fs.existsSync('/tmp/regataos-update/installing-application.txt')) {
 					var nickname = apps[i].nickname;
-					var queue = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
-
-					if ((queue.indexOf(nickname) > -1) == "0") {
-						var nickname = apps[i].nickname;
-        				var command_line = 'echo "' + nickname + '" >> "/tmp/regataos-update/list-apps-queue.txt"; \
-						sed -i "/^$/d" "/tmp/regataos-update/list-apps-queue.txt"';
-						exec(command_line, (error, stdout, stderr) => {
-						});
-					}
-				} else {
-					var nickname = apps[i].nickname;
-					var installing = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
+					var installing = fs.readFileSync("/tmp/regataos-update/installing-application.txt", "utf8");
 
 					if ((installing.indexOf(nickname) > -1) == "0") {
-						var nickname = apps[i].nickname;
-        				var command_line = 'echo "' + nickname + '" >> "/tmp/regataos-update/list-apps-queue.txt"; \
-						sed -i "/^$/d" "/tmp/regataos-update/list-apps-queue.txt"';
-						exec(command_line, (error, stdout, stderr) => {
-						});
+						if (fs.existsSync('/tmp/regataos-update/list-apps-queue.txt')) {
+							var nickname = apps[i].nickname;
+							var queue = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
+
+							if ((queue.indexOf(nickname) > -1) == "0") {
+								var nickname = apps[i].nickname;
+								var command_line = 'echo "' + nickname + '" >> "/tmp/regataos-update/list-apps-queue.txt"; \
+								sed -i "/^$/d" "/tmp/regataos-update/list-apps-queue.txt"';
+								exec(command_line, (error, stdout, stderr) => {
+								});
+							}
+
+						} else {
+							var nickname = apps[i].nickname;
+							var installing = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
+
+							if ((installing.indexOf(nickname) > -1) == "0") {
+								var nickname = apps[i].nickname;
+								var command_line = 'echo "' + nickname + '" >> "/tmp/regataos-update/list-apps-queue.txt"; \
+								sed -i "/^$/d" "/tmp/regataos-update/list-apps-queue.txt"';
+								exec(command_line, (error, stdout, stderr) => {
+								});
+							}
+						}
 					}
-				}
-			}
 
-		} else {
-        	var nickname = apps[i].nickname;
-			var command_line = 'echo "' + nickname + '" >> "/tmp/regataos-update/list-apps-queue.txt"; \
-			sed -i "/^$/d" "/tmp/regataos-update/list-apps-queue.txt"';
-			exec(command_line, (error, stdout, stderr) => {
-			});
-		}
-	}
-}
-
-	fs.access('/tmp/regataos-update/package-list.txt', (err) => {
-	if (!err) {
-		var package_list = fs.readFileSync("/tmp/regataos-update/package-list.txt", "utf8");
-        if (package_list.length >= 2) {
-			var queue = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
-			var updated = fs.readFileSync("/tmp/regataos-update/updated-apps.txt", "utf8");
-			if ((queue.indexOf("other-updates") > -1) == "0") {
-				if ((updated.indexOf("other-updates") > -1) == "0") {
-					var command_line = 'echo "other-updates" >> "/tmp/regataos-update/list-apps-queue.txt"';
-					exec(command_line,function(error,call,errlog){
+				} else {
+					var nickname = apps[i].nickname;
+					var command_line = 'echo "' + nickname + '" >> "/tmp/regataos-update/list-apps-queue.txt"; \
+					sed -i "/^$/d" "/tmp/regataos-update/list-apps-queue.txt"';
+					exec(command_line, (error, stdout, stderr) => {
 					});
 				}
 			}
 		}
+
+		fs.access('/tmp/regataos-update/package-list.txt', (err) => {
+		if (!err) {
+			var package_list = fs.readFileSync("/tmp/regataos-update/package-list.txt", "utf8");
+			if (package_list.length >= 2) {
+				var queue = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
+				var updated = fs.readFileSync("/tmp/regataos-update/updated-apps.txt", "utf8");
+				if ((queue.indexOf("other-updates") > -1) == "0") {
+					if ((updated.indexOf("other-updates") > -1) == "0") {
+						var command_line = 'echo "other-updates" >> "/tmp/regataos-update/list-apps-queue.txt"';
+						exec(command_line,function(error,call,errlog){
+						});
+					}
+				}
+			}
+		return;
+		}
+		});
+
 	return;
 	}
 	});
+	});
 
-return;
-}
-});
-});
+	fs.access('/tmp/regataos-update/apps-list.txt', (err) => {
+	if (!err) {
+		var command_line = "ps -C regataos-up-all.sh; if [ $? = 1 ]; then echo OK; fi";
+		exec(command_line, (error, stdout, stderr) => {
+		if (stdout) {
+			if ((stdout.indexOf("OK") > -1) == "1") {
+				fs.access('/tmp/regataos-update/other-updates-in-progress.txt', (err) => {
+				if (!err) {
+					var command_line = 'echo "" > "/tmp/regataos-update/all-auto-update.txt"';
+					exec(command_line, (error, stdout, stderr) => {
+					});
 
-fs.access('/tmp/regataos-update/apps-list.txt', (err) => {
-if (!err) {
-	var command_line = "ps -C regataos-up-all.sh; if [ $? = 1 ]; then echo OK; fi";
-	exec(command_line, (error, stdout, stderr) => {
-	if (stdout) {
-		if ((stdout.indexOf("OK") > -1) == "1") {
-			fs.access('/tmp/regataos-update/other-updates-in-progress.txt', (err) => {
-			if (!err) {
-				var command_line = 'echo "" > "/tmp/regataos-update/all-auto-update.txt"';
-				exec(command_line, (error, stdout, stderr) => {
+				} else {
+					var command_line = "/opt/regataos-update-manager/scripts/update-functions-icontray -update-option1";
+					exec(command_line,function(error,call,errlog){
+					});
+				}
 				});
 
 			} else {
-				var command_line = 'if test ! -e "/tmp/regataos-update/updated-apps.txt"; then echo "" > "/tmp/regataos-update/updated-apps.txt"; fi; \
-				rm -f "/tmp/regataos-update/all-auto-update.txt"; rm -f "/tmp/regataos-update/stop-all-update.txt"; \
-				/opt/regataos-update-manager/scripts/notifications/notify -up-system; killall alert-update.py; \
-				sudo /opt/regataos-update-manager/scripts/regataos-up-all.sh & ps -C install-update.py > "/dev/null"; if [ $? = 1 ]; then  cd "/opt/regataos-update-manager/tray-icon/"; python install-update.py; fi';
-				exec(command_line,function(error,call,errlog){
+				var command_line = 'echo "" > "/tmp/regataos-update/all-auto-update.txt"';
+				exec(command_line, (error, stdout, stderr) => {
 				});
 			}
-			});
-
-		} else {
-			var command_line = 'echo "" > "/tmp/regataos-update/all-auto-update.txt"';
-			exec(command_line, (error, stdout, stderr) => {
-			});
 		}
+		});
+		return;
+
+	} else {
+		var command_line = "/opt/regataos-update-manager/scripts/update-functions-icontray -update-option2";
+		exec(command_line,function(error,call,errlog){
+		});
 	}
 	});
-	return;
-
-} else {
-	var command_line = 'echo "other-updates" > "/tmp/regataos-update/list-apps-queue.txt"; \
-	rm -f "/tmp/regataos-update/stop-all-update.txt"; \
-	/opt/regataos-update-manager/scripts/notifications/notify -up-system; killall alert-update.py; \
-	sudo /opt/regataos-update-manager/scripts/regataos-other-up.sh & ps -C install-update.py > "/dev/null"; if [ $? = 1 ]; then  cd "/opt/regataos-update-manager/tray-icon/"; python install-update.py; fi';
-    exec(command_line,function(error,call,errlog){
-    });
-}
-});
 }
 
 // Install updates from the system tray icon

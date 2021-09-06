@@ -46,22 +46,18 @@ if [ $(echo $number_packages) -ge 1 ]; then
             if [ $(echo $number_apps) -eq 0 ]; then
                 echo "updated" > "/tmp/regataos-update/status.txt"
                 rm -f "/tmp/regataos-update/already_updated.txt"
-                killall alert-update.py
                 killall install-update.py
-                kill -KILL $(ps -C "python install-update.py" | awk '{print $1}'| tail -1)
             fi
+
         else
             echo "updated" > "/tmp/regataos-update/status.txt"
             rm -f "/tmp/regataos-update/already_updated.txt"
-            killall alert-update.py
             killall install-update.py
-            kill -KILL $(ps -C "python install-update.py" | awk '{print $1}'| tail -1)
         fi
     fi
+
 else
     echo "updated" > "/tmp/regataos-update/status.txt"
     rm -f "/tmp/regataos-update/already_updated.txt"
-    killall alert-update.py
     killall install-update.py
-    kill -KILL $(ps -C "python install-update.py" | awk '{print $1}'| tail -1)
 fi

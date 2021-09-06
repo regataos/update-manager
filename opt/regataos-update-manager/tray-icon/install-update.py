@@ -8,7 +8,7 @@ from PyQt5.QtGui import QIcon
 app = QApplication(sys.argv)
 
 # System tray icon information
-trayIcon = QSystemTrayIcon(QIcon('check-update.png'), parent=app)
+trayIcon = QSystemTrayIcon(QIcon('alert-update.png'), parent=app)
 title = os.popen('/bin/bash set_language_icontray -install-up-title')
 title = title.read().rstrip('\n')
 trayIcon.setToolTip(title)

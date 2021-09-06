@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Installing updates
+function install_updates() {
+    killall check-update.py
+    killall alert-update.py
+
+    ps -C install-update.py > /dev/null
+    if [ $? = 1 ]; then
+        cd /opt/regataos-update-manager/tray-icon/
+        ./install-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -up-system
+    fi
+}
+
+# Functions with update options for system tray icon
+function update1() {
+    if test ! -e "/tmp/regataos-update/updated-apps.txt"; then
+        echo "" > "/tmp/regataos-update/updated-apps.txt"
+    fi
+
+    rm -f "/tmp/regataos-update/all-auto-update.txt"
+    rm -f "/tmp/regataos-update/stop-all-update.txt"
+
+	install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-all.sh
+    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+}
+
+function update2() {
+    echo "other-updates" > "/tmp/regataos-update/list-apps-queue.txt"
+	rm -f "/tmp/regataos-update/stop-all-update.txt"
+
+	install_updates & sudo /opt/regataos-update-manager/scripts/regataos-other-up.sh
+    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+}
+
+# Run options
+case $1 in
+    "-update-option1") update1
+        ;;
+    "-update-option2") update2
+        ;;
+   *) echo "Invalid option!"
+      exit 1
+      ;;
+esac

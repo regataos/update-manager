@@ -1,5 +1,5 @@
 Name: regataos-update-manager
-Version: 1.5
+Version: 1.6
 Release: 0
 Url: https://github.com/regataos/update-manager
 Summary: Regata OS Update Manager
@@ -38,6 +38,8 @@ fi
 if test ! -e /usr/bin/regataosupdate ; then
 	ln -sf /opt/magma/regataosupdate /usr/bin/regataosupdate
 fi
+
+/opt/regataos-update-manager/scripts/set_language.sh start
 
 update-desktop-database
 

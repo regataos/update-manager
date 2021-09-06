@@ -11,7 +11,6 @@ else
 	chmod 777 /tmp/regataos-update/*
 fi
 
-killall alert-update.py
 rm -f "/tmp/regataos-update/stop-all-update.txt"
 
 function update_all_apps() {

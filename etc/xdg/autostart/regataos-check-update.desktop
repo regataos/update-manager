@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/opt/regataos-update-manager/scripts/regataos-check-up.sh
+Exec=sleep 10; /opt/regataos-update-manager/scripts/regataos-check-up.sh
 OnlyShowIn=KDE;
 Type=Service
 MimeType=

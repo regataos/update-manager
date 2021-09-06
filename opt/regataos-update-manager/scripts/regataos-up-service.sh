@@ -10,6 +10,53 @@ if ! ping -c 1 www.google.com.br ; then
     echo "Offline!"
 
 else
+    # Functions that display notifications in the system tray icon
+    #Checking for updates
+    function check_updates() {
+        killall install-update.py
+        killall alert-update.py
+
+        ps -C check-update.py > /dev/null
+        if [ $? = 1 ]; then
+            cd /opt/regataos-update-manager/tray-icon/
+            ./check-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -check-up
+        fi
+    }
+
+    #Installing updates
+    function install_updates() {
+        killall check-update.py
+        killall alert-update.py
+
+        ps -C install-update.py > /dev/null
+        if [ $? = 1 ]; then
+            cd /opt/regataos-update-manager/tray-icon/
+            ./install-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -up-system
+        fi
+    }
+
+    #Alert about updates
+    function alert_updates() {
+        killall check-update.py
+        killall install-update.py
+
+        ps -C alert-update.py > /dev/null
+        if [ $? = 1 ]; then
+            cd /opt/regataos-update-manager/tray-icon/
+            ./alert-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -show-up
+        fi
+    }
+
+    #There are no updates
+    function no_updates() {
+        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -no-up
+
+        sleep 5
+        killall check-update.py
+        killall install-update.py
+        killall alert-update.py
+    }
+
     # Create file with current status
     auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
     if [[ $(echo "$auto_up_config") == *"3"* ]]; then
@@ -49,8 +96,7 @@ else
         if test -e "/tmp/regataos-update/already_updated.txt"; then
             auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
             if [[ $(echo "$auto_up_config") == *"1"* ]]; then
-                killall check-update.py
-                /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -up-system
+                install_updates
 
                 if test -e "/tmp/regataos-update/apps-list.txt"; then
                     if test ! -e "/tmp/regataos-update/updated-apps.txt"; then
@@ -72,26 +118,19 @@ else
 			        rm -f "/tmp/regataos-update/all-auto-update.txt"
                     rm -f "/tmp/regataos-update/stop-all-update.txt"
 
-	                sudo -S /opt/regataos-update-manager/scripts/regataos-up-all.sh & ps -C install-update.py > "/dev/null"; if [ $? = 1 ]; then  cd "/opt/regataos-update-manager/tray-icon/"; python install-update.py; fi
-                    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+	                install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-all.sh
+	                /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
 
                 else
                     echo "other-updates" > "/tmp/regataos-update/list-apps-queue.txt"
 	                rm -f "/tmp/regataos-update/stop-all-update.txt"
 
-	                sudo -S /opt/regataos-update-manager/scripts/regataos-up-other-up.sh & ps -C install-update.py > "/dev/null"; if [ $? = 1 ]; then  cd "/opt/regataos-update-manager/tray-icon/"; python install-update.py; fi
-                    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+	                install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-other-up.sh
+	                /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
                 fi
 
             elif [[ $(echo "$auto_up_config") == *"2"* ]]; then
-                killall check-update.py
-                /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -show-up
-
-	            ps -C alert-update.py > /dev/null
-	            if [ $? = 1 ]; then
-                    cd /opt/regataos-update-manager/tray-icon/
-                    ./alert-update.py
-                fi
+                alert_updates
 
             elif [[ $(echo "$auto_up_config") == *"3"* ]]; then
                 echo "Nothing to do ..."
