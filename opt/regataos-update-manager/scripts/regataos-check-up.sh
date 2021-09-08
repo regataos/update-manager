@@ -119,7 +119,7 @@ else
         # Check for updates
         auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
         if [[ $(echo "$auto_up_config") != *"3"* ]]; then
-            check_updates & sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+            sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
         fi
 
         # First update check completed
