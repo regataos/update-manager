@@ -133,7 +133,7 @@ else
                         {
                         echo "<ul>"
                         while IFS= read -r file_line || [[ -n "$file_line" ]]; do
-                        echo "  <li>$file_line</li>"
+                        echo "  <li><div class='otherup-app-title otherup-app-$file_line'>$file_line</div><div class='otherup-app-status-download otherup-app-status-download-$file_line otherup-app-status-desc'>Downloading...</div> <div class='otherup-app-status-install otherup-app-status-install-$file_line otherup-app-status-desc'>Installing...</div> <div class='otherup-app-status-concluded otherup-app-status-concluded-$file_line otherup-app-status-desc'>Concluded!</div></li>"
                         done < "/tmp/regataos-update/package-list.txt"
                         echo "</ul>"
                         } 2>&1 | tee "/tmp/regataos-update/package-list-html.txt"

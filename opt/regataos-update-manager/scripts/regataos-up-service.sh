@@ -119,14 +119,20 @@ else
                     rm -f "/tmp/regataos-update/stop-all-update.txt"
 
 	                install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-all.sh
-	                /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+
+                    if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
+                        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+                    fi
 
                 else
                     echo "other-updates" > "/tmp/regataos-update/list-apps-queue.txt"
 	                rm -f "/tmp/regataos-update/stop-all-update.txt"
 
 	                install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-other-up.sh
-	                /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+
+                    if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
+                        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+                    fi
                 fi
 
             elif [[ $(echo "$auto_up_config") == *"2"* ]]; then

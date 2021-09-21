@@ -44,6 +44,10 @@ ul {
     list-style-image: url(../images/icon-list.png);
 }
 
+li {
+    margin-bottom: 0px;
+}
+
 .sidebar {
     display: block;
     position: fixed;
@@ -648,6 +652,20 @@ h1 {
     font-size: 15px;
     margin-top: 11px;
     color: #575757;
+}
+
+.otherup-app-title {
+    float: left;
+    margin-right: 10px;
+}
+
+.otherup-app-status-download, .otherup-app-status-install, .otherup-app-status-concluded {
+    display: none;
+    float: left;
+    font-size: 15px;
+    color: #575757;
+    margin-top: 2px;
+    margin-right: 10px;
 }
 
 .total-download-percentage {

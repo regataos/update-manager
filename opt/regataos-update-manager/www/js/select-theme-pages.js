@@ -22,14 +22,17 @@ function check_theme_pages() {
             $(".more-details-contents").css("background-color", "#171a21");
             $(".more-details-contents").css("border", "1px solid #3daee9");
             $(".app-status").css("color", "#ccc");
+            $(".app-status-pending").css("color", "#ccc");
+            $(".app-status-download").css("color", "#ccc");
+            $(".app-status-install").css("color", "#ccc");
+            $(".app-status-concluded").css("color", "#ccc");
+            $(".app-status-percentage").css("color", "#ccc");
 
             var option_home = document.getElementById("updateall-button2");
             option_home.classList.remove("update-all-button2-white");
             option_home.classList.add("update-all-button2-dark");
 
-            var option_home = document.getElementById("cancel-specific-app");
-            option_home.classList.remove("cancel-app-white");
-            option_home.classList.add("cancel-app-dark");
+            $(".cancel-app").removeClass("cancel-app-white").addClass("cancel-app-dark");
 
         } else {
             // To the main page
@@ -47,14 +50,17 @@ function check_theme_pages() {
             $(".more-details-contents").css("background-color", "#fff");
             $(".more-details-contents").css("border", "1px solid #ccc");
             $(".app-status").css("color", "#575757");
+            $(".app-status-pending").css("color", "#575757");
+            $(".app-status-download").css("color", "#575757");
+            $(".app-status-install").css("color", "#575757");
+            $(".app-status-concluded").css("color", "#575757");
+            $(".app-status-percentage").css("color", "#575757");
 
             var option_home = document.getElementById("updateall-button2");
             option_home.classList.remove("update-all-button2-dark");
             option_home.classList.add("update-all-button2-white");
 
-            var option_home = document.getElementById("cancel-specific-app");
-            option_home.classList.remove("cancel-app-dark");
-            option_home.classList.add("cancel-app-white");
+            $(".cancel-app").removeClass("cancel-app-dark").addClass("cancel-app-white");
         }
         return;
     }
