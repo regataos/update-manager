@@ -1,5 +1,5 @@
 Name: regataos-update-manager
-Version: 1.6
+Version: 1.7
 Release: 0
 Url: https://github.com/regataos/update-manager
 Summary: Regata OS Update Manager
@@ -10,9 +10,9 @@ BuildRequires: update-desktop-files
 BuildRequires: hicolor-icon-theme
 BuildRequires: -post-build-checks
 Requires: xz
-Requires: magma >= 5.52.2
-Requires: regataos-base >= 21.0.1
-Requires: regataos-store >= 21.0
+Requires: magma >= 5.54.1
+Requires: regataos-base >= 21.0.12
+Requires: regataos-store >= 21.3
 Conflicts: plasma5-pk-updates
 License: MIT
 Source1: %{name}-%{version}.tar.xz
@@ -35,6 +35,7 @@ fi
 if test ! -e /opt/magma/regataosupdate ; then
 	cp -f /opt/magma/magma /opt/magma/regataosupdate
 fi
+
 if test ! -e /usr/bin/regataosupdate ; then
 	ln -sf /opt/magma/regataosupdate /usr/bin/regataosupdate
 fi

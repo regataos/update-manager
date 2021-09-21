@@ -39,15 +39,15 @@ for (var i = 0; i < apps.length; i++) {
             new_app_blocks.innerHTML = ' \
             <div class="icon-app" style="background-image:url(' + icon_file + ');"></div> \
             <div class="app-name">' + app_name + '</div> \
-            <div id="pending-' + nickname + '" class="app-status-pending">Pending...</div> \
-            <div id="downloading-' + nickname + '" class="app-status-download">Downloading...</div> \
-            <div id="downloaded-' + nickname + '" class="app-status-percentage"></div> \
-            <div id="total-download-' + nickname + '" class="total-download-percentage"></div> \
-            <div id="percentage-' + nickname + '" class="app-status-percentage"></div> \
-            <div id="installing-' + nickname + '" class="app-status-install">Installing...</div> \
-            <div id="concluded-' + nickname + '" class="app-status-concluded">Concluded!</div> \
+            <div id="pending-' + nickname + '" class="app-status-pending app-status">Pending...</div> \
+            <div id="downloading-' + nickname + '" class="app-status-download app-status">Downloading...</div> \
+            <div id="downloaded-' + nickname + '" class="app-status-percentage app-status"></div> \
+            <div id="total-download-' + nickname + '" class="total-download-percentage app-status"></div> \
+            <div id="percentage-' + nickname + '" class="app-status-percentage app-status"></div> \
+            <div id="installing-' + nickname + '" class="app-status-install app-status">Installing...</div> \
+            <div id="concluded-' + nickname + '" class="app-status-concluded app-status">Concluded!</div> \
             <div id="update-app-' + nickname + '" class="update-app" onclick='+marks+'window.nickname="' + nickname + '"; update_specific_app();'+marks+'>Update</div> \
-            <div id="cancel-app-' + nickname + '" class="cancel-app" onclick='+marks+'window.nickname="' + nickname + '"; cancel_specific_app();'+marks+'>Cancel</div>';
+            <div id="cancel-specific-app" class="cancel-app-' + nickname + ' cancel-app cancel-app-white" onclick='+marks+'window.nickname="' + nickname + '"; cancel_specific_app();'+marks+'>Cancel</div>';
 
             var all_blocks = document.querySelector("div#all-apps");
             all_blocks.appendChild(new_app_blocks);

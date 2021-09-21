@@ -258,7 +258,7 @@ for (var i = 0; i < apps.length; i++) {
         $("div#update-app-" + app_package_name).css("display", "none");
 
         setTimeout(function() {
-            $("div#cancel-app-" + app_package_name).css("display", "block");
+            $("div.cancel-app-" + app_package_name).css("display", "block");
         }, 500);
 
         $("div#concluded-" + app_package_name).css("display", "none");
@@ -271,7 +271,7 @@ for (var i = 0; i < apps.length; i++) {
         $("div#update-app-" + app_package_name).css("display", "none");
 
         setTimeout(function() {
-            $("div#cancel-app-" + app_package_name).css("display", "block");
+            $("div.cancel-app-" + app_package_name).css("display", "block");
         }, 500);
 
         $("div#concluded-" + app_package_name).css("display", "none");
@@ -282,7 +282,7 @@ for (var i = 0; i < apps.length; i++) {
         $("div#downloading-" + app_package_name).css("display", "none");
         $("div#installing-" + app_package_name).css("display", "block");
         $("div#update-app-" + app_package_name).css("display", "none");
-        $("div#cancel-app-" + app_package_name).css("display", "none");
+        $("div.cancel-app-" + app_package_name).css("display", "none");
         $("div#concluded-" + app_package_name).css("display", "none");
 
     } else if (updated_application.indexOf(app_package_name) > -1) {
@@ -291,7 +291,7 @@ for (var i = 0; i < apps.length; i++) {
         $("div#downloading-" + app_package_name).css("display", "none");
         $("div#installing-" + app_package_name).css("display", "none");
         $("div#update-app-" + app_package_name).css("display", "none");
-        $("div#cancel-app-" + app_package_name).css("display", "none");
+        $("div.cancel-app-" + app_package_name).css("display", "none");
         $("div#concluded-" + app_package_name).css("display", "block");
 
 	} else {
@@ -308,7 +308,7 @@ for (var i = 0; i < apps.length; i++) {
             //}, 500);
         }
 
-        $("div#cancel-app-" + app_package_name).css("display", "none");
+        $("div.cancel-app-" + app_package_name).css("display", "none");
         $("div#concluded-" + app_package_name).css("display", "none");
     }
 }
@@ -652,7 +652,7 @@ function show_or_hide_balloon_effect() {
 
 setInterval(function(){
     show_or_hide_balloon_effect();
-}, 500);
+}, 200);
 
 // Disable the update cancel button on the backend
 var timer_update_cancel = setInterval(disable_update_cancellation, 100);

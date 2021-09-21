@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="css/roboto-style.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/select-theme-index.js"></script>
 	<script type="text/javascript" src="js/fas-icons.js"></script>
 	<script type="text/javascript" src="js/functions.js"></script>
 	<script type="text/javascript" src="js/search-update.js"></script>
@@ -18,29 +19,40 @@
     <script type="text/javascript">
 		check_updates();
     </script>
+
+	<!-- Display content when everything is ready -->
+	<script type="text/javascript">
+		$(function(){
+			$("#loadscreen").fadeOut("slow");
+		});
+
+		$(function(){
+			$(".blocks").fadeIn("slow");
+		});
+	</script>
 </head>
 <body>
 
 	<div class="sidebar">
 		<ul class="ul-sidebar">
-            <li class="li-sidebar home" onclick="go_home();" title="Updates">
+            <li id="option-home" class="li-sidebar home sidebar-button" onclick="go_home();" title="Updates">
                 <a class="link-items" onclick="go_home();">
                     <!-- <i class="fas fa-home" style="display: none;"></i> -->
-                    <img class="icones-menu" style="margin-left: 3px; height: 32px;" src="images/img-sidebar/home.png"/>
+                    <img class="icones-menu home-icon" style="margin-left: 3px; height: 32px;" src="images/img-sidebar/home.png"/>
                     <p style="margin-left: 13px;"></p>
                 </a>
             </li>
-            <li class="li-sidebar historic" onclick="go_historic();" title="Update history">
+            <li id="option-historic" class="li-sidebar historic sidebar-button" onclick="go_historic();" title="Update history">
                 <a class="link-items" onclick="go_historic();">
                     <!-- <i class="fas fa-home" style="display: none;"></i> -->
-                    <img class="icones-menu" style="margin-left: 3px; height: 32px;" src="images/img-sidebar/historic.png"/>
+                    <img class="icones-menu historic-icon" style="margin-left: 3px; height: 32px;" src="images/img-sidebar/historic.png"/>
                     <p style="margin-left: 10px;"></p>
                 </a>
             </li>
-            <li class="li-sidebar settings" onclick="go_settings();" title="Settings">
+            <li id="option-settings" class="li-sidebar settings sidebar-button" onclick="go_settings();" title="Settings">
                 <a class="link-items" onclick="go_settings();">
                     <!-- <i class="fas fa-paint-brush" style="margin-left: 1px;" style="display: none;"></i> -->
-                    <img class="icones-menu" style="margin-left: 3px; height: 33px;" src="images/img-sidebar/settings.png"/>
+                    <img class="icones-menu settings-icon" style="margin-left: 3px; height: 33px;" src="images/img-sidebar/settings.png"/>
                     <p style="margin-left: 10px;"></p>
                 </a>
             </li>

@@ -239,8 +239,8 @@ function stop_update() {
     ps -C rpm > /dev/null
     if [ $? = 1 ]
     then
-        killall zypper
         killall regataos-up.sh
+        killall zypper
         echo "never-updates" > "/tmp/regataos-update/status.txt"
         exit 0;
     fi
