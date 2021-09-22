@@ -42,3 +42,7 @@ else
     ln -sf /opt/regataos-update-manager/www/js/translations/en-us/language.js \
     /opt/regataos-update-manager/www/js/translations/language.js
 fi
+
+# Clear cache
+rm -f /tmp/regataos-update/*.txt
+rm -f /tmp/regataos-update/*.rpm

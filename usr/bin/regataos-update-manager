@@ -14,6 +14,18 @@ if test ! -e "/tmp/regataos-update/config"; then
 	ln -sf "$HOME/.config/regataos-update" "/tmp/regataos-update/config"
 fi
 
+# Check language
+if test ! -e "/tmp/regataos-configs/config/plasma-localerc" ; then
+	mkdir -p "/tmp/regataos-configs/config"
+	ln -sf "$HOME/.config/plasma-localerc" "/tmp/regataos-configs/config/"
+fi
+
+# Check the theme that should be used
+if test ! -e "/tmp/regataos-configs/config/kdeglobals" ; then
+	mkdir -p "/tmp/regataos-configs/config"
+	ln -sf "$HOME/.config/kdeglobals" "/tmp/regataos-configs/config/"
+fi
+
 # Run application
 if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
 	regataosupdate --disable-gpu /opt/regataos-update-manager
