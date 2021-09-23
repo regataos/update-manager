@@ -45,19 +45,25 @@ if [ $(echo $number_packages) -ge 1 ]; then
             number_apps=$(wc -l /tmp/regataos-update/apps-list.txt | awk '{print $1}')
             if [ $(echo $number_apps) -eq 0 ]; then
                 echo "updated" > "/tmp/regataos-update/status.txt"
-                rm -f "/tmp/regataos-update/already_updated.txt"
+                rm -f /tmp/regataos-update/already_updated.txt
+                rm -f /tmp/regataos-update/*.rpm
                 killall install-update.py
+                killall alert-update.py
             fi
 
         else
             echo "updated" > "/tmp/regataos-update/status.txt"
-            rm -f "/tmp/regataos-update/already_updated.txt"
+            rm -f /tmp/regataos-update/already_updated.txt
+            rm -f /tmp/regataos-update/*.rpm
             killall install-update.py
+            killall alert-update.py
         fi
     fi
 
 else
     echo "updated" > "/tmp/regataos-update/status.txt"
-    rm -f "/tmp/regataos-update/already_updated.txt"
+    rm -f /tmp/regataos-update/already_updated.txt
+    rm -f /tmp/regataos-update/*.rpm
     killall install-update.py
+    killall alert-update.py
 fi
