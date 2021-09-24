@@ -49,3 +49,4 @@ fi
 # Clear cache
 rm -f /tmp/regataos-update/*.txt
 rm -f /tmp/regataos-update/*.rpm
+rm -f "/tmp/regataos-configs/config/kdeglobals"
