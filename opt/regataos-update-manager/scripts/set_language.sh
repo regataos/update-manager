@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Restart the NetworkManager service
-sudo systemctl restart NetworkManager
-
 # Detect system language
 sleep 3
 
