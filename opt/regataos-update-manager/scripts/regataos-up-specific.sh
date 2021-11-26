@@ -38,14 +38,14 @@ function update_all_apps() {
     # Prepare package download link
     repoUrl="$repo_link"
     if [[ $repoUrl == *"[mainRepositoryUrl]"* ]]; then
-        repo_link="$(grep -r mainRepositoryUrl= /usr/share/regataos/regatas-base-version.txt | cut -d'=' -f 2-)"
+        repo_link="$(grep -r mainRepositoryUrl= /usr/share/regataos/regataos-base-version.txt | cut -d'=' -f 2-)"
 
     elif [[ $repoUrl == *"[basedOnVersion]"* ]]; then
-        basedOnVersion="$(grep -r basedOnVersion= /usr/share/regataos/regatas-base-version.txt | cut -d'=' -f 2-)"
+        basedOnVersion="$(grep -r basedOnVersion= /usr/share/regataos/regataos-base-version.txt | cut -d'=' -f 2-)"
         repo_link=$(echo $repoUrl | sed "s,\[basedOnVersion\],$basedOnVersion,")
 
     elif [[ $repoUrl == *"[basedOn]"* ]]; then
-        basedOn="$(grep -r basedOn= /usr/share/regataos/regatas-base-version.txt | cut -d'=' -f 2-)"
+        basedOn="$(grep -r basedOn= /usr/share/regataos/regataos-base-version.txt | cut -d'=' -f 2-)"
         repo_link=$(echo $repoUrl | sed "s,\[basedOn\],$basedOn,")
 
     else
