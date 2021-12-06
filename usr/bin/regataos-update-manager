@@ -14,6 +14,11 @@ if test ! -e "/tmp/regataos-update/config"; then
 	ln -sf "$HOME/.config/regataos-update" "/tmp/regataos-update/config"
 fi
 
+if test ! -e "$HOME/.config/regataos-update/regataos-update.conf"; then
+	mkdir -p "$HOME/.config/regataos-update"
+	echo "autoupdate=1" > "$HOME/.config/regataos-update/regataos-update.conf"
+fi
+
 # Check language
 if test ! -e "/tmp/regataos-configs/config/plasma-localerc" ; then
 	mkdir -p "/tmp/regataos-configs/config"
