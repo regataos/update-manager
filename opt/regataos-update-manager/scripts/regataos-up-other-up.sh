@@ -20,7 +20,7 @@ if [[ $(grep -r "other-updates" "/tmp/regataos-update/list-apps-queue.txt") == *
     export LC_ALL="en_US.UTF-8"
     export LANG="en_US.UTF-8"
     export LANGUAGE="en_US"
-    sudo zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses $(cat /tmp/regataos-update/package-list.txt | tr '\n' ' ')
+    sudo zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses $(cat /tmp/regataos-update/package-list.txt | tr '\n' ' ') | awk 'NF>0'
     } 2>&1 | tee "/var/log/regataos-logs/regataos-other-updates.log"
 
     echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"
