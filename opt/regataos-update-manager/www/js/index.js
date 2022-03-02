@@ -49,6 +49,8 @@ function current_status() {
             $(".yes-up").css("display", "none");
             $(".no-up").css("display", "none");
             $(".updated_system").css("display", "none");
+            $(".updated_system-check-button").css("display", "none");
+            $(".check-updates-button-status").css("display", "none");
             $(".main").css("margin-bottom", "0px");
             $(".never-up").css("display", "block");
             $(".never_update_system").css("display", "block");
@@ -63,6 +65,8 @@ function current_status() {
             $(".yes-up").css("display", "none");
             $(".no-up").css("display", "none");
             $(".updated_system").css("display", "none");
+            $(".updated_system-check-button").css("display", "none");
+            $(".check-updates-button-status").css("display", "none");
             $(".main").css("margin-bottom", "60px");
             $(".never-up").css("display", "none");
             $(".never_update_system").css("display", "none");
@@ -77,6 +81,8 @@ function current_status() {
             $(".yes-up").css("display", "block");
             $(".no-up").css("display", "none");
             $(".updated_system").css("display", "none");
+            $(".updated_system-check-button").css("display", "none");
+            $(".check-updates-button-status").css("display", "none");
             $(".main").css("margin-bottom", "60px");
             $(".never-up").css("display", "none");
             $(".never_update_system").css("display", "none");
@@ -104,8 +110,10 @@ function current_status() {
         } else if ((current_status.indexOf("no-updates") > -1) == "1") {
             $(".update-all").css("display", "none");
             $(".yes-up").css("display", "none");
-            $(".no-up").css("display", "block");
+            $(".no-up").css("display", "none");
             $(".updated_system").css("display", "block");
+            $(".updated_system-check-button").css("display", "block");
+            $(".check-updates-button-status").css("display", "block");
             $(".main").css("margin-bottom", "60px");
             $(".never-up").css("display", "none");
             $(".never_update_system").css("display", "none");
@@ -358,7 +366,6 @@ if (!err) {
             var command = '\
             echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
             echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-            console.log(command);
             exec(command,function(error,call,errlog){
             });
 
@@ -368,7 +375,6 @@ if (!err) {
             var command = '\
             echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
             echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-            console.log(command);
             exec(command,function(error,call,errlog){
             });
     
@@ -378,11 +384,12 @@ if (!err) {
             var command = ' \
             echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
             echo "other-updates" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-            console.log(command);
             exec(command,function(error,call,errlog){
             });
 
-            var command_line = "grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.log | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
+            var command_line = "\
+            cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt; \
+            grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
             exec(command_line, (error, stdout, stderr) => {
 			if (stdout) {
                 $("div#percentage-other-updates").text(stdout);
@@ -393,11 +400,12 @@ if (!err) {
             var command = ' \
             echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
             echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"'
-            console.log(command);
             exec(command,function(error,call,errlog){
             });
 
-            var command_line = "grep -r 'Retrieving package' /var/log/regataos-logs/regataos-other-updates.log | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1";
+            var command_line = "\
+            cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt; \
+            grep -r 'Retrieving package' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1";
             exec(command_line, (error, stdout, stderr) => {
 			if (stdout) {
                 $("div#percentage-other-updates").text(stdout);
@@ -652,7 +660,7 @@ function show_or_hide_balloon_effect() {
 
 setInterval(function(){
     show_or_hide_balloon_effect();
-}, 200);
+}, 100);
 
 // Disable the update cancel button on the backend
 var timer_update_cancel = setInterval(disable_update_cancellation, 100);

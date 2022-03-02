@@ -202,7 +202,7 @@ function update_packages() {
     export LC_ALL="en_US.UTF-8"
     export LANG="en_US.UTF-8"
     export LANGUAGE="en_US"
-    sudo zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses | awk 'NF>0'
+    sudo zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses
     } 2>&1 | tee "/var/log/regataos-logs/regataos-update-packages.log"
 
     exit

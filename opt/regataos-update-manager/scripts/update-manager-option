@@ -70,6 +70,19 @@ function update3() {
     echo "never-updates" > "/tmp/regataos-update/status.txt"
 }
 
+function update_button() {
+    if test ! -e "/tmp/regataos-update/already_updated.txt"; then
+        ps -C zypper > /dev/null
+        if [ $? = 1 ]; then
+            rm -f "/tmp/regataos-update/status.txt"
+            sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
+        fi
+
+    else
+        echo "show-updates" > "/tmp/regataos-update/status.txt"
+    fi
+}
+
 # Run options
 case $1 in
     "-update-1") update1
@@ -77,6 +90,8 @@ case $1 in
     "-update-2") update2
         ;;
     "-update-3") update3
+        ;;
+    "-update-button") update_button
         ;;
    *) echo "Invalid option!"
       exit 1

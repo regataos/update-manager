@@ -35,6 +35,9 @@ $(document).ready(function() {
 	$(".app-status-download").text("Baixando...");
 	$(".app-status-install").text("Instalando...");
 	$(".app-status-concluded").text("Concluído!");
+	$("#check-updates-button").text("Verificar atualizações");
+	$("#check-updates-button-title").text("Tudo pronto");
+	$("#check-updates-button-desc").text("Todos os apps estão atualizados");
 
 	setTimeout(function(){
 		$(".update-app").text("Atualizar");

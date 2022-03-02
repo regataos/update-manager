@@ -278,3 +278,15 @@ function cancel_specific_app() {
 	exec(command_line, (error, stdout, stderr) => {
 	});
 }
+
+// Check for updates manually
+function check_updates_manually() {
+	const exec = require('child_process').exec;
+	var command_line = "/opt/regataos-update-manager/scripts/update-manager-option -update-button";
+	exec(command_line,function(error,call,errlog){
+	});
+
+	setTimeout(function(){
+		location.reload();
+	}, 1000);
+}
