@@ -131,14 +131,13 @@ function current_status() {
             $(".main").css("margin-bottom", "60px");
             $(".never-up").css("display", "none");
             $(".never_update_system").css("display", "none");
-            $(".div1").css("height", "100px");
+            $(".div1").css("height", "110px");
             $(".div2").css("display", "none");
             $(".search-update-status").css("display", "none");
             $(".check-up").css("display", "none");
             $(".loading").css("display", "none");
 
             clearInterval(current_status_timer);
-
         }
     return;
     }
@@ -161,7 +160,7 @@ function updated_status() {
             $(".update-all-button2").css("display", "none");
             $(".yes-up").css("display", "none");
             $(".no-up").css("display", "none");
-            $(".div2").css("display", "block");
+            $(".div2").css("display", "none");
 
             var update_config = fs.readFileSync("/tmp/regataos-update/config/regataos-update.conf", "utf8");
             if ((update_config.indexOf("autoupdate=1") > -1) == "1") {
@@ -178,7 +177,7 @@ function updated_status() {
             $(".updated").css("display", "none");
             $(".updated-img").css("display", "none");
 		    //location.reload();
-            $(".div1").css("height", "100px");
+            $(".div1").css("height", "110px");
             $(".div1-sub").css("display", "none");
             $(".updated_system").css("display", "block");
             $(".updated_system-check-button").css("display", "block");

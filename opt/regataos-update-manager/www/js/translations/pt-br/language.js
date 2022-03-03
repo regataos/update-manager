@@ -27,7 +27,7 @@ $(document).ready(function() {
 	$(".yes-update-auto").text("Atualização automática ativada.");
 
 	// Updates buttons and status
-	$(".other-updates .app-name").text("Outras atualizações");
+	$(".other-updates .app-name").text("Atualizações do sistema");
 	$(".more-details-text").text("Mais detalhes");
 	$("#update-app-other-updates").text("Atualizar");
 
