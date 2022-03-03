@@ -16,7 +16,7 @@ fi
 
 if test ! -e "$HOME/.config/regataos-update/regataos-update.conf"; then
 	mkdir -p "$HOME/.config/regataos-update"
-	echo "autoupdate=1" > "$HOME/.config/regataos-update/regataos-update.conf"
+	echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
 fi
 
 # Check language
