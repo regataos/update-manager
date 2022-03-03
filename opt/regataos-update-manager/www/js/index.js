@@ -54,6 +54,7 @@ function current_status() {
             $(".main").css("margin-bottom", "0px");
             $(".never-up").css("display", "block");
             $(".never_update_system").css("display", "block");
+            $(".div1").css("height", "170px");
             $(".div2").css("display", "none");
             $(".search-update-status").css("display", "none");
             $(".auto-update-status").css("display", "none");
@@ -70,6 +71,7 @@ function current_status() {
             $(".main").css("margin-bottom", "60px");
             $(".never-up").css("display", "none");
             $(".never_update_system").css("display", "none");
+            $(".div1").css("height", "170px");
             $(".div2").css("display", "none");
             $(".search-update-status").css("display", "block");
             $(".auto-update-status").css("display", "none");
@@ -83,6 +85,7 @@ function current_status() {
             $(".updated_system").css("display", "none");
             $(".updated_system-check-button").css("display", "none");
             $(".check-updates-button-status").css("display", "none");
+            $(".div1").css("height", "170px");
             $(".main").css("margin-bottom", "60px");
             $(".never-up").css("display", "none");
             $(".never_update_system").css("display", "none");
@@ -117,6 +120,7 @@ function current_status() {
             $(".main").css("margin-bottom", "60px");
             $(".never-up").css("display", "none");
             $(".never_update_system").css("display", "none");
+            $(".div1").css("height", "100px");
             $(".div2").css("display", "none");
             $(".search-update-status").css("display", "none");
             $(".auto-update-status").css("display", "none");
@@ -161,8 +165,9 @@ function updated_status() {
             $(".check-up").css("display", "none");
             $(".loading").css("display", "none");
             $(".updates-app-number").css("display", "none");
-            $(".updated").css("display", "block");
-            $(".updated-img").css("display", "block");
+            $(".updated").css("display", "none");
+            $(".updated-img").css("display", "none");
+		    location.reload();
 
             clearInterval(timer_updated);
         }
