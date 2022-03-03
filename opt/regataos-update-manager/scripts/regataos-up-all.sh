@@ -142,4 +142,8 @@ for i in /opt/regataos-store/apps-list/*.json; do
 
 done
 
+if test -e "/usr/share/regataos/first-update.txt"; then
+    rm -f "/usr/share/regataos/first-update.txt"
+fi
+
 sudo /opt/regataos-update-manager/scripts/regataos-other-up.sh start

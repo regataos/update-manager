@@ -53,3 +53,7 @@ else
     killall install-update.py
     kill -KILL $(ps -C "python install-update.py" | awk '{print $1}'| tail -1)
 fi
+
+if test -e "/usr/share/regataos/first-update.txt"; then
+    rm -f "/usr/share/regataos/first-update.txt"
+fi

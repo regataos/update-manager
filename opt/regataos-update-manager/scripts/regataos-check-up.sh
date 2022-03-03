@@ -145,6 +145,18 @@ else
         if test -e "/tmp/regataos-update/already_updated.txt"; then
             auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
             if [[ $(echo "$auto_up_config") == *"1"* ]]; then
+                # After the first update, just check for new updates and don't install packages automatically.
+                if test -e "/usr/share/regataos/first-update.txt"; then
+                    if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
+                        auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+                        if [[ $(echo "$auto_up_config") == *"1"* ]]; then
+                            sed -i "s/autoupdate=1/autoupdate=2/" "$HOME/.config/regataos-update/regataos-update.conf"
+                        fi
+                    else
+                        echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
+                    fi
+                fi
+
                 if test -e "/tmp/regataos-update/apps-list.txt"; then
                     if test ! -e "/tmp/regataos-update/updated-apps.txt"; then
                         echo "" > "/tmp/regataos-update/updated-apps.txt";
@@ -186,20 +198,6 @@ else
                     if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
                         /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
                     fi
-                fi
-
-                # After the first update, just check for new updates and don't install packages automatically.
-                if test -e "/usr/share/regataos/first-update.txt"; then
-                    if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
-                        auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
-                        if [[ $(echo "$auto_up_config") == *"1"* ]]; then
-                            sed -i "s/autoupdate=1/autoupdate=2/" "$HOME/.config/regataos-update/regataos-update.conf"
-                        fi
-                    else
-                        echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
-                    fi
-
-                    rm -f "/usr/share/regataos/first-update.txt"
                 fi
 
             elif [[ $(echo "$auto_up_config") == *"2"* ]]; then
