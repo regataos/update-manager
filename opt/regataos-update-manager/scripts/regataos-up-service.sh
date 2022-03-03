@@ -5,11 +5,7 @@ cd /
 while :
 do
 
-# Checking internet connection
-if ! ping -c 1 www.google.com.br ; then
-    echo "Offline!"
-
-else
+function update_service() {
     # Functions that display notifications in the system tray icon
     #Checking for updates
     function check_updates() {
@@ -145,6 +141,18 @@ else
                 echo "Nothing to do ..."
             fi
         fi
+    fi
+}
+
+# Checking internet connection
+if ! ping -c 1 www.google.com.br ; then
+    echo "Offline!"
+
+else
+    ps -C "regataos-up-all.sh | regataos-up-specific.sh | regataos-other-up.sh | regataos-up-other-up.sh | regataos-cancel-up-specific.sh | regataos-up-cancel-all.sh | regataosgcs | zypper | magma | steam | regataos-store | regataos-gcs | rungame | rungame-epicstore | rungame-gog | rungame-steam | runlauncher | runlauncher_exe | UbisoftConnect.exe | Launcher.exe | Origin.exe | GalaxyClient.exe | EpicGamesLauncher.exe | Battle.net.exe | heroic | steamwebhelper | minigalaxy | lutris" > /dev/null
+
+    if [ $? = 1 ]; then
+        update_service
     fi
 fi
 
