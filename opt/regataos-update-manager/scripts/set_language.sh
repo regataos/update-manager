@@ -3,11 +3,13 @@
 # Detect system language
 sleep 3
 
-if test -e "$HOME/.config/plasma-localerc" ; then
-    language=$(grep -r LANG "$HOME/.config/plasma-localerc")
+user=$(users | awk '{print $1}')
 
-elif test -e "$HOME/.config/user-dirs.locale" ; then
-    language=$(grep -r LANG "$HOME/.config/user-dirs.locale")
+if test -e "/home/$user/.config/plasma-localerc" ; then
+    language=$(grep -r LANG "/home/$user/.config/plasma-localerc")
+
+elif test -e "/home/$user/.config/user-dirs.locale" ; then
+    language=$(grep -r LANG "/home/$user/.config/user-dirs.locale")
 
 else
     language=$(echo $LANG)
