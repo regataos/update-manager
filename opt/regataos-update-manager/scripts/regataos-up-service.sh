@@ -132,6 +132,7 @@ function update_service() {
                 fi
 
             elif [[ $(echo "$auto_up_config") == *"2"* ]]; then
+                echo "show-updates" > "/tmp/regataos-update/status.txt";
                 alert_updates
 
             elif [[ $(echo "$auto_up_config") == *"3"* ]]; then
