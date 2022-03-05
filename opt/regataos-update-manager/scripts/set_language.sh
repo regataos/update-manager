@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Detect system language
-sleep 3
+sleep 3;
 
+# Detect system language
 user=$(users | awk '{print $1}')
 
 if test -e "/home/$user/.config/plasma-localerc" ; then
     language=$(grep -r LANG "/home/$user/.config/plasma-localerc")
 
 elif test -e "/home/$user/.config/user-dirs.locale" ; then
-    language=$(grep -r LANG "/home/$user/.config/user-dirs.locale")
+    language=$(cat "/home/$user/.config/user-dirs.locale")
 
 else
     language=$(echo $LANG)
