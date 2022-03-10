@@ -34,7 +34,6 @@ if [[ $(grep -r "other-updates" "/tmp/regataos-update/list-apps-queue.txt") == *
 
     rm -f "/tmp/regataos-update/update-in-progress.txt"
     rm -f "/tmp/regataos-update/other-updates-in-progress.txt"
-	rm -f "/var/log/regataos-logs/regataos-other-updates.log"
 fi
 
 if test -e "/tmp/regataos-update/apps-list.txt"; then

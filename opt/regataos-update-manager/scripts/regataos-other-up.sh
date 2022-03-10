@@ -34,7 +34,6 @@ if [[ $(grep -r "other-updates" "/tmp/regataos-update/updated-apps.txt") != *"ot
         sed -i '/^$/d' "/tmp/regataos-update/apps-list.txt"
 
         rm -f "/tmp/regataos-update/other-updates-in-progress.txt"
-		rm -f "/var/log/regataos-logs/regataos-other-updates.log"
     fi
 fi
 

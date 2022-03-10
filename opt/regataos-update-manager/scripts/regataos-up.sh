@@ -14,6 +14,9 @@ fi
 
 # Update the local cache of the repositories and list the available updates.
 function search_update() {
+# Clear cache
+rm -f "/var/log/regataos-logs/regataos-other-updates.log"
+
 # If the Calamares Installer is installed, just exit
 if test -e "/usr/bin/calamares"; then
     echo "The Calamares Installer was detected, leaving..."
