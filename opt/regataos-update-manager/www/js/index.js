@@ -408,12 +408,27 @@ if (!err) {
 
             var command_line = "\
             cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt; \
-            grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
+            grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
             exec(command_line, (error, stdout, stderr) => {
 			if (stdout) {
                 $("div#percentage-other-updates").text(stdout);
 			}
 			});
+            $("div#update-app-other-updates").css("display", "none");
+
+        } else if (progress.indexOf("Checking") > -1) {
+            var command = ' \
+            echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
+            echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"'
+            exec(command,function(error,call,errlog){
+            });
+
+            var command = "cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt;";
+            exec(command,function(error,call,errlog){
+            });
+
+            $("div#percentage-other-updates").text("Checking...");
+            $("div#update-app-other-updates").css("display", "none");
 
         } else if (progress.indexOf("Retrieving") > -1) {
             var command = ' \
@@ -424,13 +439,19 @@ if (!err) {
 
             var command_line = "\
             cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt; \
-            grep -r 'Retrieving package' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1";
+            grep -r 'Retrieving package' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1";
             exec(command_line, (error, stdout, stderr) => {
 			if (stdout) {
                 $("div#percentage-other-updates").text(stdout);
 			}
 			});
-        } 
+            $("div#update-app-other-updates").css("display", "none");
+
+        } else {
+            var command = "cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt;";
+            exec(command,function(error,call,errlog){
+            });
+        }
     }
     }); 
     }
