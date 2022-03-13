@@ -376,84 +376,94 @@ if (!err) {
         clearInterval(progress_other_up);
 
     } else {
-
-    fs.access('/var/log/regataos-logs/regataos-other-updates.log', (err) => {
-    if (!err) {
-        var progress = fs.readFileSync("/var/log/regataos-logs/regataos-other-updates.log", "utf8");
-
-        if (progress.indexOf("have been updated") > -1) {
-            var command = '\
-            echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-            echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-            exec(command,function(error,call,errlog){
-            });
-
-            clearInterval(progress_other_up);
-
-        } else if (progress.indexOf("There are running programs") > -1) {
-            var command = '\
-            echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-            echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-            exec(command,function(error,call,errlog){
-            });
-    
-            clearInterval(progress_other_up);
-
-        } else if (progress.indexOf("Installing") > -1) {
-            var command = ' \
-            echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-            echo "other-updates" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-            exec(command,function(error,call,errlog){
-            });
-
-            var command_line = "\
-            cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt; \
-            grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
+        fs.access('/var/log/regataos-logs/regataos-other-updates.log', (err) => {
+        if (!err) {
+            var command_line = "cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt; \
+            cat /var/log/regataos-logs/regataos-other-updates.txt";
             exec(command_line, (error, stdout, stderr) => {
-			if (stdout) {
-                $("div#percentage-other-updates").text(stdout);
-			}
-			});
-            $("div#update-app-other-updates").css("display", "none");
-
-        } else if (progress.indexOf("Checking") > -1) {
-            var command = ' \
-            echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-            echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"'
-            exec(command,function(error,call,errlog){
+            if (stdout) {
+                window.progress = stdout;
+            }
             });
 
-            var command = "cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt;";
-            exec(command,function(error,call,errlog){
-            });
+            if (progress.indexOf("have been updated") > -1) {
+                var command = '\
+                echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
+                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"';
+                exec(command,function(error,call,errlog){
+                });
 
-            $("div#percentage-other-updates").text("Checking...");
-            $("div#update-app-other-updates").css("display", "none");
+                clearInterval(progress_other_up);
 
-        } else if (progress.indexOf("Retrieving") > -1) {
-            var command = ' \
-            echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-            echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"'
-            exec(command,function(error,call,errlog){
-            });
+            } else if (progress.indexOf("There are running programs") > -1) {
+                var command = '\
+                echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
+                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"';
+                exec(command,function(error,call,errlog){
+                });
+        
+                clearInterval(progress_other_up);
 
-            var command_line = "\
-            cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt; \
-            grep -r 'Retrieving package' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1";
-            exec(command_line, (error, stdout, stderr) => {
-			if (stdout) {
-                $("div#percentage-other-updates").text(stdout);
-			}
-			});
-            $("div#update-app-other-updates").css("display", "none");
+            } else if (progress.indexOf("Executing") > -1) {
+                var command = ' \
+                echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
+                echo "other-updates" > "/tmp/regataos-update/installing-application-other-updates.txt"';
+                exec(command,function(error,call,errlog){
+                });
 
-        } else {
-            var command = "cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt;";
-            exec(command,function(error,call,errlog){
-            });
+                var command_line = "grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
+                exec(command_line, (error, stdout, stderr) => {
+                if (stdout) {
+                    $("div#percentage-other-updates").text(stdout);
+                }
+                });
+                $("div#update-app-other-updates").css("display", "none");
+
+            } else if (progress.indexOf("Installing") > -1) {
+                var command = ' \
+                echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
+                echo "other-updates" > "/tmp/regataos-update/installing-application-other-updates.txt"';
+                exec(command,function(error,call,errlog){
+                });
+
+                var command_line = "grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
+                exec(command_line, (error, stdout, stderr) => {
+                if (stdout) {
+                    $("div#percentage-other-updates").text(stdout);
+                }
+                });
+                $("div#update-app-other-updates").css("display", "none");
+
+            } else if (progress.indexOf("Checking") > -1) {
+                var command = ' \
+                echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
+                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"'
+                exec(command,function(error,call,errlog){
+                });
+
+                $("div#percentage-other-updates").text("Checking...");
+                $("div#update-app-other-updates").css("display", "none");
+
+            } else if (progress.indexOf("Retrieving") > -1) {
+                var command = ' \
+                echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
+                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"'
+                exec(command,function(error,call,errlog){
+                });
+
+                var command_line = "grep -r 'Retrieving package' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1";
+                exec(command_line, (error, stdout, stderr) => {
+                if (stdout) {
+                    $("div#percentage-other-updates").text(stdout);
+                }
+                });
+                $("div#update-app-other-updates").css("display", "none");
+
+            } else {
+                $("div#update-app-other-updates").css("display", "none");
+            }
         }
-    }
-    }); 
+        });
     }
 
 return;
@@ -514,7 +524,11 @@ if (fs.existsSync('/tmp/regataos-update/updated-apps.txt')) {
         if (fs.existsSync('/tmp/regataos-update/update-specific-in-progress.txt')) {
             $("div#update-app-other-updates").css("display", "none");
         } else {
-            $("div#update-app-other-updates").css("display", "block");
+            if (fs.existsSync('/var/log/regataos-logs/regataos-other-updates.log')) {
+                $("div#update-app-other-updates").css("display", "none");
+            } else {
+                $("div#update-app-other-updates").css("display", "block");
+            }
         }
     }
 }
@@ -588,7 +602,7 @@ for (var i = 0; i < apps.length; i++) {
 		exec(command_line, (error, stdout, stderr) => {
 		if (stdout) {
             $(document).ready(function() {
-                $("div#downloaded-" + app_package_name).text(stdout.replace(/\s/g, "") + ' MB');
+                $("div#downloaded-" + app_package_name).text(stdout.replace(/\s/g, "") + 'MB');
             });
 		}
 		});
