@@ -478,8 +478,8 @@ const fs = require('fs');
 if (fs.existsSync('/tmp/regataos-update/updated-apps.txt')) {
 
     var list_apps_queue = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
-    var downloadable_application = fs.readFileSync("/tmp/regataos-update/downloadable-application-other-updates.txt", "utf8");
     var installing_application = fs.readFileSync("/tmp/regataos-update/installing-application-other-updates.txt", "utf8");
+    var downloadable_application = fs.readFileSync("/tmp/regataos-update/downloadable-application-other-updates.txt", "utf8");
 	var updated_application = fs.readFileSync("/tmp/regataos-update/updated-apps.txt", "utf8");
 
 	if (list_apps_queue.indexOf("other-updates") > -1) {
@@ -490,18 +490,18 @@ if (fs.existsSync('/tmp/regataos-update/updated-apps.txt')) {
         $("div#update-app-other-updates").css("display", "none");
         $("div#concluded-other-updates").css("display", "none");
 
-    } else if (downloadable_application.indexOf("other-updates") > -1) {
-        $("div#pending-other-updates").css("display", "none");
-        $("div#downloading-other-updates").css("display", "block");
-        $("div#installing-other-updates").css("display", "none");
-        $("div#percentage-other-updates").css("display", "block");
-        $("div#update-app-other-updates").css("display", "none");
-        $("div#concluded-other-updates").css("display", "none");
-
     } else if (installing_application.indexOf("other-updates") > -1) {
         $("div#pending-other-updates").css("display", "none");
         $("div#downloading-other-updates").css("display", "none");
         $("div#installing-other-updates").css("display", "block");
+        $("div#percentage-other-updates").css("display", "block");
+        $("div#update-app-other-updates").css("display", "none");
+        $("div#concluded-other-updates").css("display", "none");
+
+    } else if (downloadable_application.indexOf("other-updates") > -1) {
+        $("div#pending-other-updates").css("display", "none");
+        $("div#downloading-other-updates").css("display", "block");
+        $("div#installing-other-updates").css("display", "none");
         $("div#percentage-other-updates").css("display", "block");
         $("div#update-app-other-updates").css("display", "none");
         $("div#concluded-other-updates").css("display", "none");
