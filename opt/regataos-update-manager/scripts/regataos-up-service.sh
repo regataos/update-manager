@@ -61,7 +61,7 @@ function update_service() {
         echo "check-updates" > "/tmp/regataos-update/status.txt";
     fi
 
-	ps -C "regataos-up-all.sh | regataos-up-specific.sh | regataos-other-up.sh | regataos-up-other-up.sh | regataos-cancel-up-specific.sh | regataos-up-cancel-all.sh | regataosgcs | zypper | magma | steam | UbisoftConnect.exe | Launcher.exe | Origin.exe | GalaxyClient.exe | EpicGamesLauncher.exe | Battle.net.exe" > /dev/null
+	ps -C "regataos-up-all.sh | regataos-up-specific.sh | regataos-other-up.sh | regataos-up-other-up.sh | regataos-cancel-up-specific.sh | regataos-up-cancel-all.sh | regataosgcs | regataosupdate | zypper | magma | steam | UbisoftConnect.exe | Launcher.exe | Origin.exe | GalaxyClient.exe | EpicGamesLauncher.exe | Battle.net.exe" > /dev/null
 	if [ $? = 1 ]; then
         # Check for updates
         auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)

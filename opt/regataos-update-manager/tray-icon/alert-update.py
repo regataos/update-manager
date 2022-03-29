@@ -19,7 +19,7 @@ menu = QMenu()
 
 # Update system and apps
 def update():
-    os.system('cd /usr/share/applications/; gtk-launch "regataos-update-manager.desktop"; echo "" > "/tmp/regataos-update/install-updates.txt"')
+    os.system('ps -C "regataosupdate" > /dev/null; if [ $? = 0 ]; then killall regataosupdate; fi; cd /usr/share/applications/; gtk-launch "regataos-update-manager.desktop"; echo "" > "/tmp/regataos-update/install-updates.txt"')
 updateSystem = os.popen('/bin/bash set_language_icontray -update-sys')
 updateSystem = updateSystem.read().rstrip('\n')
 updateAction = menu.addAction(updateSystem)
