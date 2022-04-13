@@ -23,6 +23,15 @@ if [[ $(grep -r "other-updates" "/tmp/regataos-update/list-apps-queue.txt") == *
     sudo zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses $(cat /tmp/regataos-update/package-list.txt | tr '\n' ' ')
     } 2>&1 | tee "/var/log/regataos-logs/regataos-other-updates.log"
 
+    # Run additional application settings
+    if test -e "/tmp/regataos-prime/config/regataos-prime.conf"; then
+        if [[ $(grep -r "amf=" "/tmp/regataos-prime/config/regataos-prime.conf") == *"amf=on"* ]]; then
+            sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-on
+        fi
+    fi
+
+    sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
+
     echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"
     echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"
 

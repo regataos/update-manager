@@ -70,3 +70,12 @@ fi
 if test -e "/usr/share/regataos/first-update.txt"; then
     rm -f "/usr/share/regataos/first-update.txt"
 fi
+
+# Run additional application settings
+if test -e "/tmp/regataos-prime/config/regataos-prime.conf"; then
+    if [[ $(grep -r "amf=" "/tmp/regataos-prime/config/regataos-prime.conf") == *"amf=on"* ]]; then
+        sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-on
+    fi
+fi
+
+sudo /opt/regataos-prime/scripts/apps-hybrid-graphics

@@ -91,6 +91,15 @@ function update_all_apps() {
         sudo zypper --non-interactive --no-gpg-checks install --auto-agree-with-licenses $app_download_file_name
         } 2>&1 | tee -a "/var/log/regataos-logs/regataos-update-$package_name.log"
 
+        # Run additional application settings
+        if test -e "/tmp/regataos-prime/config/regataos-prime.conf"; then
+            if [[ $(grep -r "amf=" "/tmp/regataos-prime/config/regataos-prime.conf") == *"amf=on"* ]]; then
+                sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-on
+            fi
+        fi
+
+        sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
+
         echo "" > "/tmp/regataos-update/installing-application.txt"
         sed -i '/^$/d' "/tmp/regataos-update/installing-application.txt"
 
