@@ -1,11 +1,14 @@
 [Unit]
 Description=Regata OS Update Manager Icon Tray
+PartOf=graphical-session.target
+After=plasma-core.target
 
 [Service]
-Type=forking
-ExecStartPre=/bin/sleep 35
-ExecStart=/opt/regataos-update-manager/scripts/check-up-icontray.sh start
+Type=simple
+ExecStartPre=/bin/sleep 30
+ExecStart=/opt/regataos-update-manager/scripts/check-up-icontray.sh
 RemainAfterExit=true
+Restart=on-failure
 
 [Install]
 WantedBy=default.target

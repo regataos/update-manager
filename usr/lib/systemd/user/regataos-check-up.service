@@ -1,11 +1,14 @@
 [Unit]
 Description=Regata OS Update Manager
+PartOf=graphical-session.target
+After=plasma-core.target
 
 [Service]
-Type=forking
-ExecStartPre=/bin/sleep 30
-ExecStart=/opt/regataos-update-manager/scripts/regataos-check-up.sh start
+Type=simple
+ExecStartPre=/bin/sleep 35
+ExecStart=/opt/regataos-update-manager/scripts/regataos-check-up.sh
 RemainAfterExit=true
+Restart=on-failure
 
 [Install]
 WantedBy=default.target
