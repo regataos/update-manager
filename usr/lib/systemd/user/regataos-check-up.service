@@ -1,0 +1,11 @@
+[Unit]
+Description=Regata OS Update Manager
+
+[Service]
+Type=forking
+ExecStartPre=/bin/sleep 30
+ExecStart=/opt/regataos-update-manager/scripts/regataos-check-up.sh start
+RemainAfterExit=true
+
+[Install]
+WantedBy=default.target

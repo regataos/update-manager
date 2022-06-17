@@ -1,9 +1,0 @@
-[Unit]
-Description=Regata OS Update Manager SystemD
-Before=display-manager.service
-
-[Service]
-ExecStart=/bin/bash /opt/regataos-update-manager/scripts/regataos-up-systemd.sh
-
-[Install]
-WantedBy=graphical.target

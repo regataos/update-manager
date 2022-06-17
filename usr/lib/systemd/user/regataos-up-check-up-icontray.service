@@ -1,0 +1,11 @@
+[Unit]
+Description=Regata OS Update Manager Icon Tray
+
+[Service]
+Type=forking
+ExecStartPre=/bin/sleep 35
+ExecStart=/opt/regataos-update-manager/scripts/check-up-icontray.sh start
+RemainAfterExit=true
+
+[Install]
+WantedBy=default.target
