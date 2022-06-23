@@ -10,12 +10,10 @@ function check_updates() {
     killall install-update.py
     killall alert-update.py
 
-    /opt/regataos-update-manager/scripts/notifications/notify -check-up &
-
     ps -C check-update.py > /dev/null
     if [ $? = 1 ]; then
-        cd "/opt/regataos-update-manager/tray-icon/"
-        ./check-update.py
+        cd /opt/regataos-update-manager/tray-icon/
+        ./check-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -check-up
     fi
 }
 
@@ -24,12 +22,10 @@ function install_updates() {
     killall check-update.py
     killall alert-update.py
 
-    /opt/regataos-update-manager/scripts/notifications/notify -up-system &
-
     ps -C install-update.py > /dev/null
     if [ $? = 1 ]; then
-        cd "/opt/regataos-update-manager/tray-icon/"
-        ./install-update.py
+        cd /opt/regataos-update-manager/tray-icon/
+        ./install-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -up-system
     fi
 }
 
@@ -38,18 +34,16 @@ function alert_updates() {
     killall check-update.py
     killall install-update.py
 
-    /opt/regataos-update-manager/scripts/notifications/notify -show-up &
-
     ps -C alert-update.py > /dev/null
     if [ $? = 1 ]; then
-        cd "/opt/regataos-update-manager/tray-icon/"
-        ./alert-update.py
+        cd /opt/regataos-update-manager/tray-icon/
+        ./alert-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -show-up
     fi
 }
 
 #There are no updates
 function no_updates() {
-    /opt/regataos-update-manager/scripts/notifications/notify -no-up
+    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -no-up
 
     sleep 5
     killall check-update.py
@@ -78,7 +72,7 @@ else
         echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"
 
         sleep 3600
-        /opt/regataos-update-manager/scripts/regataos-up-service.sh start
+        /bin/bash /opt/regataos-update-manager/scripts/regataos-up-service.sh
 
     else
         # Check for updates
@@ -187,7 +181,7 @@ else
                     install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-all.sh
 
                     if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
-                        /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+                        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
                     fi
 
                 else
@@ -202,7 +196,7 @@ else
                     install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-other-up.sh
 
                     if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
-                        /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+                        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
                     fi
                 fi
 
@@ -235,6 +229,6 @@ else
 
         # Start the Regata OS Update Manager's service
         sleep 3600
-        /opt/regataos-update-manager/scripts/regataos-up-service.sh start
+        /bin/bash /opt/regataos-update-manager/scripts/regataos-up-service.sh
     fi
 fi
