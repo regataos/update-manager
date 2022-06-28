@@ -12,7 +12,11 @@ if [ $? = 0 ]; then
     user=$(users | awk '{print $1}')
 
     if test -e "/home/$user/.config/plasma-localerc" ; then
-        language=$(grep -r LANG "/home/$user/.config/plasma-localerc")
+		language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1)
+
+		if [ -z $language ]; then
+			language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2-)
+		fi
 
     elif test -e "/home/$user/.config/user-dirs.locale" ; then
         language=$(cat "/home/$user/.config/user-dirs.locale")
@@ -22,6 +26,9 @@ if [ $? = 0 ]; then
     fi
 
     # Configure application language
+    rm -f "/opt/regataos-update-manager/scripts/notifications/notify"
+    rm -f "/opt/regataos-update-manager/www/js/translations/language.js"
+
     if [[ $language == *"pt_BR"* ]]; then
         ln -sf /opt/regataos-update-manager/scripts/notifications/pt-br/notify \
         /opt/regataos-update-manager/scripts/notifications/notify
