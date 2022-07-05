@@ -155,6 +155,8 @@ else
                     else
                         echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
                     fi
+                else
+                    echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
                 fi
 
                 if test -e "/tmp/regataos-update/apps-list.txt"; then
