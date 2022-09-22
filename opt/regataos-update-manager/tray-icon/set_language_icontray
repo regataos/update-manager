@@ -1,17 +1,35 @@
 #!/bin/bash
 
+# Detect system language
+user=$(users | awk '{print $1}')
+
+if test -e "/home/$user/.config/plasma-localerc" ; then
+	language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
+
+	if [ -z $language ]; then
+    	language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d"." -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
+	fi
+
+elif test -e "/home/$user/.config/user-dirs.locale" ; then
+    language=$(cat "/home/$user/.config/user-dirs.locale" | tr [A-Z] [a-z] | sed 's/_/-/')
+
+else
+    language=$(echo $LANG | tr [A-Z] [a-z] | sed 's/_/-/' | cut -d"." -f -1)
+fi
+
 # Choose the translation of the icon in the system
 # tray according to the user's language
 function check_up_title() {
-    language=$(echo $LANG)
-
-    if [[ $language == *"pt_BR"* ]]; then
+    if [[ $language == *"pt-br"* ]]; then
         echo "Verificando atualizações..."
 
-    elif [[ $language == *"pt_PT"* ]]; then
-        echo "Checking for updates..."
+    elif [[ $language == *"pt-pt"* ]]; then
+        echo "Verificando atualizações..."
 
-    elif [[ $language == *"en_US"* ]]; then
+    elif [[ $language == *"pt"* ]]; then
+        echo "Verificando atualizações..."
+
+    elif [[ $language == *"en-us"* ]]; then
         echo "Checking for updates..."
 
     else
@@ -20,23 +38,28 @@ function check_up_title() {
 }
 
 function available_up_title() {
-    language=$(echo $LANG)
-
-    if [[ $language == *"pt_BR"* ]]; then
+    if [[ $language == *"pt-br"* ]]; then
         if test -e "/tmp/regataos-update/number-apps.txt"; then
             echo "Atualizações disponíveis! $(cat /tmp/regataos-update/number-apps.txt)"
         else
             echo "Atualizações disponíveis!"
         fi
 
-    elif [[ $language == *"pt_PT"* ]]; then
+    elif [[ $language == *"pt-pt"* ]]; then
         if test -e "/tmp/regataos-update/number-apps.txt"; then
             echo "Atualizações disponíveis! $(cat /tmp/regataos-update/number-apps.txt)"
         else
             echo "Atualizações disponíveis!"
         fi
 
-    elif [[ $language == *"en_US"* ]]; then
+    elif [[ $language == *"pt"* ]]; then
+        if test -e "/tmp/regataos-update/number-apps.txt"; then
+            echo "Atualizações disponíveis! $(cat /tmp/regataos-update/number-apps.txt)"
+        else
+            echo "Atualizações disponíveis!"
+        fi
+
+    elif [[ $language == *"en-us"* ]]; then
         if test -e "/tmp/regataos-update/number-apps.txt"; then
             echo "Updates available! $(cat /tmp/regataos-update/number-apps.txt)"
         else
@@ -53,15 +76,16 @@ function available_up_title() {
 }
 
 function install_up_title() {
-    language=$(echo $LANG)
-
-    if [[ $language == *"pt_BR"* ]]; then
+    if [[ $language == *"pt-br"* ]]; then
         echo "Instalando atualizações..."
 
-    elif [[ $language == *"pt_PT"* ]]; then
+    elif [[ $language == *"pt-pt"* ]]; then
         echo "Instalando atualizações..."
 
-    elif [[ $language == *"en_US"* ]]; then
+    elif [[ $language == *"pt"* ]]; then
+        echo "Instalando atualizações..."
+
+    elif [[ $language == *"en-us"* ]]; then
         echo "Installing updates..."
 
     else
@@ -70,15 +94,16 @@ function install_up_title() {
 }
 
 function open_up_mg() {
-    language=$(echo $LANG)
-
-    if [[ $language == *"pt_BR"* ]]; then
+    if [[ $language == *"pt-br"* ]]; then
         echo "Abrir o gerenciador de atualizações"
 
-    elif [[ $language == *"pt_PT"* ]]; then
+    elif [[ $language == *"pt-pt"* ]]; then
         echo "Abrir o gerenciador de atualizações"
 
-    elif [[ $language == *"en_US"* ]]; then
+    elif [[ $language == *"pt"* ]]; then
+        echo "Abrir o gerenciador de atualizações"
+
+    elif [[ $language == *"en-us"* ]]; then
         echo "Open update manager"
 
     else
@@ -87,15 +112,16 @@ function open_up_mg() {
 }
 
 function update_sys() {
-    language=$(echo $LANG)
-
-    if [[ $language == *"pt_BR"* ]]; then
+    if [[ $language == *"pt-br"* ]]; then
         echo "Instalar atualizações"
 
-    elif [[ $language == *"pt_PT"* ]]; then
+    elif [[ $language == *"pt-pt"* ]]; then
         echo "Instalar atualizações"
 
-    elif [[ $language == *"en_US"* ]]; then
+    elif [[ $language == *"pt"* ]]; then
+        echo "Instalar atualizações"
+
+    elif [[ $language == *"en-us"* ]]; then
         echo "Install updates"
 
     else

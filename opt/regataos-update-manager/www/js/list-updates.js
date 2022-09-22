@@ -51,7 +51,7 @@ for (var i = 0; i < apps.length; i++) {
 
             var all_blocks = document.querySelector("div#all-apps");
             all_blocks.appendChild(new_app_blocks);
-            language();
+            applyTranslationPages();
         }
 	}
 }

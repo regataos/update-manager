@@ -1,0 +1,59 @@
+[
+    {
+        "index": {
+            "windowTitle":"Regata OS Update",
+            "sideBar": {
+                "home": "Updates",
+                "historic": "Update history",
+                "settings": "Settings"
+            }
+        },
+        "home": {
+            "topButton": {
+                "updateAll": "Update all",
+                "cancel": "Cancel"
+            },
+            "appStatus": {
+                "checkUp": "Checking for updates...",
+                "noUpdates": "There are no updates available.",
+                "neverUp": "Never search for system updates!",
+                "yesUp": "Updates available!",
+                "updated": "Updated!",
+                "searchUp": "This may take a few minutes!",
+                "noUpAuto": "Automatic update disabled.",
+                "yesUpAuto": "Automatic update enabled."
+            },
+            "updateStatus": {
+                "pending": "Pending...",
+                "download": "Downloading...",
+                "installing": "Installing...",
+                "concluded": "Concluded!",
+                "checking": "Check for updates",
+                "allReady": "All ready",
+                "allReadyDesc": "All apps are up to date"
+            },
+            "otherUpdates": {
+                "title": "System updates",
+                "moreDetails": "More details",
+                "otherUpButton": "Update"
+            },
+            "button": {
+                "update": "Update",
+                "cancel": "Cancel"
+            }
+        },
+        "historic": {
+            "title": "Recently updated apps",
+            "openApp": "Open"
+        },
+        "settings": {
+            "title": "Settings",
+            "autoUpdateOption": {
+                "title": "Automatic updates",
+                "autoUpOn": "Update the system automatically",
+                "checkUpOnly": "Just check for system updates",
+                "neverUpdate": "Never check for updates"
+            }
+        }
+    }
+]

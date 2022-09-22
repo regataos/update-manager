@@ -1,0 +1,47 @@
+#!/bin/sh
+
+function check_update() {
+    notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Verificando atualizações..." "Buscando por atualizações do sistema."
+}
+
+function no_update() {
+    notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Não há atualizações!" "Não há atualizações disponíveis para o sistema."
+}
+
+function show_update() {
+    #if test -e "/tmp/regataos-update/number-apps.txt"; then
+    #    number_update=$(cat /tmp/regataos-update/number-apps.txt)
+    #    if [ $(echo $number_update | sed 's/(\|)//g') -gt 1 ]; then
+    #        notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Atualizações disponíveis $number_update!" "A atualização automática está desativada."
+    #    else
+    #        notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Existem atualizações disponíveis!" "A atualização automática está desativada."
+    #    fi
+	#else
+		notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Existem atualizações disponíveis!" "A atualização automática está desativada."
+    #fi
+}
+
+function up_system() {
+    notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Instalando atualizações..." "A atualização automática está ativada."
+}
+
+function upd_system() {
+    notify-send -i regataos-up-mg-none-notify -u normal -a 'Regata OS Update' "Sistema atualizado!" "O sistema foi atualizado com sucesso."
+}
+
+# Run options
+case $1 in
+    "-check-up") check_update
+        ;;
+    "-no-up") no_update
+        ;;
+    "-show-up") show_update
+        ;;
+    "-up-system") up_system
+        ;;
+    "-upd-system") upd_system
+        ;;
+   *) echo "Invalid option!"
+      exit 1
+      ;;
+esac

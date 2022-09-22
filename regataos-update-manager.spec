@@ -1,5 +1,5 @@
 Name: regataos-update-manager
-Version: 1.7
+Version: 1.8
 Release: 0
 Url: https://github.com/regataos/update-manager
 Summary: Regata OS Update Manager
@@ -32,15 +32,26 @@ if test -e /opt/regataos-base/%{name}-%{version}.tar.xz ; then
 	tar xf /opt/regataos-base/%{name}-%{version}.tar.xz -C /
 fi
 
-if test ! -e /opt/magma/regataosupdate ; then
-	cp -f /opt/magma/magma /opt/magma/regataosupdate
+rm -f "/opt/magma/regataosupdate"
+cp -f "/opt/magma/nw" "/opt/magma/regataosupdate"
+
+if test ! -e "/usr/bin/regataosupdate"; then
+	ln -sf "/opt/magma/regataosupdate" "/usr/bin/regataosupdate"
 fi
 
-if test ! -e /usr/bin/regataosupdate ; then
-	ln -sf /opt/magma/regataosupdate /usr/bin/regataosupdate
+systemctl daemon-reload
+systemctl enable --now regataos-up-select-language.service
+systemctl --global enable regataos-check-up.service
+systemctl --global enable regataos-up-check-up-icontray.service
+
+if test ! -e /usr/share/regataos/create-iso.txt ; then
+  sudo /opt/regataos-update-manager/scripts/select-language
 fi
 
-/opt/regataos-update-manager/scripts/set_language.sh start
+# Prepare for the first update
+#user=$(users | awk '{print $1}')
+#chmod 777 "/usr/share/regataos/first-update.txt"
+#chown $user:users "/usr/share/regataos/first-update.txt"
 
 update-desktop-database
 

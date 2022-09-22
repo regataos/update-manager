@@ -20,9 +20,28 @@ if test ! -e "$HOME/.config/regataos-update/regataos-update.conf"; then
 fi
 
 # Check language
-if test ! -e "/tmp/regataos-configs/config/plasma-localerc" ; then
+if test ! -e "/tmp/regataos-configs/config/plasma-localerc"; then
+	if test ! -e "$HOME/.config/plasma-localerc"; then
+		if test -e "/etc/xdg/plasma-localerc"; then
+			cp -f "/etc/xdg/plasma-localerc" "$HOME/.config/plasma-localerc"
+		fi
+	fi
+
 	mkdir -p "/tmp/regataos-configs/config"
-	ln -sf "$HOME/.config/plasma-localerc" "/tmp/regataos-configs/config/"
+	chmod 777 "/tmp/regataos-configs/config"
+
+	if test -e "$HOME/.config/plasma-localerc"; then
+		ln -sf "$HOME/.config/plasma-localerc" "/tmp/regataos-configs/config/"
+	fi
+fi
+
+if test ! -e "/tmp/regataos-configs/config/user-dirs.locale"; then
+	if test -e "$HOME/.config/user-dirs.locale"; then
+		mkdir -p "/tmp/regataos-configs/config"
+		chmod 777 "/tmp/regataos-configs/config"
+
+		ln -sf "$HOME/.config/user-dirs.locale" "/tmp/regataos-configs/config/"
+	fi
 fi
 
 # Check the theme that should be used

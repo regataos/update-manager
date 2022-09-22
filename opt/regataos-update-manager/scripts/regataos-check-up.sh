@@ -3,6 +3,33 @@
 # Clear cache
 rm -f "/tmp/regataos-update/status.txt"
 rm -f "/tmp/regataos-update/already_updated.txt"
+rm -f "/tmp/regataos-configs/config/kdeglobals"
+rm -f /tmp/regataos-update/*.txt
+rm -f /tmp/regataos-update/*.rpm
+
+# Detect system language
+user=$(users | awk '{print $1}')
+
+if test -e "/home/$user/.config/plasma-localerc" ; then
+	language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
+
+	if [ -z $language ]; then
+    	language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d"." -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
+	fi
+
+elif test -e "/home/$user/.config/user-dirs.locale" ; then
+    language=$(cat "/home/$user/.config/user-dirs.locale" | tr [A-Z] [a-z] | sed 's/_/-/')
+
+else
+    language=$(echo $LANG | tr [A-Z] [a-z] | sed 's/_/-/' | cut -d"." -f -1)
+fi
+
+# Configure application language
+if test -e "/opt/regataos-update-manager/scripts/notifications/$language"; then
+	scriptNotify="/opt/regataos-update-manager/scripts/notifications/$language"
+else
+	scriptNotify="/opt/regataos-update-manager/scripts/notifications/en-us"
+fi
 
 # Functions that display notifications in the system tray icon
 #Checking for updates
@@ -13,7 +40,7 @@ function check_updates() {
     ps -C check-update.py > /dev/null
     if [ $? = 1 ]; then
         cd /opt/regataos-update-manager/tray-icon/
-        ./check-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -check-up
+        ./check-update.py & /bin/bash $scriptNotify -check-up
     fi
 }
 
@@ -25,7 +52,7 @@ function install_updates() {
     ps -C install-update.py > /dev/null
     if [ $? = 1 ]; then
         cd /opt/regataos-update-manager/tray-icon/
-        ./install-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -up-system
+        ./install-update.py & /bin/bash $scriptNotify -up-system
     fi
 }
 
@@ -37,13 +64,13 @@ function alert_updates() {
     ps -C alert-update.py > /dev/null
     if [ $? = 1 ]; then
         cd /opt/regataos-update-manager/tray-icon/
-        ./alert-update.py & /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -show-up
+        ./alert-update.py & /bin/bash $scriptNotify -show-up
     fi
 }
 
 #There are no updates
 function no_updates() {
-    /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -no-up
+    /bin/bash $scriptNotify -no-up
 
     sleep 5
     killall check-update.py
@@ -183,7 +210,7 @@ else
                     install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-all.sh
 
                     if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
-                        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+                        /bin/bash $scriptNotify -upd-system
                     fi
 
                 else
@@ -198,7 +225,7 @@ else
                     install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-other-up.sh
 
                     if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
-                        /bin/bash /opt/regataos-update-manager/scripts/notifications/notify -upd-system
+                        /bin/bash $scriptNotify -upd-system
                     fi
                 fi
 

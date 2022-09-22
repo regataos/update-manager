@@ -1,0 +1,59 @@
+[
+    {
+        "index": {
+            "windowTitle":"Regata OS Update",
+            "sideBar": {
+                "home": "Atualizações",
+                "historic": "Histórico de atualizações",
+                "settings": "Configurações"
+            }
+        },
+        "home": {
+            "topButton": {
+                "updateAll": "Atualizar tudo",
+                "cancel": "Cancelar"
+            },
+            "appStatus": {
+                "checkUp": "Verificando atualizações...",
+                "noUpdates": "Não há atualizações disponíveis.",
+                "neverUp": "Nunca procurar por atualizações do sistema!",
+                "yesUp": "Atualizações disponíveis!",
+                "updated": "Atualizado!",
+                "searchUp": "Isso pode levar alguns minutos!",
+                "noUpAuto": "Atualização automática desativada.",
+                "yesUpAuto": "Atualização automática ativada."
+            },
+            "updateStatus": {
+                "pending": "Pendente...",
+                "download": "Baixando...",
+                "installing": "Instalando...",
+                "concluded": "Concluído!",
+                "checking": "Verificar atualizações",
+                "allReady": "Tudo pronto",
+                "allReadyDesc": "Todos os apps estão atualizados"
+            },
+            "otherUpdates": {
+                "title": "Atualizações do sistema",
+                "moreDetails": "Mais detalhes",
+                "otherUpButton": "Atualizar"
+            },
+            "button": {
+                "update": "Atualizar",
+                "cancel": "Cancelar"
+            }
+        },
+        "historic": {
+            "title": "Aplicativos atualizados recentemente",
+            "openApp": "Abrir"
+        },
+        "settings": {
+            "title": "Configurações",
+            "autoUpdateOption": {
+                "title": "Atualizações automáticas",
+                "autoUpOn": "Atualizar o sistema automaticamente",
+                "checkUpOnly": "Apenas procurar por atualizações",
+                "neverUpdate": "Nunca procurar por atualizações"
+            }
+        }
+    }
+]

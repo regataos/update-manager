@@ -107,7 +107,7 @@ function current_status() {
 
             yes_up_number();
             list_updates();
-            language();
+            applyTranslationPages();
 
             clearInterval(current_status_timer);
 

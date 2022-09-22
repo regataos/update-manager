@@ -237,14 +237,16 @@ function update_or_cancel() {
 			$("div.update-all-button2").css("display", "none");
 
 		} else {
-			var data = fs.readFileSync("/tmp/regataos-update/apps-list.txt", "utf8");
-        	if (data.length <= 1) {
-				$(".update-all").css("display", "none");
+			if (fs.existsSync('/tmp/regataos-update/apps-list.txt')) {
+				var data = fs.readFileSync("/tmp/regataos-update/apps-list.txt", "utf8");
+				if (data.length <= 1) {
+					$(".update-all").css("display", "none");
 
-			} else {
-				$(".update-all").css("display", "block");
-				$("div.update-all-button1").css("display", "block");
-				$("div.update-all-button2").css("display", "none");
+				} else {
+					$(".update-all").css("display", "block");
+					$("div.update-all-button1").css("display", "block");
+					$("div.update-all-button2").css("display", "none");
+				}
 			}
 		}
 	}

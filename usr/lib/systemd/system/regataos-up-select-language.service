@@ -1,9 +1,0 @@
-[Unit]
-Description=Regata OS Update Manager Select Language
-Before=display-manager.service
-
-[Service]
-ExecStart=/bin/bash /opt/regataos-update-manager/scripts/select-language
-
-[Install]
-WantedBy=graphical.target
