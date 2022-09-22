@@ -28,6 +28,16 @@ mkdir -p %{buildroot}/opt/regataos-base/
 cp -f %{SOURCE1} %{buildroot}/opt/regataos-base/%{name}-%{version}.tar.xz
 
 %post
+# Small fix for directory with UI translations.
+if [ -d "/opt/regataos-update-manager/scripts/notifications/en-us" ]; then
+  rm -rf "/opt/regataos-update-manager/scripts/notifications/en-us"
+fi
+
+if [ -d "/opt/regataos-update-manager/scripts/notifications/pt-br" ]; then
+  rm -rf "/opt/regataos-update-manager/scripts/notifications/pt-br"
+fi
+
+# Install app
 if test -e /opt/regataos-base/%{name}-%{version}.tar.xz ; then
 	tar xf /opt/regataos-base/%{name}-%{version}.tar.xz -C /
 fi
