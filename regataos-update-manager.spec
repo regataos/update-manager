@@ -44,15 +44,6 @@ systemctl enable --now regataos-up-select-language.service
 systemctl --global enable regataos-check-up.service
 systemctl --global enable regataos-up-check-up-icontray.service
 
-if test ! -e /usr/share/regataos/create-iso.txt ; then
-  sudo /opt/regataos-update-manager/scripts/select-language
-fi
-
-# Prepare for the first update
-#user=$(users | awk '{print $1}')
-#chmod 777 "/usr/share/regataos/first-update.txt"
-#chown $user:users "/usr/share/regataos/first-update.txt"
-
 update-desktop-database
 
 %clean
