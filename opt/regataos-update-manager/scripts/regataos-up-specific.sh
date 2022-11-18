@@ -55,7 +55,7 @@ function update_all_apps() {
     if [ -z $download_link ];then
         version=$(zypper info $package_name | grep Ver | awk '{print $3}')
         app_download_file_name="$package_name-$version.$architecture.rpm"
-        app_download_link="$repo_link/$app_download_file_name"
+        app_download_link="$repo_link/$architecture/$app_download_file_name"
 
     elif [[ $download_link == *"undefined"* ]]; then
         version=$(zypper info $package_name | grep Ver | awk '{print $3}')
