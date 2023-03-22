@@ -61,7 +61,7 @@ else
                     export LC_ALL="en_US.UTF-8"
                     export LANG="en_US.UTF-8"
                     export LANGUAGE="en_US"
-                    sudo zypper --non-interactive --no-gpg-checks refresh
+                    retry -r 20 -- zypper --non-interactive --no-gpg-checks refresh
                     } 2>&1 | tee "/var/log/regataos-logs/regataos-refresh-repo.log";
 
                     {
@@ -205,7 +205,7 @@ function update_packages() {
     export LC_ALL="en_US.UTF-8"
     export LANG="en_US.UTF-8"
     export LANGUAGE="en_US"
-    sudo zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses
+    retry -r 20 -- zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses
     } 2>&1 | tee "/var/log/regataos-logs/regataos-update-packages.log"
 
     # Run additional application settings
@@ -252,6 +252,7 @@ function stop_update() {
     if [ $? = 1 ]
     then
         killall regataos-up.sh
+        killall retry
         killall zypper
         echo "never-updates" > "/tmp/regataos-update/status.txt"
         exit 0;

@@ -1,5 +1,5 @@
 Name: regataos-update-manager
-Version: 1.8
+Version: 2.0
 Release: 0
 Url: https://github.com/regataos/update-manager
 Summary: Regata OS Update Manager
@@ -13,6 +13,7 @@ Requires: xz
 Requires: magma >= 5.54.1
 Requires: regataos-base >= 21.0.12
 Requires: regataos-store >= 21.3
+Requires: retry
 Conflicts: plasma5-pk-updates
 License: MIT
 Source1: %{name}-%{version}.tar.xz

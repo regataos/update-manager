@@ -88,7 +88,7 @@ function update_all_apps() {
         echo "" > "/tmp/regataos-update/installation-in-progress.txt"
         cd /tmp/regataos-update/
         {
-        sudo zypper --non-interactive --no-gpg-checks install --auto-agree-with-licenses $app_download_file_name
+        retry -r 20 -- zypper --non-interactive --no-gpg-checks install --auto-agree-with-licenses $app_download_file_name
         } 2>&1 | tee -a "/var/log/regataos-logs/regataos-update-$package_name.log"
 
         # Run additional application settings
