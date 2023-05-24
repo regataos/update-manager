@@ -61,7 +61,7 @@ else
                     export LC_ALL="en_US.UTF-8"
                     export LANG="en_US.UTF-8"
                     export LANGUAGE="en_US"
-                    retry -r 20 -- zypper --non-interactive --no-gpg-checks refresh
+                    retry -r 5 -- zypper --non-interactive --no-gpg-checks refresh
                     } 2>&1 | tee "/var/log/regataos-logs/regataos-refresh-repo.log";
 
                     {
@@ -72,7 +72,8 @@ else
                     } 2>&1 | tee "/var/log/regataos-logs/regataos-list-updates.log";
 
                     sed -i 's/ - x86_64//' "/var/log/regataos-logs/regataos-list-updates.log"
-                    package_list=$(cat /var/log/regataos-logs/regataos-list-updates.log | awk '{print $5}' | sed -n '5,$p');
+                    get_line=$(grep -n "Reading installed packages" "/var/log/regataos-logs/regataos-list-updates.log" | cut -f1 -d:)
+                    package_list=$(cat /var/log/regataos-logs/regataos-list-updates.log | awk '{print $5}' | sed -n "$(($get_line+3))",'$p');
                     echo "$package_list" > "/tmp/regataos-update/package-list.txt";
 
                     for i in /opt/regataos-store/apps-list/*.json; do
