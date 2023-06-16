@@ -12,13 +12,10 @@ class SystemTrayIcon(QSystemTrayIcon):
         self.menu = QMenu(parent)
 
         def update():
-            os.system('ps -C "regataosupdate" > /dev/null; if [ $? = 0 ]; then \
-                      killall regataosupdate; fi; cd /usr/share/applications/; \
-                      gtk-launch "regataos-update-manager.desktop"; \
-                      echo "" > "/tmp/regataos-update/install-updates.txt"')
+            os.system('/bin/bash up_icontray_functions -install-updates')
 
         def open_app():
-            os.system('cd /usr/share/applications/; gtk-launch "regataos-update-manager.desktop"')
+            os.system('/bin/bash up_icontray_functions -show-up-app')
 
         updateSystem = os.popen('/bin/bash set_language_icontray -update-sys')
         updateSystem = updateSystem.read().rstrip('\n')
@@ -36,7 +33,7 @@ class SystemTrayIcon(QSystemTrayIcon):
     def onTrayIconActivated(self, reason):
         if reason == QSystemTrayIcon.Trigger:
             print("Click with the left mouse button.")
-            os.system('cd /usr/share/applications/; gtk-launch "regataos-update-manager.desktop"')
+            os.system('/bin/bash up_icontray_functions -show-hide-up')
 
         elif reason == QSystemTrayIcon.Context:
             print("Click with the right mouse button.")

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Show the Update Manager window
+function show_up_window() {
+    cd /usr/share/applications/; gtk-launch "regataos-update-manager.desktop"
+}
+
+# Show/hide the Update Manager window, keeping the icon in the system tray.
+function show_hide_up_window() {
+    ps -C "regataosupdate" > /dev/null
+    if [ $? = 1 ]; then
+        show_up_window
+    else
+        # Close Update Manager app
+        kill -SIGTERM $(ps -C regataosupdate | head -2 | tail -1 | awk '{print $1}')
+    fi
+}
+
+# Install updates
+function install_updates() {
+    ps -C "regataosupdate" > /dev/null
+    if [ $? = 0 ]; then
+        # Close Update Manager app
+        kill -SIGTERM $(ps -C regataosupdate | head -2 | tail -1 | awk '{print $1}')
+    fi
+
+    cd /usr/share/applications/
+    gtk-launch "regataos-update-manager.desktop"
+    echo "" > "/tmp/regataos-update/install-updates.txt"
+}
+
+# Run options.
+case $1 in
+    "-show-up-app") show_up_window
+      ;;
+    "-show-hide-up") show_hide_up_window
+      ;;
+    "-install-updates") install_updates
+      ;;
+   *) echo "Invalid option!"
+      exit 1
+      ;;
+esac
