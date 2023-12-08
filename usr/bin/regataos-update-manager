@@ -55,6 +55,11 @@ if test ! -e "/tmp/regataos-configs/config/kdeglobals" ; then
 	fi
 fi
 
+# Clear GPUCache files
+if test -e "$HOME/.config/Regata OS Update/Default/GPUCache/index"; then
+	rm -f "$HOME/.config/Regata OS Update/Default/GPUCache/"*
+fi
+
 # Run application
 if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
 	regataosupdate --disable-gpu /opt/regataos-update-manager
