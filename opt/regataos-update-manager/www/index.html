@@ -1,67 +1,59 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Regata OS Update</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-	<link rel="stylesheet" type="text/css" href="css/roboto-style.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/select-theme-index.js"></script>
-	<script type="text/javascript" src="js/fas-icons.js"></script>
-	<script type="text/javascript" src="js/functions.js"></script>
-	<script type="text/javascript" src="js/search-update.js"></script>
-	<script type="text/javascript" src="js/pages.js"></script>
+    <title>Regata OS Update</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/fas-icons.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+    <script type="text/javascript" src="js/search-update.js"></script>
 
     <!-- Update software repositories -->
     <script type="text/javascript">
-		check_updates();
+        check_updates();
     </script>
-
-	<!-- Display content when everything is ready -->
-	<script type="text/javascript">
-		$(function(){
-			$("#loadscreen").fadeOut("slow");
-		});
-
-		$(function(){
-			$(".blocks").fadeIn("slow");
-		});
-	</script>
 </head>
-<body>
 
-	<div class="sidebar">
-		<ul class="ul-sidebar">
+<body>
+    <div id="loadscreen"></div>
+    <div class="sidebar">
+        <ul class="ul-sidebar">
             <li id="option-home" class="li-sidebar home sidebar-button" onclick="go_home();" title="Updates">
+                <div class="sidebar-item-effect"></div>
                 <a class="link-items" onclick="go_home();">
-                    <!-- <i class="fas fa-home" style="display: none;"></i> -->
-                    <img class="icones-menu home-icon" style="margin-left: 3px; height: 32px;" src="images/img-sidebar/home.png"/>
+                    <img class="icones-menu home-icon" src="images/img-sidebar/home.png" />
                     <p style="margin-left: 13px;"></p>
                 </a>
             </li>
-            <li id="option-historic" class="li-sidebar historic sidebar-button" onclick="go_historic();" title="Update history">
+            <li id="option-historic" class="li-sidebar historic sidebar-button" onclick="go_historic();"
+                title="Update history">
+                <div class="sidebar-item-effect"></div>
                 <a class="link-items" onclick="go_historic();">
-                    <!-- <i class="fas fa-home" style="display: none;"></i> -->
-                    <img class="icones-menu historic-icon" style="margin-left: 3px; height: 32px;" src="images/img-sidebar/historic.png"/>
+                    <img class="icones-menu historic-icon" src="images/img-sidebar/historic.png" />
                     <p style="margin-left: 10px;"></p>
                 </a>
             </li>
-            <li id="option-settings" class="li-sidebar settings sidebar-button" onclick="go_settings();" title="Settings">
+            <li id="option-settings" class="li-sidebar settings sidebar-button" onclick="go_settings();"
+                title="Settings">
+                <div class="sidebar-item-effect"></div>
                 <a class="link-items" onclick="go_settings();">
-                    <!-- <i class="fas fa-paint-brush" style="margin-left: 1px;" style="display: none;"></i> -->
-                    <img class="icones-menu settings-icon" style="margin-left: 3px; height: 33px;" src="images/img-sidebar/settings.png"/>
+                    <img class="icones-menu settings-icon" src="images/img-sidebar/settings.png" />
                     <p style="margin-left: 10px;"></p>
                 </a>
             </li>
         </ul>
-	</div>
+    </div>
 
-	<div class="div-iframe">
+    <div class="div-iframe">
         <iframe src="pages/home.html" allowfullscreen frameborder="0" class="iframe" id="main-iframe"></iframe>
+        <script type="text/javascript" src="js/pages.js"></script>
     </div>
     <script type="text/javascript" src="js/settings-checker.js"></script>
     <script type="text/javascript" src="js/translations/apply-translation-index.js"></script>
-	<script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
 </body>
+
 </html>

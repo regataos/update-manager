@@ -1,3 +1,8 @@
+// Disable main hover effect after few seconds
+setTimeout(function () {
+    document.getElementById("loadscreen").style.display = "none";
+}, 1000);
+
 // Show the number of application updates
 function yes_up_number() {
     const fs = require('fs');
@@ -90,7 +95,7 @@ function current_status() {
                 $(".main").css("margin-bottom", "60px");
                 $(".never-up").css("display", "none");
                 $(".never_update_system").css("display", "none");
-                $(".div2").css("display", "block");
+                $(".div2").css("display", "grid");
                 $(".search-update-status").css("display", "none");
 
                 var update_config = fs.readFileSync("/tmp/regataos-update/config/regataos-update.conf", "utf8");
@@ -209,14 +214,12 @@ function show_details() {
     $(".show-details").css("display", "none");
     $(".hide-details").css("display", "flex");
     $(".more-details-contents").css("display", "block");
-    $("div.other-updates").css("height", "260px");
 }
 
 function hide_details() {
     $(".show-details").css("display", "flex");
     $(".hide-details").css("display", "none");
     $(".more-details-contents").css("display", "none");
-    $("div.other-updates").css("height", "49px");
 }
 
 // List of apps that have already been updated
