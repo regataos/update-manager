@@ -135,16 +135,8 @@ li {
     transition: all 0.3s ease-in-out;
 }
 
-.sidebar-item-effect-dark {
-    transition: all 0.3s ease-in-out;
-}
-
 .sidebar .ul-sidebar li:hover .sidebar-item-effect {
     background-color: #005fb8;
-}
-
-.sidebar .ul-sidebar li:hover .sidebar-item-effect-dark {
-    background-color: #3daee9;
 }
 
 .sidebar-button {
@@ -221,26 +213,41 @@ li.historic {
 
 .div1 {
     position: relative;
-    height: 170px;
-    margin-bottom: 0px;
+    float: left;
+    height: auto;
+    width: 100%;
+    padding: 0px 10px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
 .div1-sub {
     position: relative;
-    width: 500px;
-    height: 41px;
+    display: block;
+    height: auto;
+    float: left;
+    line-height: 1.4;
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
 }
 
-.div1-updated {
+.div1-updated,
+.div1-settings {
     position: relative;
     height: 110px;
+    padding: 0px 10px;
+    box-sizing: border-box;
     margin-bottom: 0px;
+}
+
+.div1-settings {
+    height: auto;
 }
 
 .div2 {
     display: none;
     position: relative;
-    display: grid;
     grid-template-columns: repeat(1, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 10px;
@@ -257,17 +264,30 @@ li.historic {
 }
 
 .div2-updated {
-    display: block;
+    display: grid;
     position: relative;
-    max-width: 750px;
+    grid-template-columns: repeat(1, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
 
 .div2-settings {
-    display: block;
     position: relative;
-    max-width: 750px;
+    float: left;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 0px 10px;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
@@ -329,9 +349,10 @@ h1 {
 }
 
 .update-all {
-    display: none;
-    position: relative;
-    float: right;
+    display: block;
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
@@ -350,8 +371,6 @@ h1 {
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     padding: 5px 20px;
     transition: all 0.5s ease-in-out;
-    animation-name: animatebottom;
-    animation-duration: .5s;
 }
 
 .update-all-button1:hover {
@@ -364,48 +383,34 @@ h1 {
     transition: all 0s;
 }
 
+.update-all-button2-teste,
 .update-all-button2 {
     display: none;
     font: 17px 'Oxygen', sans-serif;
     font-weight: 400;
     text-align: center;
+    color: #333;
     width: 110px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 2em;
+    border: 1px solid #b5b5b5;
+    background-color: #d3d3d3;
     background-position: center;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
-    padding: 14px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    padding: 5px 20px;
     transition: all 0.5s ease-in-out;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
 
-.update-all-button2-white {
-    background-color: #ccc;
-    color: #333;
+.update-all-button2-teste:hover,
+.update-all-button2:hover {
+    background: #c1c1c1 radial-gradient(circle, transparent 1%, #c1c1c1 1%) center/15000%;
 }
 
-.update-all-button2-white:hover {
-    background: #b5b5b5 radial-gradient(circle, transparent 1%, #b5b5b5 1%) center/15000%;
-}
-
-.update-all-button2-white:active {
-    background-color: #dadada;
-    background-size: 100%;
-    transition: all 0s;
-}
-
-.update-all-button2-dark {
-    background-color: #49505a;
-    color: #fff;
-}
-
-.update-all-button2-dark:hover {
-    background: #414750 radial-gradient(circle, transparent 1%, #414750 1%) center/15000%;
-}
-
-.update-all-button2-dark:active {
-    background-color: #515863;
+.update-all-button2-teste:active,
+.update-all-button2:active {
+    background-color: #d3d3d3;
     background-size: 100%;
     transition: all 0s;
 }
@@ -649,8 +654,9 @@ h1 {
     display: none;
     position: relative;
     float: left;
-    width: 500px;
+    width: 100%;
     color: #575757;
+    line-height: 1.2;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
@@ -663,17 +669,6 @@ h1 {
     color: #575757;
     animation-name: animatebottom;
     animation-duration: .5s;
-}
-
-.block-app-fictitious {
-    position: relative;
-    background-color: #fff;
-    width: 100%;
-    height: 0px;
-    margin-bottom: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    transition: all 0.3s;
 }
 
 .block-app {
@@ -699,7 +694,7 @@ h1 {
 
 .app-name {
     float: left;
-    font-size: 19px;
+    font-size: 18px;
     margin-top: 0px;
     margin-right: 10px;
 }
@@ -726,7 +721,9 @@ h1 {
 
 .otherup-app-title {
     float: left;
-    margin-right: 10px;
+    font-size: 17px;
+    line-height: 1.0;
+    margin: 0px 10px;
 }
 
 .otherup-app-status-download,
@@ -734,7 +731,8 @@ h1 {
 .otherup-app-status-concluded {
     display: none;
     float: left;
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.4;
     color: #575757;
     margin-top: 0px;
     margin-right: 10px;
@@ -759,7 +757,7 @@ h1 {
     background-repeat: no-repeat;
     margin-top: 0px;
     margin-right: 15px;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 .update-other,
@@ -795,62 +793,50 @@ h1 {
     transition: all 0s;
 }
 
+.cancel-app-teste,
 .cancel-app {
     display: none;
-    float: right;
+    position: absolute;
+    right: 0;
     cursor: pointer;
+    color: #333;
     font: 16px 'Oxygen', sans-serif;
+    border: 1px solid #b5b5b5;
+    background-color: #d3d3d3;
     background-position: center;
-    border-radius: 5px;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
-    padding: 13px;
+    border-radius: 2em;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    padding: 5px 20px;
     margin-top: 0px;
-    margin-right: 10px;
+    margin-right: 20px;
     transition: all 0.5s ease-in-out;
 }
 
-.cancel-app-white {
-    background-color: #ccc;
-    color: #333;
+.cancel-app-teste:hover,
+.cancel-app:hover {
+    background: #c1c1c1 radial-gradient(circle, transparent 1%, #c1c1c1 1%) center/15000%;
 }
 
-.cancel-app-white:hover {
-    background: #b5b5b5 radial-gradient(circle, transparent 1%, #b5b5b5 1%) center/15000%;
-}
-
-.cancel-app-white:active {
-    background-color: #dadada;
-    background-size: 100%;
-    transition: all 0s;
-}
-
-.cancel-app-dark {
-    background-color: #49505a;
-    color: #fff;
-}
-
-.cancel-app-dark:hover {
-    background: #414750 radial-gradient(circle, transparent 1%, #414750 1%) center/15000%;
-}
-
-.cancel-app-dark:active {
-    background-color: #515863;
+.cancel-app-teste:active,
+.cancel-app:active {
+    background-color: #d3d3d3;
     background-size: 100%;
     transition: all 0s;
 }
 
 .open-app {
-    float: right;
+    position: absolute;
+    right: 0;
     cursor: pointer;
     color: #fff;
     font: 16px 'Oxygen', sans-serif;
     background-color: #005fb8;
     background-position: center;
-    border-radius: 5px;
+    border-radius: 2em;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
-    padding: 13px 18px;
+    padding: 5px 20px;
     margin-top: 0px;
-    margin-right: 10px;
+    margin-right: 20px;
     transition: all 0.5s ease-in-out;
 }
 
@@ -886,6 +872,10 @@ h1 {
     margin-right: 10px;
 }
 
+.more-details img {
+    width: 15px;
+}
+
 .show-details {
     display: flex;
 }
@@ -916,6 +906,31 @@ h1 {
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 10px 15px;
+}
+
+.system-update-list-item {
+    float: left;
+    width: 100%;
+    margin: 7px 0px;
+}
+
+.system-update-list-item img {
+    float: left;
+    content: url('../images/icon-list.png');
+}
+
+#other-updates-status-bar {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: auto;
+    float: left;
+    line-height: 1.0;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+    padding: 0px 10px;
+    padding-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 @keyframes animatebottom {

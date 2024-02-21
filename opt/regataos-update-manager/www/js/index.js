@@ -59,7 +59,6 @@ function current_status() {
                 $(".main").css("margin-bottom", "0px");
                 $(".never-up").css("display", "block");
                 $(".never_update_system").css("display", "block");
-                $(".div1").css("height", "170px");
                 $(".div1-sub").css("display", "block");
                 $(".div2").css("display", "none");
                 $(".search-update-status").css("display", "none");
@@ -76,7 +75,6 @@ function current_status() {
                 $(".main").css("margin-bottom", "60px");
                 $(".never-up").css("display", "none");
                 $(".never_update_system").css("display", "none");
-                $(".div1").css("height", "170px");
                 $(".div1-sub").css("display", "block");
                 $(".div2").css("display", "none");
                 $(".search-update-status").css("display", "block");
@@ -90,7 +88,6 @@ function current_status() {
                 $(".updated_system").css("display", "none");
                 $(".updated_system-check-button").css("display", "none");
                 $(".check-updates-button-status").css("display", "none");
-                $(".div1").css("height", "170px");
                 $(".div1-sub").css("display", "block");
                 $(".main").css("margin-bottom", "60px");
                 $(".never-up").css("display", "none");
@@ -136,7 +133,6 @@ function current_status() {
                 $(".main").css("margin-bottom", "60px");
                 $(".never-up").css("display", "none");
                 $(".never_update_system").css("display", "none");
-                $(".div1").css("height", "110px");
                 $(".div2").css("display", "none");
                 $(".search-update-status").css("display", "none");
                 $(".check-up").css("display", "none");
@@ -182,7 +178,6 @@ function updated_status() {
                 $(".updated").css("display", "none");
                 $(".updated-img").css("display", "none");
                 //location.reload();
-                $(".div1").css("height", "110px");
                 $(".div1-sub").css("display", "none");
                 $(".updated_system").css("display", "block");
                 $(".updated_system-check-button").css("display", "block");
@@ -281,7 +276,6 @@ function list_updated_queue() {
                     var updated_application = fs.readFileSync("/tmp/regataos-update/updated-apps.txt", "utf8");
 
                     if (list_apps_queue.indexOf(app_package_name) > -1) {
-                        $("div#" + app_package_name).css("position", "relative");
                         $("div#pending-" + app_package_name).css("display", "block");
                         $("div#downloading-" + app_package_name).css("display", "none");
                         $("div#installing-" + app_package_name).css("display", "none");
@@ -294,7 +288,6 @@ function list_updated_queue() {
                         $("div#concluded-" + app_package_name).css("display", "none");
 
                     } else if (downloadable_application.indexOf(app_package_name) > -1) {
-                        $("div#" + app_package_name).css("position", "absolute");
                         $("div#pending-" + app_package_name).css("display", "none");
                         $("div#downloading-" + app_package_name).css("display", "block");
                         $("div#installing-" + app_package_name).css("display", "none");
@@ -307,7 +300,6 @@ function list_updated_queue() {
                         $("div#concluded-" + app_package_name).css("display", "none");
 
                     } else if (installing_application.indexOf(app_package_name) > -1) {
-                        $("div#" + app_package_name).css("position", "absolute");
                         $("div#pending-" + app_package_name).css("display", "none");
                         $("div#downloading-" + app_package_name).css("display", "none");
                         $("div#installing-" + app_package_name).css("display", "block");
@@ -316,7 +308,6 @@ function list_updated_queue() {
                         $("div#concluded-" + app_package_name).css("display", "none");
 
                     } else if (updated_application.indexOf(app_package_name) > -1) {
-                        $("div#" + app_package_name).css("position", "relative");
                         $("div#pending-" + app_package_name).css("display", "none");
                         $("div#downloading-" + app_package_name).css("display", "none");
                         $("div#installing-" + app_package_name).css("display", "none");
@@ -325,7 +316,6 @@ function list_updated_queue() {
                         $("div#concluded-" + app_package_name).css("display", "block");
 
                     } else {
-                        $("div#" + app_package_name).css("position", "relative");
                         $("div#pending-" + app_package_name).css("display", "none");
                         $("div#downloading-" + app_package_name).css("display", "none");
                         $("div#installing-" + app_package_name).css("display", "none");
@@ -553,7 +543,7 @@ function show_other_updates() {
                 if ((updated_apps.indexOf("other-updates") > -1) == "1") {
                     $("div.other-updates").css("display", "none");
                 } else {
-                    $("div.other-updates").css("display", "block");
+                    $("div.other-updates").css("display", "flex");
                 }
 
             } else {
@@ -641,83 +631,6 @@ setInterval(function () {
         }
     });
 }, 1000);
-
-// Show or hide the div element for the balloon effect, used to put the app being updated to the start of the queue
-function show_or_hide_balloon_effect() {
-    const fs = require('fs');
-
-    fs.access('/tmp/regataos-update/downloadable-application.txt', (err) => {
-        if (!err) {
-            var data = fs.readFileSync("/tmp/regataos-update/downloadable-application.txt", "utf8");
-
-            if (data.length >= 2) {
-                $("div.block-app-fictitious").css("height", "49px");
-                $("div.block-app-fictitious").css("margin-bottom", "10px");
-                $("div.block-app-fictitious").css("padding-top", "15px");
-                $("div.block-app-fictitious").css("padding-bottom", "15px");
-
-            } else {
-                fs.access('/tmp/regataos-update/installing-application.txt', (err) => {
-                    if (!err) {
-                        var data = fs.readFileSync("/tmp/regataos-update/installing-application.txt", "utf8");
-
-                        if (data.length >= 2) {
-                            $("div.block-app-fictitious").css("height", "49px");
-                            $("div.block-app-fictitious").css("margin-bottom", "10px");
-                            $("div.block-app-fictitious").css("padding-top", "15px");
-                            $("div.block-app-fictitious").css("padding-bottom", "15px");
-
-                        } else {
-                            $("div.block-app-fictitious").css("height", "0px");
-                            $("div.block-app-fictitious").css("margin-bottom", "0px");
-                            $("div.block-app-fictitious").css("padding-top", "0px");
-                            $("div.block-app-fictitious").css("padding-bottom", "0px");
-                        }
-                        return;
-
-                    } else {
-                        $("div.block-app-fictitious").css("height", "0px");
-                        $("div.block-app-fictitious").css("margin-bottom", "0px");
-                        $("div.block-app-fictitious").css("padding-top", "0px");
-                        $("div.block-app-fictitious").css("padding-bottom", "0px");
-                    }
-                });
-            }
-            return;
-
-        } else {
-            fs.access('/tmp/regataos-update/installing-application.txt', (err) => {
-                if (!err) {
-                    var data = fs.readFileSync("/tmp/regataos-update/installing-application.txt", "utf8");
-
-                    if (data.length >= 2) {
-                        $("div.block-app-fictitious").css("height", "49px");
-                        $("div.block-app-fictitious").css("margin-bottom", "10px");
-                        $("div.block-app-fictitious").css("padding-top", "15px");
-                        $("div.block-app-fictitious").css("padding-bottom", "15px");
-
-                    } else {
-                        $("div.block-app-fictitious").css("height", "0px");
-                        $("div.block-app-fictitious").css("margin-bottom", "0px");
-                        $("div.block-app-fictitious").css("padding-top", "0px");
-                        $("div.block-app-fictitious").css("padding-bottom", "0px");
-                    }
-                    return;
-
-                } else {
-                    $("div.block-app-fictitious").css("height", "0px");
-                    $("div.block-app-fictitious").css("margin-bottom", "0px");
-                    $("div.block-app-fictitious").css("padding-top", "0px");
-                    $("div.block-app-fictitious").css("padding-bottom", "0px");
-                }
-            });
-        }
-    });
-}
-
-setInterval(function () {
-    show_or_hide_balloon_effect();
-}, 100);
 
 // Disable the update cancel button on the backend
 var timer_update_cancel = setInterval(disable_update_cancellation, 100);

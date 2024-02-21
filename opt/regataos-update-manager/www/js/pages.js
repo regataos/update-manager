@@ -70,37 +70,27 @@ function go_home() {
 	const exec = require('child_process').exec;
 	const fs = require('fs');
 
-	fs.access('/tmp/regataos-update/status.txt', (err) => {
-		if (!err) {
-			var status = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
-			if ((status.indexOf("updated") > -1) == "1") {
-				var command_line = 'echo "no-updates" > /tmp/regataos-update/status.txt';
-				exec(command_line, (error, stdout, stderr) => {
-				});
-			}
-			return;
+	if (fs.existsSync("/tmp/regataos-update/status.txt")) {
+		const status = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
+		if (status.includes("updated")) {
+			const commandLine = 'echo "no-updates" > /tmp/regataos-update/status.txt';
+			exec(commandLine, (error, stdout, stderr) => { });
 		}
-	});
+	}
 
-	var iframe_url = document.getElementById("main-iframe").contentWindow.location.href
-
-	if ((iframe_url.indexOf("home.html") > -1) == "0") {
+	if (!getIframeUrl().includes("home.html")) {
 		document.getElementById("main-iframe").contentWindow.document.location.href = "pages/home.html";
 	}
 }
 
 function go_historic() {
-	var iframe_url = document.getElementById("main-iframe").contentWindow.location.href
-
-	if ((iframe_url.indexOf("historic.html") > -1) == "0") {
+	if (!getIframeUrl().includes("historic.html")) {
 		document.getElementById("main-iframe").contentWindow.document.location.href = "pages/historic.html";
 	}
 }
 
 function go_settings() {
-	var iframe_url = document.getElementById("main-iframe").contentWindow.location.href
-
-	if ((iframe_url.indexOf("settings.html") > -1) == "0") {
+	if (!getIframeUrl().includes("settings.html")) {
 		document.getElementById("main-iframe").contentWindow.document.location.href = "pages/settings.html";
 	}
 }

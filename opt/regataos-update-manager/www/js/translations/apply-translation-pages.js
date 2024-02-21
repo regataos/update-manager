@@ -51,8 +51,12 @@ function applyTranslationPages() {
 
             // Other updates
             document.querySelector(".other-updates .app-name").innerHTML = data[i].home.otherUpdates.title;
-            document.querySelector(".more-details-text").innerHTML = data[i].home.otherUpdates.moreDetails;
             document.querySelector("#update-app-other-updates").innerHTML = data[i].home.otherUpdates.otherUpButton;
+
+            const moreDetailsText = document.querySelectorAll(".more-details-text");
+            for (let b = 0; b < moreDetailsText.length; b++) {
+                moreDetailsText[b].innerHTML = data[i].home.otherUpdates.moreDetails;
+            }
 
         } else if ((pageUrl.indexOf("historic.html") > -1) == "1") {
             // Title

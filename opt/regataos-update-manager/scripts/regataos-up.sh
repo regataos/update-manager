@@ -14,199 +14,197 @@ fi
 
 # Update the local cache of the repositories and list the available updates.
 function search_update() {
-# Clear cache
-rm -f "/var/log/regataos-logs/regataos-other-updates.log"
+    # Clear cache
+    rm -f "/var/log/regataos-logs/regataos-other-updates.log"
 
-# If the Calamares Installer is installed, just exit
-if test -e "/usr/bin/calamares"; then
-    echo "The Calamares Installer was detected, leaving..."
-    echo "no-updates" > "/tmp/regataos-update/status.txt";
-    echo "" > "/tmp/regataos-update/already_updated.txt";
-    killall alert-update.py
-    killall install-update.py
-    killall check-update.py
-    exit 0;
+    # If the Calamares Installer is installed, just exit
+    if test -e "/usr/bin/calamares"; then
+        echo "The Calamares Installer was detected, leaving..."
+        echo "no-updates" >"/tmp/regataos-update/status.txt"
+        echo "" >"/tmp/regataos-update/already_updated.txt"
+        killall alert-update.py
+        killall install-update.py
+        killall check-update.py
+        exit 0
 
-else
-    if test ! -e "/tmp/regataos-update/already_updated.txt"; then
-        if test ! -e "/tmp/regataos-update/update-in-progress.txt"; then
-            if test ! -e "/tmp/regataos-update/other-updates-in-progress.txt"; then
-                if test ! -e "/tmp/regataos-update/update-specific-in-progress.txt"; then
-                    if test ! -e "/tmp/regataos-update"; then
-                        mkdir -p "/tmp/regataos-update"
-                        chmod 777 "/tmp/regataos-update"
-                    else
-                        rm -f "/tmp/regataos-update/apps-list.txt"
-                        rm -f "/tmp/regataos-update/number-apps.txt"
-                        rm -f "/tmp/regataos-update/number-packages.txt"
-                        rm -f "/tmp/regataos-update/package-list-html.txt"
-                        rm -f "/tmp/regataos-update/package-list.txt"
-                        rm -f "/tmp/regataos-update/updated-apps.txt"
-                        rm -f /tmp/regataos-update/*.rpm
+    else
+        if test ! -e "/tmp/regataos-update/already_updated.txt"; then
+            if test ! -e "/tmp/regataos-update/update-in-progress.txt"; then
+                if test ! -e "/tmp/regataos-update/other-updates-in-progress.txt"; then
+                    if test ! -e "/tmp/regataos-update/update-specific-in-progress.txt"; then
+                        if test ! -e "/tmp/regataos-update"; then
+                            mkdir -p "/tmp/regataos-update"
+                            chmod 777 "/tmp/regataos-update"
+                        else
+                            rm -f "/tmp/regataos-update/apps-list.txt"
+                            rm -f "/tmp/regataos-update/number-apps.txt"
+                            rm -f "/tmp/regataos-update/number-packages.txt"
+                            rm -f "/tmp/regataos-update/package-list-html.txt"
+                            rm -f "/tmp/regataos-update/package-list.txt"
+                            rm -f "/tmp/regataos-update/updated-apps.txt"
+                            rm -f /tmp/regataos-update/*.rpm
 
-                        chmod 777 "/tmp/regataos-update"
-                    fi
-
-                    # Create file with current status
-                    auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
-                    if [[ $(echo "$auto_up_config") == *"3"* ]]; then
-                        echo "never-updates" > "/tmp/regataos-update/status.txt";
-                        exit 0;
-
-                    else
-                        echo "check-updates" > "/tmp/regataos-update/status.txt";
-                    fi
-
-                    {
-                    export LC_ALL="en_US.UTF-8"
-                    export LANG="en_US.UTF-8"
-                    export LANGUAGE="en_US"
-                    retry -r 5 -- zypper --non-interactive --no-gpg-checks refresh
-                    } 2>&1 | tee "/var/log/regataos-logs/regataos-refresh-repo.log";
-
-                    {
-                    export LC_ALL="en_US.UTF-8"
-                    export LANG="en_US.UTF-8"
-                    export LANGUAGE="en_US"
-                    sudo zypper --non-interactive list-updates
-                    } 2>&1 | tee "/var/log/regataos-logs/regataos-list-updates.log";
-
-                    sed -i 's/ - x86_64//' "/var/log/regataos-logs/regataos-list-updates.log"
-                    get_line=$(grep -n "Reading installed packages" "/var/log/regataos-logs/regataos-list-updates.log" | cut -f1 -d:)
-                    package_list=$(cat /var/log/regataos-logs/regataos-list-updates.log | awk '{print $5}' | sed -n "$(($get_line+3))",'$p');
-                    echo "$package_list" > "/tmp/regataos-update/package-list.txt";
-
-                    for i in /opt/regataos-store/apps-list/*.json; do
-                        package_name="$(grep -R '"package":' $i | awk '{print $2}' | sed 's/"\|,//g')";
-                        package="$(grep -r "$package_name" /tmp/regataos-update/package-list.txt)"
-
-                        if [ -z $(echo $package | awk '{print $1}' | sed "s/$package_name//") ];then
-                            if [[ $package == *"$package_name"* ]]; then
-                                desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1);
-
-                                if [ ! -z $desktop_file ];then
-                                    echo "$package_name" >> "/tmp/regataos-update/apps-list.txt";
-                                    icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-);
-
-                                    search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
-                                    search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
-                                    search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
-
-                                    if [ -z $search_icon_directory_svg ];then
-                                        size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
-                                        size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
-
-                                        if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
-                                            search_icon_directory=$(echo $search_icon_directory_png1)
-
-                                        elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
-                                            search_icon_directory=$(echo $search_icon_directory_png2)
-
-                                        elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
-                                            search_icon_directory=$(echo $search_icon_directory_png2)
-
-                                        elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
-                                            search_icon_directory=$(echo $search_icon_directory_png2)
-
-                                        else
-                                            search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
-                                        fi
-
-                                    else
-                                        search_icon_directory=$(echo $search_icon_directory_svg)
-                                    fi
-
-                                    echo "file://$search_icon_directory" > "/tmp/regataos-update/$package_name-icon.txt";
-                                    sed -i "/$package_name/{ s/$package_name//;:a;n;ba }" "/tmp/regataos-update/package-list.txt"
-                                fi
-                            fi
+                            chmod 777 "/tmp/regataos-update"
                         fi
-                    done
 
-                    if test -e  "/tmp/regataos-update/package-list.txt"; then
-                        sed -i '/^$/d' "/tmp/regataos-update/package-list.txt";
+                        # Create file with current status
+                        auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+                        if [[ $(echo "$auto_up_config") == *"3"* ]]; then
+                            echo "never-updates" >"/tmp/regataos-update/status.txt"
+                            exit 0
 
-                        number_packages=$(wc -l /tmp/regataos-update/package-list.txt | awk '{print $1}')
-                        if [ $(echo $number_packages) -ge 1 ]; then
-                            echo "There are $number_packages apps to update"
-                            echo "($number_packages)" > "/tmp/regataos-update/number-packages.txt";
-                            echo "show-updates" > "/tmp/regataos-update/status.txt";
-                            echo "" > "/tmp/regataos-update/already_updated.txt"
+                        else
+                            echo "check-updates" >"/tmp/regataos-update/status.txt"
                         fi
 
                         {
-                        echo "<ul>"
-                        while IFS= read -r file_line || [[ -n "$file_line" ]]; do
-                        echo "  <li><div class='otherup-app-title otherup-app-$file_line'>$file_line</div><div class='otherup-app-status-download otherup-app-status-download-$file_line otherup-app-status-desc'>Downloading...</div> <div class='otherup-app-status-install otherup-app-status-install-$file_line otherup-app-status-desc'>Installing...</div> <div class='otherup-app-status-concluded otherup-app-status-concluded-$file_line otherup-app-status-desc'>Concluded!</div></li>"
-                        done < "/tmp/regataos-update/package-list.txt"
-                        echo "</ul>"
-                        } 2>&1 | tee "/tmp/regataos-update/package-list-html.txt"
+                            export LC_ALL="en_US.UTF-8"
+                            export LANG="en_US.UTF-8"
+                            export LANGUAGE="en_US"
+                            retry -r 5 -- zypper --non-interactive --no-gpg-checks refresh
+                        } 2>&1 | tee "/var/log/regataos-logs/regataos-refresh-repo.log"
 
-                        if test -e "/var/log/regataos-logs/updated-apps.txt"; then
-                            sed -i "s/other-updates//" "/var/log/regataos-logs/updated-apps.txt"
-                            sed -i '/^$/d' "/var/log/regataos-logs/updated-apps.txt"
-                        fi
-                    fi
+                        {
+                            export LC_ALL="en_US.UTF-8"
+                            export LANG="en_US.UTF-8"
+                            export LANGUAGE="en_US"
+                            sudo zypper --non-interactive list-updates
+                        } 2>&1 | tee "/var/log/regataos-logs/regataos-list-updates.log"
 
-                    if test -e "/tmp/regataos-update/apps-list.txt"; then
-                        sed -i '/^$/d' "/tmp/regataos-update/apps-list.txt";
-                        number_apps=$(wc -l /tmp/regataos-update/apps-list.txt | awk '{print $1}')
-                        if [ $(echo $number_apps) -ge 1 ]; then
-                            if test -e "/tmp/regataos-update/number-packages.txt"; then
-                                echo "There are $(($number_apps+1)) apps to update"
-                                echo "($(($number_apps+1)))" > "/tmp/regataos-update/number-apps.txt";
-                                echo "show-updates" > "/tmp/regataos-update/status.txt";
-                                echo "" > "/tmp/regataos-update/already_updated.txt"
+                        sed -i 's/ - x86_64//' "/var/log/regataos-logs/regataos-list-updates.log"
+                        get_line=$(grep -n "Reading installed packages" "/var/log/regataos-logs/regataos-list-updates.log" | cut -f1 -d:)
+                        package_list=$(cat /var/log/regataos-logs/regataos-list-updates.log | awk '{print $5}' | sed -n "$(($get_line + 3))",'$p')
+                        echo "$package_list" >"/tmp/regataos-update/package-list.txt"
 
-                            else
-                                echo "There are $number_apps apps to update"
-                                echo "($number_apps)" > "/tmp/regataos-update/number-apps.txt";
-                                echo "show-updates" > "/tmp/regataos-update/status.txt";
-                                echo "" > "/tmp/regataos-update/already_updated.txt"
+                        for i in /opt/regataos-store/apps-list/*.json; do
+                            package_name="$(grep -R '"package":' $i | awk '{print $2}' | sed 's/"\|,//g')"
+                            package="$(grep -r "$package_name" /tmp/regataos-update/package-list.txt)"
+
+                            if [ -z $(echo $package | awk '{print $1}' | sed "s/$package_name//") ]; then
+                                if [[ $package == *"$package_name"* ]]; then
+                                    desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1)
+
+                                    if [ ! -z $desktop_file ]; then
+                                        echo "$package_name" >>"/tmp/regataos-update/apps-list.txt"
+                                        icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-)
+
+                                        search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1)
+                                        search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1)
+                                        search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1)
+
+                                        if [ -z $search_icon_directory_svg ]; then
+                                            size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
+                                            size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
+
+                                            if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
+                                                search_icon_directory=$(echo $search_icon_directory_png1)
+
+                                            elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
+                                                search_icon_directory=$(echo $search_icon_directory_png2)
+
+                                            elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
+                                                search_icon_directory=$(echo $search_icon_directory_png2)
+
+                                            elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
+                                                search_icon_directory=$(echo $search_icon_directory_png2)
+
+                                            else
+                                                search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
+                                            fi
+
+                                        else
+                                            search_icon_directory=$(echo $search_icon_directory_svg)
+                                        fi
+
+                                        echo "file://$search_icon_directory" >"/tmp/regataos-update/$package_name-icon.txt"
+                                        sed -i "/$package_name/{ s/$package_name//;:a;n;ba }" "/tmp/regataos-update/package-list.txt"
+                                    fi
+                                fi
+                            fi
+                        done
+
+                        if test -e "/tmp/regataos-update/package-list.txt"; then
+                            sed -i '/^$/d' "/tmp/regataos-update/package-list.txt"
+
+                            number_packages=$(wc -l /tmp/regataos-update/package-list.txt | awk '{print $1}')
+                            if [ $(echo $number_packages) -ge 1 ]; then
+                                echo "There are $number_packages apps to update"
+                                echo "($number_packages)" >"/tmp/regataos-update/number-packages.txt"
+                                echo "show-updates" >"/tmp/regataos-update/status.txt"
+                                echo "" >"/tmp/regataos-update/already_updated.txt"
+                            fi
+
+                            {
+                                echo -e "<div id='system-update-list'>\n"
+                                while IFS= read -r file_line || [[ -n "$file_line" ]]; do
+                                    echo -e "  <div class='system-update-list-item'>\n    <img src='' alt=''/>\n    <div class='otherup-app-title otherup-app-$file_line'>$file_line</div>\n    <div class='otherup-app-status-download otherup-app-status-download-$file_line otherup-app-status-desc'>Downloading...</div>\n    <div class='otherup-app-status-install otherup-app-status-install-$file_line otherup-app-status-desc'>Installing...</div>\n    <div class='otherup-app-status-concluded otherup-app-status-concluded-$file_line otherup-app-status-desc'>Concluded!</div>\n  </div>\n"
+                                done <"/tmp/regataos-update/package-list.txt"
+                                echo -e "</div>\n"
+                            } 2>&1 | tee "/tmp/regataos-update/package-list-html.txt"
+
+                            if test -e "/var/log/regataos-logs/updated-apps.txt"; then
+                                sed -i "s/other-updates//" "/var/log/regataos-logs/updated-apps.txt"
+                                sed -i '/^$/d' "/var/log/regataos-logs/updated-apps.txt"
                             fi
                         fi
-                    fi
 
-                    if test ! -e "/tmp/regataos-update/number-apps.txt"; then
-                        if test ! -e  "/tmp/regataos-update/number-packages.txt"; then
-                            echo "no-updates" > "/tmp/regataos-update/status.txt";
-                            killall alert-update.py
-                            killall install-update.py
-                            killall check-update.py
+                        if test -e "/tmp/regataos-update/apps-list.txt"; then
+                            sed -i '/^$/d' "/tmp/regataos-update/apps-list.txt"
+                            number_apps=$(wc -l /tmp/regataos-update/apps-list.txt | awk '{print $1}')
+                            if [ $(echo $number_apps) -ge 1 ]; then
+                                if test -e "/tmp/regataos-update/number-packages.txt"; then
+                                    echo "There are $(($number_apps + 1)) apps to update"
+                                    echo "($(($number_apps + 1)))" >"/tmp/regataos-update/number-apps.txt"
+                                    echo "show-updates" >"/tmp/regataos-update/status.txt"
+                                    echo "" >"/tmp/regataos-update/already_updated.txt"
 
+                                else
+                                    echo "There are $number_apps apps to update"
+                                    echo "($number_apps)" >"/tmp/regataos-update/number-apps.txt"
+                                    echo "show-updates" >"/tmp/regataos-update/status.txt"
+                                    echo "" >"/tmp/regataos-update/already_updated.txt"
+                                fi
+                            fi
+                        fi
+
+                        if test ! -e "/tmp/regataos-update/number-apps.txt"; then
+                            if test ! -e "/tmp/regataos-update/number-packages.txt"; then
+                                echo "no-updates" >"/tmp/regataos-update/status.txt"
+                                killall alert-update.py
+                                killall install-update.py
+                                killall check-update.py
+
+                            else
+                                ps -C alert-update.py >/dev/null
+                                if [ $? = 1 ]; then
+                                    cd /opt/regataos-update-manager/tray-icon/
+                                    ./alert-update.py
+                                fi
+                            fi
                         else
-                            ps -C alert-update.py > /dev/null
-                            if [ $? = 1 ]
-                            then
+                            ps -C alert-update.py >/dev/null
+                            if [ $? = 1 ]; then
                                 cd /opt/regataos-update-manager/tray-icon/
                                 ./alert-update.py
                             fi
                         fi
-                    else
-                        ps -C alert-update.py > /dev/null
-                        if [ $? = 1 ]
-                        then
-                            cd /opt/regataos-update-manager/tray-icon/
-                            ./alert-update.py
-                        fi
-                    fi
 
-                    chmod 777 /tmp/regataos-update/*
-                    exit
+                        chmod 777 /tmp/regataos-update/*
+                        exit
+                    fi
                 fi
             fi
         fi
     fi
-fi
 }
 
 # Update packages
 function update_packages() {
     {
-    export LC_ALL="en_US.UTF-8"
-    export LANG="en_US.UTF-8"
-    export LANGUAGE="en_US"
-    retry -r 20 -- zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses
+        export LC_ALL="en_US.UTF-8"
+        export LANG="en_US.UTF-8"
+        export LANGUAGE="en_US"
+        retry -r 20 -- zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses
     } 2>&1 | tee "/var/log/regataos-logs/regataos-update-packages.log"
 
     # Run additional application settings
@@ -234,8 +232,8 @@ function check_up_config() {
             chmod 777 /tmp/regataos-update/*
         fi
 
-        echo "never-updates" > "/tmp/regataos-update/status.txt";
-        exit 0;
+        echo "never-updates" >"/tmp/regataos-update/status.txt"
+        exit 0
 
     else
         search_update
@@ -244,31 +242,34 @@ function check_up_config() {
 
 # Stop update
 function stop_update() {
-    echo "never-updates" > "/tmp/regataos-update/status.txt"
+    echo "never-updates" >"/tmp/regataos-update/status.txt"
     rm -f "/tmp/regataos-update/all-auto-update.txt"
-	echo "" > "/tmp/regataos-update/stop-all-update.txt"
-	sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh
+    echo "" >"/tmp/regataos-update/stop-all-update.txt"
+    sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh
 
-    ps -C rpm > /dev/null
-    if [ $? = 1 ]
-    then
+    ps -C rpm >/dev/null
+    if [ $? = 1 ]; then
         killall regataos-up.sh
         killall retry
         killall zypper
-        echo "never-updates" > "/tmp/regataos-update/status.txt"
-        exit 0;
+        echo "never-updates" >"/tmp/regataos-update/status.txt"
+        exit 0
     fi
 }
 
 # Run options
 case $1 in
-    "-check-up-config") check_up_config
-        ;;
-    "-install-up") update_packages
-        ;;
-    "-stop-up") stop_update
-        ;;
-   *) echo "Invalid option!"
-      exit 1
-      ;;
+"-check-up-config")
+    check_up_config
+    ;;
+"-install-up")
+    update_packages
+    ;;
+"-stop-up")
+    stop_update
+    ;;
+*)
+    echo "Invalid option!"
+    exit 1
+    ;;
 esac
