@@ -3,8 +3,9 @@
 // Apply text translations in the app
 function applyTranslation() {
     const fs = require('fs');
+    const getTranslation = selectTranslationFile();
 
-    let data = fs.readFileSync(selectTranslationFile(), "utf8");
+    let data = fs.readFileSync(getTranslation, "utf8");
     data = JSON.parse(data);
 
     for (let i = 0; i < data.length; i++) {

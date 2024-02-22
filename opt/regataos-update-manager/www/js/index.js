@@ -3,42 +3,6 @@ setTimeout(function () {
     document.getElementById("loadscreen").style.display = "none";
 }, 1000);
 
-// Show the number of application updates
-function yes_up_number() {
-    const fs = require('fs');
-
-    fs.access('/tmp/regataos-update/number-apps.txt', (err) => {
-        if (!err) {
-            $(".update-all").css("display", "block");
-
-            fs.readFile('/tmp/regataos-update/number-apps.txt', (err, data) => {
-                if (err) throw err;
-                var number = data
-                $(document).ready(function () {
-                    $(".updates-app-number").css("display", "block");
-                    $(".updates-app-number").text(number);
-                });
-            });
-            return;
-        } else {
-            $(".update-all").css("display", "none");
-        }
-    });
-
-    fs.access('/tmp/regataos-update/number-packages.txt', (err) => {
-        if (!err) {
-            fs.readFile('/tmp/regataos-update/number-packages.txt', (err, data) => {
-                if (err) throw err;
-                var number = data
-                $(document).ready(function () {
-                    $(".updates-package-number").text(number);
-                });
-            });
-            return;
-        }
-    });
-}
-
 // Display elements on the screen according to the current status
 var current_status_timer = setInterval(current_status, 100);
 
@@ -50,7 +14,6 @@ function current_status() {
             var current_status = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
 
             if ((current_status.indexOf("never-updates") > -1) == "1") {
-                $(".update-all").css("display", "none");
                 $(".yes-up").css("display", "none");
                 $(".no-up").css("display", "none");
                 $(".updated_system").css("display", "none");
@@ -66,7 +29,6 @@ function current_status() {
                 $(".loading").css("display", "none");
 
             } else if ((current_status.indexOf("check-updates") > -1) == "1") {
-                $(".update-all").css("display", "none");
                 $(".yes-up").css("display", "none");
                 $(".no-up").css("display", "none");
                 $(".updated_system").css("display", "none");
@@ -80,9 +42,10 @@ function current_status() {
                 $(".search-update-status").css("display", "block");
                 $(".check-up").css("display", "block");
                 $(".loading").css("display", "block");
+                document.querySelector(".update-all-button1").style.display = "none";
+                document.querySelector(".update-all-button2").style.display = "none";
 
             } else if ((current_status.indexOf("show-updates") > -1) == "1") {
-                $(".update-all").css("display", "block");
                 $(".yes-up").css("display", "block");
                 $(".no-up").css("display", "none");
                 $(".updated_system").css("display", "none");
@@ -106,8 +69,8 @@ function current_status() {
 
                 $(".check-up").css("display", "none");
                 $(".loading").css("display", "none");
+                document.querySelector(".update-all-button1").style.display = "block";
 
-                yes_up_number();
                 list_updates();
                 applyTranslationPages();
 
@@ -123,7 +86,6 @@ function current_status() {
                     $(".yes-update-auto").css("display", "none");
                 }
 
-                $(".update-all").css("display", "none");
                 $(".yes-up").css("display", "none");
                 $(".no-up").css("display", "none");
                 $(".updated_system").css("display", "block");
@@ -137,6 +99,8 @@ function current_status() {
                 $(".search-update-status").css("display", "none");
                 $(".check-up").css("display", "none");
                 $(".loading").css("display", "none");
+                document.querySelector(".update-all-button1").style.display = "none";
+                document.querySelector(".update-all-button2").style.display = "none";
 
                 clearInterval(current_status_timer);
             }
@@ -156,9 +120,8 @@ function updated_status() {
             var updated_status = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
 
             if ((updated_status.indexOf("updated") > -1) == "1") {
-                $(".update-all").css("display", "none");
-                $(".update-all-button1").css("display", "none");
-                $(".update-all-button2").css("display", "none");
+                document.querySelector(".update-all-button1").style.display = "none";
+                document.querySelector(".update-all-button2").style.display = "none";
                 $(".yes-up").css("display", "none");
                 $(".no-up").css("display", "none");
                 $(".div2").css("display", "none");
@@ -352,212 +315,6 @@ setInterval(function () {
     });
 }, 1000);
 
-// Show status of other package updates
-var progress_other_up = setInterval(progress_other_updates, 100);
-
-function progress_other_updates() {
-    const fs = require('fs');
-    const exec = require('child_process').exec;
-
-    fs.access('/tmp/regataos-update/status.txt', (err) => {
-        if (!err) {
-            var current_status = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
-            if ((current_status.indexOf("no-updates") > -1) == "1") {
-                clearInterval(progress_other_up);
-
-            } else if ((current_status.indexOf("never-updates") > -1) == "1") {
-                clearInterval(progress_other_up);
-
-            } else {
-                fs.access('/var/log/regataos-logs/regataos-other-updates.log', (err) => {
-                    if (!err) {
-                        var command_line = "cat /var/log/regataos-logs/regataos-other-updates.log | awk 'NF>0' > /var/log/regataos-logs/regataos-other-updates.txt; \
-            cat /var/log/regataos-logs/regataos-other-updates.txt";
-                        exec(command_line, (error, stdout, stderr) => {
-                            if (stdout) {
-                                window.progress = stdout;
-                            }
-                        });
-
-                        if (progress.indexOf("have been updated") > -1) {
-                            var command = '\
-                echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-                            exec(command, function (error, call, errlog) {
-                            });
-
-                            clearInterval(progress_other_up);
-
-                        } else if (progress.indexOf("There are running programs") > -1) {
-                            var command = '\
-                echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-                            exec(command, function (error, call, errlog) {
-                            });
-
-                            clearInterval(progress_other_up);
-
-                        } else if (progress.indexOf("Executing") > -1) {
-                            var command = ' \
-                echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-                echo "other-updates" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-                            exec(command, function (error, call, errlog) {
-                            });
-
-                            var command_line = "grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
-                            exec(command_line, (error, stdout, stderr) => {
-                                if (stdout) {
-                                    $("div#percentage-other-updates").text(stdout);
-                                }
-                            });
-                            $("div#update-app-other-updates").css("display", "none");
-
-                        } else if (progress.indexOf("Installing") > -1) {
-                            var command = ' \
-                echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-                echo "other-updates" > "/tmp/regataos-update/installing-application-other-updates.txt"';
-                            exec(command, function (error, call, errlog) {
-                            });
-
-                            var command_line = "grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
-                            exec(command_line, (error, stdout, stderr) => {
-                                if (stdout) {
-                                    $("div#percentage-other-updates").text(stdout);
-                                }
-                            });
-                            $("div#update-app-other-updates").css("display", "none");
-
-                        } else if (progress.indexOf("Checking") > -1) {
-                            var command = ' \
-                echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"'
-                            exec(command, function (error, call, errlog) {
-                            });
-
-                            $("div#percentage-other-updates").text("Checking...");
-                            $("div#update-app-other-updates").css("display", "none");
-
-                        } else if (progress.indexOf("Retrieving") > -1) {
-                            var command = ' \
-                echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt"; \
-                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"'
-                            exec(command, function (error, call, errlog) {
-                            });
-
-                            var command_line = "grep -r 'Retrieving package' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1";
-                            exec(command_line, (error, stdout, stderr) => {
-                                if (stdout) {
-                                    $("div#percentage-other-updates").text(stdout);
-                                }
-                            });
-                            $("div#update-app-other-updates").css("display", "none");
-
-                        } else {
-                            $("div#update-app-other-updates").css("display", "none");
-                        }
-                    }
-                });
-            }
-
-            return;
-        }
-    });
-}
-
-// View the progress of "other updates"
-function status_other_updates() {
-    const fs = require('fs');
-
-    if (fs.existsSync('/tmp/regataos-update/updated-apps.txt')) {
-
-        var list_apps_queue = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
-        var installing_application = fs.readFileSync("/tmp/regataos-update/installing-application-other-updates.txt", "utf8");
-        var downloadable_application = fs.readFileSync("/tmp/regataos-update/downloadable-application-other-updates.txt", "utf8");
-        var updated_application = fs.readFileSync("/tmp/regataos-update/updated-apps.txt", "utf8");
-
-        if (list_apps_queue.indexOf("other-updates") > -1) {
-            $("div#pending-other-updates").css("display", "block");
-            $("div#downloading-other-updates").css("display", "none");
-            $("div#installing-other-updates").css("display", "none");
-            $("div#percentage-other-updates").css("display", "none");
-            $("div#update-app-other-updates").css("display", "none");
-            $("div#concluded-other-updates").css("display", "none");
-
-        } else if (installing_application.indexOf("other-updates") > -1) {
-            $("div#pending-other-updates").css("display", "none");
-            $("div#downloading-other-updates").css("display", "none");
-            $("div#installing-other-updates").css("display", "block");
-            $("div#percentage-other-updates").css("display", "block");
-            $("div#update-app-other-updates").css("display", "none");
-            $("div#concluded-other-updates").css("display", "none");
-
-        } else if (downloadable_application.indexOf("other-updates") > -1) {
-            $("div#pending-other-updates").css("display", "none");
-            $("div#downloading-other-updates").css("display", "block");
-            $("div#installing-other-updates").css("display", "none");
-            $("div#percentage-other-updates").css("display", "block");
-            $("div#update-app-other-updates").css("display", "none");
-            $("div#concluded-other-updates").css("display", "none");
-
-        } else if (updated_application.indexOf("other-updates") > -1) {
-            $("div#pending-other-updates").css("display", "none");
-            $("div#downloading-other-updates").css("display", "none");
-            $("div#installing-other-updates").css("display", "none");
-            $("div#percentage-other-updates").css("display", "none");
-            $("div#update-app-other-updates").css("display", "none");
-            $("div#concluded-other-updates").css("display", "block");
-
-        } else {
-            $("div#pending-other-updates").css("display", "none");
-            $("div#downloading-other-updates").css("display", "none");
-            $("div#installing-other-updates").css("display", "none");
-            $("div#percentage-other-updates").css("display", "none");
-            $("div#concluded-other-updates").css("display", "none");
-
-            if (fs.existsSync('/tmp/regataos-update/update-specific-in-progress.txt')) {
-                $("div#update-app-other-updates").css("display", "none");
-            } else {
-                if (fs.existsSync('/var/log/regataos-logs/regataos-other-updates.log')) {
-                    $("div#update-app-other-updates").css("display", "none");
-                } else {
-                    $("div#update-app-other-updates").css("display", "block");
-                }
-            }
-        }
-    }
-}
-
-setInterval(function () {
-    status_other_updates();
-}, 100);
-
-// If it exists, display "other updates"
-function show_other_updates() {
-    const fs = require('fs');
-
-    fs.access('/tmp/regataos-update/package-list-html.txt', (err) => {
-        if (!err) {
-            var data = fs.readFileSync("/tmp/regataos-update/package-list.txt", "utf8");
-            if (data.length >= 2) {
-                var updated_apps = fs.readFileSync("/tmp/regataos-update/updated-apps.txt", "utf8");
-                if ((updated_apps.indexOf("other-updates") > -1) == "1") {
-                    $("div.other-updates").css("display", "none");
-                } else {
-                    $("div.other-updates").css("display", "flex");
-                }
-
-            } else {
-                $("div.other-updates").css("display", "none");
-            }
-            return;
-        }
-    });
-}
-
-setInterval(function () {
-    show_other_updates();
-}, 100);
-
 // Capture percentage of app download
 function download_percentage() {
     const fs = require('fs');
@@ -642,7 +399,7 @@ function disable_update_cancellation() {
         if (!err) {
             var data = fs.readFileSync("/tmp/regataos-update/apps-list.txt", "utf8");
             if (data.length <= 1) {
-                $(".update-all").css("display", "none");
+                $(".update-all-button2").css("display", "none");
                 clearInterval(timer_update_cancel);
             }
         }

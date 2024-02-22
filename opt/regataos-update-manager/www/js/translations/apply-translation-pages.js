@@ -3,15 +3,16 @@
 // Apply text translations in the app
 function applyTranslationPages() {
     const fs = require('fs');
+    const getTranslation = selectTranslationFile();
 
-    let data = fs.readFileSync(selectTranslationFile(), "utf8");
+    let data = fs.readFileSync(getTranslation, "utf8");
     data = JSON.parse(data);
 
     for (let i = 0; i < data.length; i++) {
         // Apply translations according to page URL
-        pageUrl = window.location.href;
+        const pageUrl = window.location.href;
 
-        if ((pageUrl.indexOf("home.html") > -1) == "1") {
+        if (pageUrl.includes("home.html")) {
             // Title
             document.querySelector("h1").innerHTML = data[i].index.windowTitle;
 
@@ -58,7 +59,7 @@ function applyTranslationPages() {
                 moreDetailsText[b].innerHTML = data[i].home.otherUpdates.moreDetails;
             }
 
-        } else if ((pageUrl.indexOf("historic.html") > -1) == "1") {
+        } else if (pageUrl.includes("historic.html")) {
             // Title
             document.querySelector("h1").innerHTML = data[i].index.windowTitle;
             document.querySelector(".apps-updated").innerHTML = data[i].historic.title;
@@ -69,7 +70,7 @@ function applyTranslationPages() {
                 openApp[b].innerHTML = data[i].historic.openApp;
             }
 
-        } else if ((pageUrl.indexOf("settings.html") > -1) == "1") {
+        } else if (pageUrl.includes("settings.html")) {
             // Title
             document.querySelector("h1").innerHTML = data[i].index.windowTitle;
             document.querySelector(".apps-settings").innerHTML = data[i].settings.title;
