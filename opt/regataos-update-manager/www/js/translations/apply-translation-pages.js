@@ -21,9 +21,9 @@ function applyTranslationPages() {
             document.querySelector(".update-all-button2").innerHTML = data[i].home.topButton.cancel;
 
             // App Status
-            document.querySelector(".check-up").innerHTML = data[i].home.appStatus.checkUp;
-            document.querySelector(".no-up").innerHTML = data[i].home.appStatus.noUpdates;
-            document.querySelector(".never-up").innerHTML = data[i].home.appStatus.neverUp;
+            document.querySelector(".check-update-title").innerHTML = data[i].home.appStatus.checkUp;
+            document.querySelector(".without-update-title").innerHTML = data[i].home.appStatus.noUpdates;
+            document.querySelector(".never-update-title").innerHTML = data[i].home.appStatus.neverUp;
             document.querySelector(".yes-up").innerHTML = data[i].home.appStatus.yesUp;
             document.querySelector(".updated").innerHTML = data[i].home.appStatus.updated;
             document.querySelector(".search-update-status").innerHTML = data[i].home.appStatus.searchUp;
@@ -35,7 +35,7 @@ function applyTranslationPages() {
             document.querySelector(".app-status-download").innerHTML = data[i].home.updateStatus.download;
             document.querySelector(".app-status-install").innerHTML = data[i].home.updateStatus.installing;
             document.querySelector(".app-status-concluded").innerHTML = data[i].home.updateStatus.concluded;
-            document.querySelector("#check-updates-button").innerHTML = data[i].home.updateStatus.checking;
+            document.querySelector("#check-updates-button").innerHTML = data[i].home.updateStatus.verify;
             document.querySelector("#check-updates-button-title").innerHTML = data[i].home.updateStatus.allReady;
             document.querySelector("#check-updates-button-desc").innerHTML = data[i].home.updateStatus.allReadyDesc;
 

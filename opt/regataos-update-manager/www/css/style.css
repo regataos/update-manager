@@ -28,7 +28,7 @@ body {
 }
 
 .loadscreen-page {
-    height: 95% !important;
+    height: 98% !important;
 }
 
 @keyframes initEffect {
@@ -224,14 +224,14 @@ li.historic {
     margin-bottom: 20px;
 }
 
-.div1-sub,
-.div1-sub2 {
+.div1-sub {
     position: relative;
     display: block;
     float: left;
     line-height: 1.4;
     width: 100%;
     height: auto;
+    margin-top: 5px;
     margin-bottom: 5px;
     animation-name: animatebottom;
     animation-duration: .5s;
@@ -251,7 +251,7 @@ li.historic {
 }
 
 .div2 {
-    display: none;
+    display: grid;
     position: relative;
     grid-template-columns: repeat(1, 1fr);
     grid-column-gap: 10px;
@@ -390,6 +390,8 @@ h1 {
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     padding: 5px 20px;
     transition: all 0.5s ease-in-out;
+    animation-name: animatebottom;
+    animation-duration: .5s;
 }
 
 .update-all-button1:hover {
@@ -418,6 +420,8 @@ h1 {
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     padding: 5px 20px;
     transition: all 0.5s ease-in-out;
+    animation-name: animatebottom;
+    animation-duration: .5s;
 }
 
 .update-all-button2-teste:hover,
@@ -448,16 +452,12 @@ h1 {
     font-size: 20px;
 }
 
-.check-up {
+#main-check-update {
     display: none;
-    position: relative;
-    float: left;
-    width: 600px;
-    font-size: 20px;
 }
 
 .loading {
-    display: none;
+    display: block;
     position: relative;
     width: 110px;
     padding-right: 58px;
@@ -477,17 +477,22 @@ h1 {
     animation: spin 1.5s linear infinite;
 }
 
-.updated_system {
+#main-without-update {
     display: none;
+}
+
+.updated-system {
+    display: block;
     position: relative;
     width: 120px;
+    padding-right: 58px;
     margin-left: auto;
     margin-right: auto;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
 
-.updated_system_img {
+.updated-system-img {
     display: block;
     position: relative;
     height: 120px;
@@ -497,32 +502,11 @@ h1 {
     background-repeat: no-repeat;
 }
 
-.check-updates-button-status {
-    display: none;
+.updated-system-check-button {
+    display: block;
     position: relative;
-    width: 300px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    animation-name: animatebottom;
-    animation-duration: .5s;
-}
-
-#check-updates-button-title {
-    font-size: 19px;
-    margin-right: 20px;
-}
-
-#check-updates-button-desc {
-    font-size: 17px;
-    color: #333;
-    margin-right: 20px;
-}
-
-.updated_system-check-button {
-    display: none;
-    position: relative;
-    width: 200px;
+    width: 258px;
+    padding-right: 58px;
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
@@ -530,18 +514,39 @@ h1 {
     animation-duration: .5s;
 }
 
+.check-updates-button-status {
+    display: block;
+    position: relative;
+    width: 300px;
+    text-align: center;
+    padding-right: 58px;
+    margin-left: auto;
+    margin-right: auto;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+#check-updates-button-title {
+    font-size: 25px;
+}
+
+#check-updates-button-desc {
+    font-size: 19px;
+    color: #333;
+}
+
 #check-updates-button {
     float: right;
     cursor: pointer;
     color: #fff;
-    font: 16px 'Oxygen', sans-serif;
+    font: 18px 'Oxygen', sans-serif;
     text-align: center;
     background-color: #005fb8;
     background-position: center;
-    border-radius: 5px;
+    border-radius: 2em;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     margin-right: 20px;
-    padding: 13px;
+    padding: 5px 20px;
     transition: all 0.5s ease-in-out;
 }
 
@@ -555,28 +560,6 @@ h1 {
     transition: all 0s;
 }
 
-
-.never_update_system {
-    display: none;
-    position: relative;
-    width: 146px;
-    margin-top: 0px;
-    margin-left: auto;
-    margin-right: auto;
-    animation-name: animatebottom;
-    animation-duration: .5s;
-}
-
-.never_update_system_img {
-    display: block;
-    position: relative;
-    width: 146px;
-    height: 200px;
-    background-position: 50% 50%;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-}
-
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -587,49 +570,93 @@ h1 {
     }
 }
 
-.no-up {
+#main-never-update {
+    display: none;
+}
+
+.never-update {
+    display: block;
+    position: relative;
+    width: 146px;
+    padding-right: 58px;
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+.never-update-img {
+    display: block;
+    position: relative;
+    width: 146px;
+    height: 200px;
+    background-position: 50% 50%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url('../images/security-medium.png');
+}
+
+.check-update-title,
+.without-update-title,
+.never-update-title {
     display: none;
     position: relative;
     float: left;
     width: 600px;
     font-size: 20px;
+    line-height: 1.2;
+    animation-name: animatebottom;
+    animation-duration: .5s;
 }
 
-.never-up {
+.updated-system-title,
+.with-update-title {
     display: none;
     position: relative;
     float: left;
     width: 600px;
-    font-size: 20px;
-}
-
-.show-updates {
-    position: relative;
-    margin-right: 250px;
+    animation-name: animatebottom;
+    animation-duration: .5s;
 }
 
 .yes-up {
-    display: none;
+    display: block;
     position: relative;
     float: left;
     font-size: 20px;
     font-weight: bold;
+    line-height: 1.2;
     margin-right: 5px;
 }
 
-.updated {
-    display: none;
+.updates-app-number {
+    display: block;
     position: relative;
     float: left;
     font-size: 20px;
     font-weight: bold;
+    line-height: 1.2;
+}
+
+#main-updated-system {
+    display: none;
+}
+
+.updated {
+    display: block;
+    position: relative;
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.2;
     margin-right: 8px;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
 
 .updated-img {
-    display: none;
+    display: block;
     position: relative;
     float: left;
     height: 22px;
@@ -637,17 +664,9 @@ h1 {
     background-position: 50% 50%;
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    margin-top: 8px;
+    margin-top: 0px;
     animation-name: animatebottom;
     animation-duration: .5s;
-}
-
-.updates-app-number {
-    display: none;
-    position: relative;
-    float: left;
-    font-size: 20px;
-    font-weight: bold;
 }
 
 .updates-package-number {

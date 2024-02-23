@@ -9,6 +9,7 @@ installing_system_update="/tmp/regataos-update/installing-system-update.txt"
 system_update_installed="/tmp/regataos-update/system-update-installed.txt"
 downloading_system_update="/tmp/regataos-update/downloading-system-update.txt"
 waiting_for_installation="/tmp/regataos-update/waiting-for-installation.txt"
+updated_apps="/tmp/regataos-update/updated-apps.txt"
 
 # Create some log files in advance.
 if test ! -e "$installing_system_update"; then
@@ -25,6 +26,10 @@ fi
 
 if test ! -e "$waiting_for_installation"; then
     echo "" >"$waiting_for_installation"
+fi
+
+if test ! -e "$updated_apps"; then
+    echo "" >"$updated_apps"
 fi
 
 while :; do

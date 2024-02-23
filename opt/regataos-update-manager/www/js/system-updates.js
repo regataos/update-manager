@@ -125,15 +125,18 @@ function systemUpdateStatus() {
         }
     }
 }
+systemUpdateStatus();
 
 // Show progress of system updates
-const systemUpProgress = setInterval(systemUpdatesProgress, 100);
+const systemUpProgress = setInterval(systemUpdatesProgress, 500);
 function systemUpdatesProgress() {
     const fs = require('fs');
     const exec = require('child_process').exec;
     const statusFile = "/tmp/regataos-update/status.txt";
     const regataosOtherUpdatesLog = "/var/log/regataos-logs/regataos-other-updates.log";
     const regataosOtherUpdatesFile = "/var/log/regataos-logs/regataos-other-updates.txt";
+    const downloadableAppOtherUpdates = "/tmp/regataos-update/downloadable-application-other-updates.txt"
+    const installingAppOtherUpdates = "/tmp/regataos-update/installing-application-other-updates.txt"
 
     if (fs.existsSync(statusFile)) {
         const currentStatus = fs.readFileSync(statusFile, "utf8");
@@ -144,18 +147,16 @@ function systemUpdatesProgress() {
             const updateAppOtherUpdates = document.querySelector("div#update-app-other-updates");
 
             function clearProgress() {
-                const commandLine = `echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt";
-                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"`;
+                const commandLine = `echo "" > "${downloadableAppOtherUpdates}"; echo "" > "${installingAppOtherUpdates}"`;
                 exec(commandLine, function (error, call, errlog) { });
                 clearInterval(systemUpProgress);
             }
 
             function progressInstalling() {
-                const commandLine1 = ` echo "" > "/tmp/regataos-update/downloadable-application-other-updates.txt";
-                echo "other-updates" > "/tmp/regataos-update/installing-application-other-updates.txt"`;
+                const commandLine1 = ` echo "" > "${downloadableAppOtherUpdates}"; echo "other-updates" > "${installingAppOtherUpdates}"`;
                 exec(commandLine1, function (error, call, errlog) { });
 
-                const commandLine2 = "grep -r 'Installing:' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1";
+                const commandLine2 = `grep -r 'Installing:' ${regataosOtherUpdatesFile} | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1`;
                 exec(commandLine2, (error, stdout, stderr) => {
                     if (stdout) {
                         percentageOtherUpdates.innerHTML = stdout;
@@ -165,20 +166,27 @@ function systemUpdatesProgress() {
             }
 
             function progressChecking() {
-                const commandLine = `echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt";
-                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"`;
+                const fs = require('fs');
+                const getTranslation = selectTranslationFile();
+
+                const commandLine = `echo "other-updates" > "${downloadableAppOtherUpdates}"; echo "" > "${installingAppOtherUpdates}"`;
                 exec(commandLine, function (error, call, errlog) { });
 
-                percentageOtherUpdates.innerHTML = "Checking...";
+                let data = fs.readFileSync(getTranslation, "utf8");
+                data = JSON.parse(data);
+
+                for (let i = 0; i < data.length; i++) {
+                    percentageOtherUpdates.innerHTML = data[i].home.updateStatus.checking;
+                }
+
                 updateAppOtherUpdates.style.display = "none";
             }
 
             function progressRetrieving() {
-                const commandLine1 = `echo "other-updates" > "/tmp/regataos-update/downloadable-application-other-updates.txt";
-                echo "" > "/tmp/regataos-update/installing-application-other-updates.txt"`
+                const commandLine1 = `echo "other-updates" > "${downloadableAppOtherUpdates}"; echo "" > "${installingAppOtherUpdates}"`
                 exec(commandLine1, function (error, call, errlog) { });
 
-                const commandLine2 = "grep -r 'Retrieving package' /var/log/regataos-logs/regataos-other-updates.txt | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1";
+                const commandLine2 = `grep -r 'Retrieving package' ${regataosOtherUpdatesFile} | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1`;
                 exec(commandLine2, (error, stdout, stderr) => {
                     if (stdout) {
                         percentageOtherUpdates.innerHTML = stdout;
@@ -210,3 +218,4 @@ function systemUpdatesProgress() {
         }
     }
 }
+systemUpdatesProgress();

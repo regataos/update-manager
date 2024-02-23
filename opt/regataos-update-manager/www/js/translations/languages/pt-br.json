@@ -28,7 +28,8 @@
                 "download": "Baixando...",
                 "installing": "Instalando...",
                 "concluded": "Concluído!",
-                "checking": "Verificar atualizações",
+                "checking": "Verificando...",
+                "verify": "Verificar atualizações",
                 "allReady": "Tudo pronto",
                 "allReadyDesc": "Todos os apps estão atualizados"
             },

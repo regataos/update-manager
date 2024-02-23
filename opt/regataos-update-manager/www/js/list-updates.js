@@ -1,5 +1,5 @@
 // This function lists the updates available automatically
-function list_updates() {
+function listUpdates() {
   const fs = require('fs');
 
   var files = [];

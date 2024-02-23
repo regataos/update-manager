@@ -28,7 +28,8 @@
                 "download": "Downloading...",
                 "installing": "Installing...",
                 "concluded": "Concluded!",
-                "checking": "Check for updates",
+                "checking": "Checking...",
+                "verify": "Check for updates",
                 "allReady": "All ready",
                 "allReadyDesc": "All apps are up to date"
             },
