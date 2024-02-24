@@ -20,7 +20,7 @@ function applyTranslationPages() {
             document.querySelector(".update-all-button1").innerHTML = data[i].home.topButton.updateAll;
             document.querySelector(".update-all-button2").innerHTML = data[i].home.topButton.cancel;
 
-            // App Status
+            // Update status
             document.querySelector(".check-update-title").innerHTML = data[i].home.appStatus.checkUp;
             document.querySelector(".without-update-title").innerHTML = data[i].home.appStatus.noUpdates;
             document.querySelector(".never-update-title").innerHTML = data[i].home.appStatus.neverUp;
@@ -30,11 +30,27 @@ function applyTranslationPages() {
             document.querySelector(".not-up-auto").innerHTML = data[i].home.appStatus.noUpAuto;
             document.querySelector(".yes-update-auto").innerHTML = data[i].home.appStatus.yesUpAuto;
 
-            // Update status
-            document.querySelector(".app-status-pending").innerHTML = data[i].home.updateStatus.pending;
-            document.querySelector(".app-status-download").innerHTML = data[i].home.updateStatus.download;
-            document.querySelector(".app-status-install").innerHTML = data[i].home.updateStatus.installing;
-            document.querySelector(".app-status-concluded").innerHTML = data[i].home.updateStatus.concluded;
+            // App Status
+            const appStatusPending = document.querySelectorAll(".app-status-pending");
+            for (let b = 0; b < appStatusPending.length; b++) {
+                appStatusPending[b].innerHTML = data[i].home.updateStatus.pending;
+            }
+
+            const appStatusDownload = document.querySelectorAll(".app-status-download");
+            for (let b = 0; b < appStatusDownload.length; b++) {
+                appStatusDownload[b].innerHTML = data[i].home.updateStatus.download;
+            }
+
+            const appStatusInstall = document.querySelectorAll(".app-status-install");
+            for (let b = 0; b < appStatusInstall.length; b++) {
+                appStatusInstall[b].innerHTML = data[i].home.updateStatus.installing;
+            }
+
+            const appStatusConcluded = document.querySelectorAll(".app-status-concluded");
+            for (let b = 0; b < appStatusConcluded.length; b++) {
+                appStatusConcluded[b].innerHTML = data[i].home.updateStatus.concluded;
+            }
+
             document.querySelector("#check-updates-button").innerHTML = data[i].home.updateStatus.verify;
             document.querySelector("#check-updates-button-title").innerHTML = data[i].home.updateStatus.allReady;
             document.querySelector("#check-updates-button-desc").innerHTML = data[i].home.updateStatus.allReadyDesc;

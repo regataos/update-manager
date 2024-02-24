@@ -19,18 +19,18 @@ function update1() {
         autoupdate_value=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
         sed -i "s/$autoupdate_value/1/" "$HOME/.config/regataos-update/regataos-update.conf"
     else
-        echo "autoupdate=1" > "$HOME/.config/regataos-update/regataos-update.conf"
+        echo "autoupdate=1" >"$HOME/.config/regataos-update/regataos-update.conf"
     fi
 
     if test ! -e "/tmp/regataos-update/already_updated.txt"; then
-        ps -C zypper > /dev/null
+        ps -C zypper >/dev/null
         if [ $? = 1 ]; then
             rm -f "/tmp/regataos-update/status.txt"
             sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
         fi
 
     else
-        echo "show-updates" > "/tmp/regataos-update/status.txt"
+        echo "show-updates" >"/tmp/regataos-update/status.txt"
     fi
 }
 
@@ -39,18 +39,18 @@ function update2() {
         autoupdate_value=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
         sed -i "s/$autoupdate_value/2/" "$HOME/.config/regataos-update/regataos-update.conf"
     else
-        echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
+        echo "autoupdate=2" >"$HOME/.config/regataos-update/regataos-update.conf"
     fi
 
     if test ! -e "/tmp/regataos-update/already_updated.txt"; then
-        ps -C zypper > /dev/null
+        ps -C zypper >/dev/null
         if [ $? = 1 ]; then
             rm -f "/tmp/regataos-update/status.txt"
             sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
         fi
 
     else
-        echo "show-updates" > "/tmp/regataos-update/status.txt"
+        echo "show-updates" >"/tmp/regataos-update/status.txt"
     fi
 }
 
@@ -59,41 +59,49 @@ function update3() {
         autoupdate_value=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
         sed -i "s/$autoupdate_value/3/" "$HOME/.config/regataos-update/regataos-update.conf"
     else
-        echo "autoupdate=3" > "$HOME/.config/regataos-update/regataos-update.conf"
+        echo "autoupdate=3" >"$HOME/.config/regataos-update/regataos-update.conf"
     fi
 
-    echo "never-updates" > "/tmp/regataos-update/status.txt"
+    echo "never-updates" >"/tmp/regataos-update/status.txt"
     rm -f "/tmp/regataos-update/all-auto-update.txt"
-	echo "" > "/tmp/regataos-update/stop-all-update.txt"
-	sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh
+    echo "" >"/tmp/regataos-update/stop-all-update.txt"
+    sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh
     sudo /opt/regataos-update-manager/scripts/regataos-up.sh -stop-up
-    echo "never-updates" > "/tmp/regataos-update/status.txt"
+    echo "never-updates" >"/tmp/regataos-update/status.txt"
 }
 
 function update_button() {
+    echo "" >"/tmp/regataos-update/installing-application-other-updates.txt"
+    echo "" >"/tmp/regataos-update/downloadable-application-other-updates.txt"
+
     if test ! -e "/tmp/regataos-update/already_updated.txt"; then
-        ps -C zypper > /dev/null
+        ps -C zypper >/dev/null
         if [ $? = 1 ]; then
             rm -f "/tmp/regataos-update/status.txt"
             sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
         fi
 
     else
-        echo "show-updates" > "/tmp/regataos-update/status.txt"
+        echo "show-updates" >"/tmp/regataos-update/status.txt"
     fi
 }
 
 # Run options
 case $1 in
-    "-update-1") update1
-        ;;
-    "-update-2") update2
-        ;;
-    "-update-3") update3
-        ;;
-    "-update-button") update_button
-        ;;
-   *) echo "Invalid option!"
-      exit 1
-      ;;
+"-update-1")
+    update1
+    ;;
+"-update-2")
+    update2
+    ;;
+"-update-3")
+    update3
+    ;;
+"-update-button")
+    update_button
+    ;;
+*)
+    echo "Invalid option!"
+    exit 1
+    ;;
 esac

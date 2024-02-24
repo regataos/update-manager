@@ -20,9 +20,13 @@ function showSystemUpdates() {
         const systemUpdates = document.querySelector(".div2-other-updates");
 
         if (data.length >= 2) {
-            const displayOtherUpdates = fs.readFileSync(updatedApps, "utf8");
-            if (displayOtherUpdates.includes("other-updates")) {
-                systemUpdates.style.display = "";
+            if (fs.existsSync(updatedApps)) {
+                const displayOtherUpdates = fs.readFileSync(updatedApps, "utf8");
+                if (displayOtherUpdates.includes("other-updates")) {
+                    systemUpdates.style.display = "";
+                } else {
+                    systemUpdates.style.display = "grid";
+                }
             } else {
                 systemUpdates.style.display = "grid";
             }

@@ -42,7 +42,6 @@ function select_auto_update() {
     var value = select.options[select.selectedIndex].value;
 
     var command_line = "/opt/regataos-update-manager/scripts/update-manager-option -update-" + value;
-    console.log(command_line);
     exec(command_line, function (error, call, errlog) {
     });
 }

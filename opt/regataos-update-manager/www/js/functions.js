@@ -179,115 +179,65 @@ function install_other_updates() {
 setInterval(updateSystemOrCancelUpdate, 500);
 function updateSystemOrCancelUpdate() {
 	const fs = require('fs');
+	const downloadableApp = "/tmp/regataos-update/downloadable-application.txt";
+	const listAppsQueue = "/tmp/regataos-update/list-apps-queue.txt";
+	const upInProgress = "/tmp/regataos-update/update-in-progress.txt";
+	const otherUpInProgress = "/tmp/regataos-update/other-updates-in-progress.txt";
+	const upSpecificInProgress = "/tmp/regataos-update/update-specific-in-progress.txt";
+	const status = "/tmp/regataos-update/status.txt";
+	const allAutoUpdate = "/tmp/regataos-update/all-auto-update.txt";
+	const stopAllUp = "/tmp/regataos-update/stop-all-update.txt";
 
-	/*
+	const updateAll = document.querySelector(".update-all");
+	const upAllButton = document.querySelector(".update-all-button1");
+	const cancelUpButton = document.querySelector(".update-all-button2");
+	const upAppButton = document.querySelector(".update-app");
+
 	function showInstallAllButton() {
-		const numberApps = "/tmp/regataos-update/number-apps.txt";
-		const upAllButton = document.querySelector(".update-all-button1");
-
-		if (fs.existsSync(numberApps)) {
-			upAllButton.style.display = "block";
-		} else {
-			upAllButton.style.display = "none";
-		}
-	}
-
-	function showCancelAllButton() {
-		const regataosOtherUpdates = "/var/log/regataos-logs/regataos-other-updates.log";
-		const appsListFile = "/tmp/regataos-update/apps-list.txt";
-		const cancelUpButton = document.querySelector(".update-all-button2");
-
-		if (fs.existsSync(regataosOtherUpdates)) {
-			const data = fs.readFileSync(appsListFile, "utf8");
-			if (data.length <= 1) {
+		const appsList = "/tmp/regataos-update/apps-list.txt";
+		if (fs.existsSync(appsList)) {
+			let data = fs.readFileSync(appsList, "utf8");
+			data = data.split('\n');
+			if (data.length >= 2) {
+				updateAll.style.display = "block";
+				upAllButton.style.display = "block";
 				cancelUpButton.style.display = "none";
 			} else {
-				cancelUpButton.style.display = "block";
+				updateAll.style.display = "none";
 			}
 		}
 	}
-	*/
 
-	if (fs.existsSync('/tmp/regataos-update/all-auto-update.txt')) {
-		$("div.update-all-button1").css("display", "none");
-		$("div.update-all-button2").css("display", "block");
-
-	} else if (fs.existsSync('/tmp/regataos-update/update-specific-in-progress.txt')) {
-		$("div.update-all-button1").css("display", "none");
-		$("div.update-all-button2").css("display", "block");
-
-	} else if (fs.existsSync('/tmp/regataos-update/other-updates-in-progress.txt')) {
-		$("div.update-all-button1").css("display", "none");
-		$("div.update-all-button2").css("display", "none");
-		$("div.update-app").css("display", "none");
-
-	} else if (fs.existsSync('/tmp/regataos-update/update-in-progress.txt')) {
-		var download = fs.readFileSync("/tmp/regataos-update/downloadable-application.txt", "utf8");
-		var queue = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
-
-		if (download.length >= 2) {
-			$("div.update-all-button1").css("display", "none");
-			$("div.update-all-button2").css("display", "block");
-
-		} else if (queue.length >= 2) {
-			$("div.update-all-button1").css("display", "none");
-			$("div.update-all-button2").css("display", "block");
-
+	if ((fs.existsSync(allAutoUpdate)) || (fs.existsSync(upSpecificInProgress))) {
+		upAllButton.style.display = "none";
+		cancelUpButton.style.display = "block";
+	} else if (fs.existsSync(otherUpInProgress)) {
+		upAllButton.style.display = "none";
+		cancelUpButton.style.display = "none";
+		upAppButton.style.display = "none";
+	} else if (fs.existsSync(upInProgress)) {
+		const download = fs.readFileSync(downloadableApp, "utf8");
+		const queue = fs.readFileSync(listAppsQueue, "utf8");
+		if ((download.length >= 2) || (queue.length >= 2)) {
+			upAllButton.style.display = "none";
+			cancelUpButton.style.display = "block";
 		} else {
-			if (fs.existsSync('/tmp/regataos-update/apps-list.txt')) {
-				let data = fs.readFileSync("/tmp/regataos-update/apps-list.txt", "utf8");
-				data = data.split('\n');
-				if (data.length >= 2) {
-					$(".update-all").css("display", "block");
-					$("div.update-all-button1").css("display", "block");
-					$("div.update-all-button2").css("display", "none");
-				} else {
-					$(".update-all").css("display", "none");
-				}
-			}
+			showInstallAllButton();
 		}
-
-	} else if (fs.existsSync('/tmp/regataos-update/stop-all-update.txt')) {
-		if (fs.existsSync('/tmp/regataos-update/update-in-progress.txt')) {
-			$("div.update-all-button1").css("display", "none");
-			$("div.update-all-button2").css("display", "block");
-
-		} else if (fs.existsSync('/tmp/regataos-update/update-in-progress.txt')) {
-			$("div.update-all-button1").css("display", "none");
-			$("div.update-all-button2").css("display", "block");
-
+	} else if (fs.existsSync(stopAllUp)) {
+		if (fs.existsSync(upInProgress)) {
+			upAllButton.style.display = "none";
+			cancelUpButton.style.display = "block";
 		} else {
-			if (fs.existsSync('/tmp/regataos-update/apps-list.txt')) {
-				let data = fs.readFileSync("/tmp/regataos-update/apps-list.txt", "utf8");
-				data = data.split('\n');
-				if (data.length >= 2) {
-					$(".update-all").css("display", "block");
-					$("div.update-all-button1").css("display", "block");
-					$("div.update-all-button2").css("display", "none");
-				} else {
-					$(".update-all").css("display", "none");
-				}
-			}
+			showInstallAllButton();
 		}
-
 	} else {
-		var updated = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
+		var updated = fs.readFileSync(status, "utf8");
 		if ((updated.indexOf("updated") > -1) == "1") {
-			$("div.update-all-button1").css("display", "none");
-			$("div.update-all-button2").css("display", "none");
-
+			upAllButton.style.display = "none";
+			cancelUpButton.style.display = "none";
 		} else {
-			if (fs.existsSync('/tmp/regataos-update/apps-list.txt')) {
-				let data = fs.readFileSync("/tmp/regataos-update/apps-list.txt", "utf8");
-				data = data.split('\n');
-				if (data.length >= 2) {
-					$(".update-all").css("display", "block");
-					$("div.update-all-button1").css("display", "block");
-					$("div.update-all-button2").css("display", "none");
-				} else {
-					$(".update-all").css("display", "none");
-				}
-			}
+			showInstallAllButton();
 		}
 	}
 }
@@ -318,13 +268,8 @@ function cancel_specific_app() {
 }
 
 // Check for updates manually
-function check_updates_manually() {
+function checkUpdatesManually() {
 	const exec = require('child_process').exec;
-	var command_line = "/opt/regataos-update-manager/scripts/update-manager-option -update-button";
-	exec(command_line, function (error, call, errlog) {
-	});
-
-	setTimeout(function () {
-		location.reload();
-	}, 1000);
+	const commandLine = "/opt/regataos-update-manager/scripts/update-manager-option -update-button";
+	exec(commandLine, function (error, call, errlog) { });
 }

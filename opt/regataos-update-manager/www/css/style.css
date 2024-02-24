@@ -177,12 +177,13 @@ li.historic {
 }
 
 .icones-menu {
-    height: 30px;
-    margin-left: 2px;
+    height: 28px;
+    margin-left: 4px;
 }
 
 .settings-icon {
-    height: 33px;
+    height: 32px;
+    margin-left: 3px;
 }
 
 .div-iframe {
@@ -221,7 +222,6 @@ li.historic {
     width: 100%;
     padding: 0px 10px;
     box-sizing: border-box;
-    margin-bottom: 20px;
 }
 
 .div1-sub {
@@ -248,6 +248,11 @@ li.historic {
 
 .div1-settings {
     height: auto;
+}
+
+#main-with-update {
+    display: none;
+    margin-top: 20px;
 }
 
 .div2 {
@@ -378,7 +383,7 @@ h1 {
 
 .update-all-button1 {
     display: none;
-    font: 17px 'Oxygen', sans-serif;
+    font: 18px 'Oxygen', sans-serif;
     font-weight: 400;
     text-align: center;
     width: 110px;
@@ -404,10 +409,9 @@ h1 {
     transition: all 0s;
 }
 
-.update-all-button2-teste,
 .update-all-button2 {
     display: none;
-    font: 17px 'Oxygen', sans-serif;
+    font: 18px 'Oxygen', sans-serif;
     font-weight: 400;
     text-align: center;
     color: #333;
@@ -417,19 +421,16 @@ h1 {
     border: 1px solid #b5b5b5;
     background-color: #d3d3d3;
     background-position: center;
-    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     padding: 5px 20px;
     transition: all 0.5s ease-in-out;
     animation-name: animatebottom;
     animation-duration: .5s;
 }
 
-.update-all-button2-teste:hover,
 .update-all-button2:hover {
     background: #c1c1c1 radial-gradient(circle, transparent 1%, #c1c1c1 1%) center/15000%;
 }
 
-.update-all-button2-teste:active,
 .update-all-button2:active {
     background-color: #d3d3d3;
     background-size: 100%;
@@ -673,6 +674,7 @@ h1 {
     float: right;
     font-size: 18px;
     margin-left: 5px;
+    margin-right: 10px;
 }
 
 .auto-update-status,
@@ -709,8 +711,13 @@ h1 {
 .app-name {
     float: left;
     font-size: 18px;
+    line-height: 1.4;
     margin-top: 0px;
     margin-right: 10px;
+}
+
+.other-updates .app-name {
+    margin-right: 0px;
 }
 
 .app-status-pending,
@@ -720,16 +727,30 @@ h1 {
     display: none;
     float: left;
     font-size: 15px;
+    line-height: 1.4;
     color: #575757;
     margin-top: 0px;
     margin-right: 10px;
 }
 
-.app-status-percentage {
+.download-status-app {
     display: none;
+}
+
+.app-status-percentage {
+    display: block;
     float: left;
     font-size: 15px;
     margin-top: 0px;
+    color: #575757;
+}
+
+.total-download-percentage {
+    display: block;
+    float: left;
+    font-size: 15px;
+    margin-top: 0px;
+    margin-right: 5px;
     color: #575757;
 }
 
@@ -750,15 +771,6 @@ h1 {
     color: #575757;
     margin-top: 0px;
     margin-right: 10px;
-}
-
-.total-download-percentage {
-    display: none;
-    float: left;
-    font-size: 15px;
-    margin-top: 0px;
-    margin-right: 5px;
-    color: #575757;
 }
 
 .icon-app {
@@ -807,7 +819,6 @@ h1 {
     transition: all 0s;
 }
 
-.cancel-app-teste,
 .cancel-app {
     display: none;
     position: absolute;
@@ -819,19 +830,16 @@ h1 {
     background-color: #d3d3d3;
     background-position: center;
     border-radius: 2em;
-    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     padding: 5px 20px;
     margin-top: 0px;
     margin-right: 20px;
     transition: all 0.5s ease-in-out;
 }
 
-.cancel-app-teste:hover,
 .cancel-app:hover {
     background: #c1c1c1 radial-gradient(circle, transparent 1%, #c1c1c1 1%) center/15000%;
 }
 
-.cancel-app-teste:active,
 .cancel-app:active {
     background-color: #d3d3d3;
     background-size: 100%;
@@ -923,12 +931,16 @@ h1 {
 }
 
 .system-update-list-item {
+    display: flex;
+    align-items: center;
     float: left;
     width: 100%;
     margin: 7px 0px;
 }
 
 .system-update-list-item img {
+    width: 17px;
+    height: auto;
     float: left;
     content: url('../images/icon-list.png');
 }
