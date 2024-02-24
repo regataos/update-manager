@@ -190,7 +190,7 @@ function systemUpdatesProgress() {
                 const commandLine1 = `echo "other-updates" > "${downloadableAppOtherUpdates}"; echo "" > "${installingAppOtherUpdates}"`
                 exec(commandLine1, function (error, call, errlog) { });
 
-                const commandLine2 = `grep -r 'Retrieving package' ${regataosOtherUpdatesFile} | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1`;
+                const commandLine2 = `grep -r 'Retrieving' ${regataosOtherUpdatesFile} | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1`;
                 exec(commandLine2, (error, stdout, stderr) => {
                     if (stdout) {
                         percentageOtherUpdates.innerHTML = stdout;
@@ -223,3 +223,27 @@ function systemUpdatesProgress() {
     }
 }
 systemUpdatesProgress();
+
+// Functions to show or hide "Other updates" details
+function displayDetails(display) {
+    const fs = require('fs');
+    const moreDetailsContents = document.querySelector(".more-details-contents");
+    const showDetails = document.querySelector(".show-details");
+    const hideDetails = document.querySelector(".hide-details");
+
+    if (display.includes("show")) {
+        const packageListHtml = "/tmp/regataos-update/package-list-html.txt";
+        if (fs.existsSync(packageListHtml)) {
+            let getPackageListHtml = fs.readFileSync(packageListHtml, "utf8");
+            getPackageListHtml = getPackageListHtml.replace(/\s/g, "\n");
+            moreDetailsContents.innerHTML = getPackageListHtml;
+        }
+        showDetails.style.display = "none";
+        hideDetails.style.display = "flex";
+        moreDetailsContents.style.display = "block";
+    } else {
+        showDetails.style.display = "flex";
+        hideDetails.style.display = "none";
+        moreDetailsContents.style.display = "none";
+    }
+}

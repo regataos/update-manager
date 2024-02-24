@@ -7,7 +7,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 	<link rel="stylesheet" type="text/css" href="./../css/style.css">
 	<script type="text/javascript" src="./../js/settings-checker.js"></script>
-	<script type="text/javascript" src="./../js/jquery.min.js"></script>
 	<script type="text/javascript" src="./../js/functions.js"></script>
 </head>
 
@@ -32,7 +31,7 @@
 				<div class="auto-update-status not-up-auto">Automatic update disabled.</div>
 				<div class="auto-update-status yes-update-auto">Automatic update enabled.</div>
 				<div class="update-all">
-					<div class="update-all-button1" onclick="install_all_apps();">Update all</div>
+					<div class="update-all-button1" onclick="installAllApps();">Update all</div>
 					<div id="updateall-button2" class="update-all-button2" onclick="cancelAllApps();">Cancel</div>
 				</div>
 			</div>
@@ -69,11 +68,11 @@
 					</div>
 					<div class="app-name">System updates</div>
 					<div class="updates-package-number"></div>
-					<div class="more-details show-details" onclick="show_details();">
+					<div class="more-details show-details" onclick="displayDetails('show');">
 						<img src="../images/arrow_right.png" alt="">
 						<div class="more-details-text">More details</div>
 					</div>
-					<div class="more-details hide-details" onclick="hide_details();">
+					<div class="more-details hide-details" onclick="displayDetails('hide');">
 						<img src="../images/arrow_drop_down.png" alt="">
 						<div class="more-details-text">More details</div>
 					</div>
@@ -90,7 +89,6 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="./../js/translations/apply-translation-pages.js"></script>
-	<script type="text/javascript" src="./../js/index.js"></script>
 	<script type="text/javascript" src="./../js/list-updates.js"></script>
 	<script type="text/javascript" src="./../js/app-updates.js"></script>
 	<script type="text/javascript" src="./../js/system-updates.js"></script>
