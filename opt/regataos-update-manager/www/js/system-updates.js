@@ -7,7 +7,7 @@ function checkSystemUpdateStatus() {
 }
 checkSystemUpdateStatus();
 
-// Display system updates
+// Display system updates.
 setInterval(showSystemUpdates, 500);
 function showSystemUpdates() {
     const fs = require('fs');
@@ -38,7 +38,7 @@ function showSystemUpdates() {
 }
 showSystemUpdates();
 
-// Show number of system updates
+// Show number of system updates.
 setInterval(showNumberSystemUpdates, 500);
 function showNumberSystemUpdates() {
     const fs = require('fs');
@@ -57,7 +57,7 @@ function showNumberSystemUpdates() {
 }
 showNumberSystemUpdates();
 
-// system update status
+// system update status.
 setInterval(systemUpdateStatus, 500);
 function systemUpdateStatus() {
     const fs = require('fs');
@@ -131,7 +131,7 @@ function systemUpdateStatus() {
 }
 systemUpdateStatus();
 
-// Show progress of system updates
+// Show progress of system updates.
 const systemUpProgress = setInterval(systemUpdatesProgress, 500);
 function systemUpdatesProgress() {
     const fs = require('fs');
@@ -139,8 +139,8 @@ function systemUpdatesProgress() {
     const statusFile = "/tmp/regataos-update/status.txt";
     const regataosOtherUpdatesLog = "/var/log/regataos-logs/regataos-other-updates.log";
     const regataosOtherUpdatesFile = "/var/log/regataos-logs/regataos-other-updates.txt";
-    const downloadableAppOtherUpdates = "/tmp/regataos-update/downloadable-application-other-updates.txt"
-    const installingAppOtherUpdates = "/tmp/regataos-update/installing-application-other-updates.txt"
+    const downloadableAppOtherUpdates = "/tmp/regataos-update/downloadable-application-other-updates.txt";
+    const installingAppOtherUpdates = "/tmp/regataos-update/installing-application-other-updates.txt";
 
     if (fs.existsSync(statusFile)) {
         const currentStatus = fs.readFileSync(statusFile, "utf8");
@@ -212,19 +212,22 @@ function systemUpdatesProgress() {
                         } else if (progress.includes("Checking")) {
                             progressChecking();
                         } else if (progress.includes("Retrieving")) {
-                            progressRetrieving()
+                            progressRetrieving();
                         } else {
                             updateAppOtherUpdates.style.display = "none";
                         }
                     }
                 });
+            } else {
+                const clearOtherUpdates = `echo "" > "${downloadableAppOtherUpdates}"; echo "" > "${installingAppOtherUpdates}"`
+                exec(clearOtherUpdates, function (error, call, errlog) { });
             }
         }
     }
 }
 systemUpdatesProgress();
 
-// Functions to show or hide "Other updates" details
+// Functions to show or hide "Other updates" details.
 function displayDetails(display) {
     const fs = require('fs');
     const moreDetailsContents = document.querySelector(".more-details-contents");
@@ -247,3 +250,55 @@ function displayDetails(display) {
         moreDetailsContents.style.display = "none";
     }
 }
+
+// Check and show the installation status of system updates.
+setInterval(checkInstallStatusOfSystemUpdates, 1000);
+function checkInstallStatusOfSystemUpdates() {
+    const fs = require('fs');
+    const listSystemUpdates = "/tmp/regataos-update/package-list.txt";
+    const systemUpdateInstalled = "/tmp/regataos-update/system-update-installed.txt"
+    const waitingForInstallation = "/tmp/regataos-update/waiting-for-installation.txt"
+    const installingSystemUpdate = "/tmp/regataos-update/installing-system-update.txt"
+    const downloadingSystemUpdate = "/tmp/regataos-update/downloading-system-update.txt"
+
+    if (fs.existsSync(listSystemUpdates)) {
+        const systemUpdates = fs.readFileSync(listSystemUpdates, "utf8");
+        const fileLines = systemUpdates.split('\n');
+        fileLines.forEach(line => {
+            if (document.querySelector(`.otherup-app-status-concluded-${line}`) !== null) {
+                const installed = fs.readFileSync(systemUpdateInstalled, "utf8");
+                const waiting = fs.readFileSync(waitingForInstallation, "utf8");
+                const installing = fs.readFileSync(installingSystemUpdate, "utf8");
+                const downloading = fs.readFileSync(downloadingSystemUpdate, "utf8");
+
+                if (installed.includes(line)) {
+                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "block";
+                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "none";
+                } else if (installing.includes(line)) {
+                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "block";
+                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "none";
+                } else if (waiting.includes(line)) {
+                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "block";
+                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "none";
+                } else if (downloading.includes(line)) {
+                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "block";
+                } else {
+                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "none";
+                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "none";
+                }
+            }
+        });
+    }
+}
+checkInstallStatusOfSystemUpdates();

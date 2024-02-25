@@ -137,7 +137,7 @@ function search_update() {
                             {
                                 echo -e "<div id='system-update-list'>\n"
                                 while IFS= read -r file_line || [[ -n "$file_line" ]]; do
-                                    echo -e "  <div class='system-update-list-item'>\n    <img src='' alt=''/>\n    <div class='otherup-app-title otherup-app-$file_line'>$file_line</div>\n    <div class='otherup-app-status-download otherup-app-status-download-$file_line otherup-app-status-desc'>Downloading...</div>\n    <div class='otherup-app-status-install otherup-app-status-install-$file_line otherup-app-status-desc'>Installing...</div>\n    <div class='otherup-app-status-concluded otherup-app-status-concluded-$file_line otherup-app-status-desc'>Concluded!</div>\n  </div>\n"
+                                    echo -e "  <div class='system-update-list-item'>\n    <img src='' alt=''/>\n    <div class='otherup-app-title otherup-app-$file_line'>$file_line</div>\n    <div class='otherup-app-status-waiting otherup-app-status-waiting-$file_line otherup-app-status-desc'>Waiting for installation...</div>\n    <div class='otherup-app-status-download otherup-app-status-download-$file_line otherup-app-status-desc'>Downloading...</div>\n    <div class='otherup-app-status-install otherup-app-status-install-$file_line otherup-app-status-desc'>Installing...</div>\n    <div class='otherup-app-status-concluded otherup-app-status-concluded-$file_line otherup-app-status-desc'>Concluded!</div>\n  </div>\n"
                                 done <"/tmp/regataos-update/package-list.txt"
                                 echo -e "</div>\n"
                             } 2>&1 | tee "/tmp/regataos-update/package-list-html.txt"

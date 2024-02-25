@@ -757,19 +757,20 @@ h1 {
 .otherup-app-title {
     float: left;
     font-size: 17px;
-    line-height: 1.0;
+    line-height: 1.2;
     margin: 0px 10px;
 }
 
+.otherup-app-status-waiting,
 .otherup-app-status-download,
 .otherup-app-status-install,
 .otherup-app-status-concluded {
     display: none;
     float: left;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.2;
     color: #575757;
-    margin-top: 0px;
+    margin-top: 1px;
     margin-right: 10px;
 }
 
@@ -937,7 +938,20 @@ h1 {
     align-items: center;
     float: left;
     width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ddd;
+    padding-left: 8px;
+    padding-bottom: 5px;
     margin: 7px 0px;
+    margin-bottom: 0px;
+}
+
+.system-update-list-item:first-child {
+    margin-top: 4px;
+}
+
+.system-update-list-item:last-child {
+    border-bottom: 0px solid #ddd;
 }
 
 .system-update-list-item img {

@@ -25,6 +25,7 @@
             },
             "updateStatus": {
                 "pending": "Pendente...",
+                "waiting": "Aguardando instalação...",
                 "download": "Baixando...",
                 "installing": "Instalando...",
                 "concluded": "Concluído!",

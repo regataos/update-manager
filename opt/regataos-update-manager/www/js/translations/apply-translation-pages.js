@@ -55,6 +55,27 @@ function applyTranslationPages() {
             document.querySelector("#check-updates-button-title").innerHTML = data[i].home.updateStatus.allReady;
             document.querySelector("#check-updates-button-desc").innerHTML = data[i].home.updateStatus.allReadyDesc;
 
+            // System updates status
+            const otherUpStatusWaiting = document.querySelectorAll(".otherup-app-status-waiting");
+            for (let b = 0; b < otherUpStatusWaiting.length; b++) {
+                otherUpStatusWaiting[b].innerHTML = data[i].home.updateStatus.waiting;
+            }
+
+            const otherUpStatusDownload = document.querySelectorAll(".otherup-app-status-download");
+            for (let b = 0; b < otherUpStatusDownload.length; b++) {
+                otherUpStatusDownload[b].innerHTML = data[i].home.updateStatus.download;
+            }
+
+            const otherUpStatusInstall = document.querySelectorAll(".otherup-app-status-install");
+            for (let b = 0; b < otherUpStatusInstall.length; b++) {
+                otherUpStatusInstall[b].innerHTML = data[i].home.updateStatus.installing;
+            }
+
+            const otherUpStatusConcluded = document.querySelectorAll(".otherup-app-status-concluded");
+            for (let b = 0; b < otherUpStatusConcluded.length; b++) {
+                otherUpStatusConcluded[b].innerHTML = data[i].home.updateStatus.concluded;
+            }
+
             // Button
             const updateApp = document.querySelectorAll(".update-app");
             for (let b = 0; b < updateApp.length; b++) {
