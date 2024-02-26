@@ -139,7 +139,9 @@ else
         if [[ $(echo "$auto_up_config") == *"3"* ]]; then
             echo "never-updates" >"/tmp/regataos-update/status.txt"
         else
-            echo "check-updates" >"/tmp/regataos-update/status.txt"
+            if [[ $(cat "/tmp/regataos-update/status.txt") != *"show-updates"* ]]; then
+                echo "check-updates" >"/tmp/regataos-update/status.txt"
+            fi
         fi
 
         if test ! -e "/tmp/regataos-update/config"; then

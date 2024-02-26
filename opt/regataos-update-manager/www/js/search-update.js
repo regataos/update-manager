@@ -14,10 +14,7 @@ function checkUpdates() {
         if (checkStatus.includes("never-updates")) {
             const command = `echo "never-updates" > ${status}`;
             exec(command, function (error, call, errlog) { });
-        } else if (checkStatus.includes("check-updates")) {
-            const command = "Zypper is already looking for updates...";
-            console.log(command);
-        } else {
+        } else if ((!checkStatus.includes("check-updates")) || (!checkStatus.includes("show-updates"))) {
             const command = "sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config";
             exec(command, function (error, call, errlog) { });
         }

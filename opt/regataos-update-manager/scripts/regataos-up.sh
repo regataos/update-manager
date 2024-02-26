@@ -48,13 +48,14 @@ function search_update() {
                         fi
 
                         # Create file with current status
-                        auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+                        auto_up_config=$(grep -r "autoupdate=" /tmp/regataos-update/config/regataos-update.conf | cut -d"=" -f 2-)
                         if [[ $(echo "$auto_up_config") == *"3"* ]]; then
                             echo "never-updates" >"/tmp/regataos-update/status.txt"
                             exit 0
-
                         else
-                            echo "check-updates" >"/tmp/regataos-update/status.txt"
+                            if [[ $(cat "/tmp/regataos-update/status.txt") != *"show-updates"* ]]; then
+                                echo "check-updates" >"/tmp/regataos-update/status.txt"
+                            fi
                         fi
 
                         {
@@ -221,7 +222,7 @@ function update_packages() {
 
 # Check update settings
 function check_up_config() {
-    auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+    auto_up_config=$(grep -r "autoupdate=" /tmp/regataos-update/config/regataos-update.conf | cut -d"=" -f 2-)
     if [[ $(echo "$auto_up_config") == *"3"* ]]; then
         if test ! -e "/tmp/regataos-update"; then
             mkdir -p "/tmp/regataos-update"

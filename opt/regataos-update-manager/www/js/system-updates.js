@@ -245,9 +245,9 @@ function displayDetails(display) {
         hideDetails.style.display = "flex";
         moreDetailsContents.style.display = "block";
     } else {
+        moreDetailsContents.style.display = "none";
         showDetails.style.display = "flex";
         hideDetails.style.display = "none";
-        moreDetailsContents.style.display = "none";
     }
 }
 
