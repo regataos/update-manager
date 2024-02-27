@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="./../css/style.css">
 </head>
 
-<body>
+<body onclick="hideSpecifiedMenu();">
 	<div id="loadscreen" class="loadscreen-page"></div>
 	<div class="main">
 		<div class="div1-settings">
@@ -21,11 +21,21 @@
 		<div class="div2-settings">
 			<div class="up-apps-auto">Automatic updates</div>
 			<div class="up-apps-auto-select">
-				<select class="selectnav" id="select-update" onchange="selectAutoUpdate()">
-					<option class="selectnav-option up-on" value="1">Update the system automatically</option>
-					<option class="selectnav-option up-only" value="2">Just check for system updates</option>
-					<option class="selectnav-option up-off" value="3">Never check for updates</option>
-				</select>
+				<button class="button-settings" id="select-update-config"
+					onclick="showSpecifiedMenu(this.id, 'update-config-menu')"></button>
+				<div class="context-menu" id="update-config-menu">
+					<div class="up-on" id="automatic-update"
+						onclick="showSpecifiedMenu('select-update-config', 'update-config-menu', this.id); selectAutoUpdate('1')">
+					</div>
+					<div class="division-options"></div>
+					<div class="up-only" id="search-update"
+						onclick="showSpecifiedMenu('select-update-config', 'update-config-menu', this.id); selectAutoUpdate('2')">
+					</div>
+					<div class="division-options"></div>
+					<div class="up-off" id="never-check-update"
+						onclick="showSpecifiedMenu('select-update-config', 'update-config-menu', this.id); selectAutoUpdate('3')">
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

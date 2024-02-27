@@ -4,6 +4,9 @@
 }
 
 body {
+    float: left;
+    width: 100%;
+    height: 100%;
     font-family: Oxygen;
     font-weight: 300;
     background: #fff;
@@ -291,7 +294,7 @@ li.historic {
 .div2-settings {
     position: relative;
     float: left;
-    height: auto;
+    height: 350px;
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 20px;
@@ -482,7 +485,7 @@ h1 {
 .updated-system {
     display: block;
     position: relative;
-    width: 120px;
+    width: 140px;
     padding-right: 58px;
     margin-left: auto;
     margin-right: auto;
@@ -493,8 +496,8 @@ h1 {
 .updated-system-img {
     display: block;
     position: relative;
-    height: 120px;
-    width: 120px;
+    height: 140px;
+    width: 140px;
     background-position: 50% 50%;
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -981,6 +984,93 @@ h1 {
     margin-bottom: 2px;
 }
 
+.button-settings {
+    position: relative;
+    display: block;
+    float: left;
+    border: 1px solid #b5b5b5;
+    background-color: #eff0f1;
+    background-position: center;
+    color: #000;
+    font-family: Oxygen;
+    margin-top: 10px;
+    width: auto;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 2em;
+    padding: 10px 22px;
+    box-shadow: 0 0 2px rgb(0 0 0 / 40%);
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.button-settings:hover {
+    background: #d3d3d3 radial-gradient(circle, transparent 1%, #d3d3d3 1%) center/15000%;
+}
+
+.button-settings:active {
+    background-color: #eff0f1;
+    background-size: 100%;
+    transition: all 0s;
+}
+
+.context-menu {
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: 10px;
+    float: left;
+    width: auto;
+    height: auto;
+    padding: 10px 0px;
+    z-index: 1000;
+    border-radius: 8px;
+    cursor: auto;
+    background-color: #dededf99;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: rgb(0 0 0 / 44%) 0px 0px 10px;
+    transition: all .3s;
+}
+
+.context-menu div {
+    padding: 12px 20px;
+    transition: all .3s;
+    text-align: left;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    transition: all .3s;
+    animation-name: animatemenubottom;
+    animation-duration: .1s;
+}
+
+.context-menu div:focus,
+.context-menu div:hover {
+    background-color: #fff;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+}
+
+.division-options {
+    cursor: auto !important;
+    margin: 10px 10px !important;
+    padding: 0 !important;
+    border-bottom: 2px solid #d3d3d3;
+    animation-name: none !important;
+}
+
+@keyframes animatemenubottom {
+    from {
+        padding: 5px 10px;
+    }
+
+    to {
+        padding: 12px 20px;
+    }
+}
+
 @keyframes animatebottom {
     from {
         bottom: -30px;
@@ -1022,6 +1112,38 @@ h1 {
     .main {
         color: #eff0f1;
         background-color: #1b1e20 !important;
+    }
+
+    a {
+        color: #3daee9;
+    }
+
+    .button-settings {
+        background-color: #434b54;
+        color: #fff;
+    }
+
+    .button-settings:hover {
+        background: #4e5864 radial-gradient(circle, transparent 1%, #4e5864 1%) center/15000%;
+    }
+
+    .button-settings:active {
+        background-color: #434b54;
+        background-size: 100%;
+        transition: all 0s;
+    }
+
+    .context-menu {
+        background-color: #383e4291;
+    }
+
+    .context-menu div:focus,
+    .context-menu div:hover {
+        background-color: #4e5864;
+    }
+
+    .division-options {
+        border-bottom: 2px solid #4e555c;
     }
 
     ::-webkit-scrollbar-track {
@@ -1149,6 +1271,10 @@ h1 {
         content: url('../images/arrow_drop_down-dark.png');
     }
 
+    .updated-system-img {
+        background-image: url('../images/updated-system-dark.png') !important;
+    }
+
     .app-status-pending,
     .app-status-download,
     .app-status-install,
@@ -1169,6 +1295,16 @@ h1 {
 
     .system-update-list-item {
         border-bottom: 1px solid #2a2e32;
+    }
+
+    #select-update {
+        background-color: #2a2e32;
+        color: #fff;
+        border-radius: 5px;
+    }
+
+    option:hover {
+        background-color: #5b6670;
     }
 }
 

@@ -114,9 +114,21 @@ function applyTranslationPages() {
 
             // Auto update option
             document.querySelector(".up-apps-auto").innerHTML = data[i].settings.autoUpdateOption.title;
-            document.querySelector(".selectnav .up-on").innerHTML = data[i].settings.autoUpdateOption.autoUpOn;
-            document.querySelector(".selectnav .up-only").innerHTML = data[i].settings.autoUpdateOption.checkUpOnly;
-            document.querySelector(".selectnav .up-off").innerHTML = data[i].settings.autoUpdateOption.neverUpdate;
+
+            const upOn = document.querySelectorAll(".up-on");
+            for (let b = 0; b < upOn.length; b++) {
+                upOn[b].innerHTML = data[i].settings.autoUpdateOption.autoUpOn;
+            }
+
+            const upOnly = document.querySelectorAll(".up-only");
+            for (let b = 0; b < upOnly.length; b++) {
+                upOnly[b].innerHTML = data[i].settings.autoUpdateOption.checkUpOnly;
+            }
+
+            const upOff = document.querySelectorAll(".up-off");
+            for (let b = 0; b < upOff.length; b++) {
+                upOff[b].innerHTML = data[i].settings.autoUpdateOption.neverUpdate;
+            }
         }
     }
 }
