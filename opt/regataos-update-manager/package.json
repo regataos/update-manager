@@ -1,7 +1,7 @@
 {
   "name": "Regata OS Update",
   "description": "Update Manager",
-  "version": "2.0.0",
+  "version": "4.0.0",
   "main": "www/index.html",
   "inject_js_start": "",
   "inject_js_end": "www/js/search.js",

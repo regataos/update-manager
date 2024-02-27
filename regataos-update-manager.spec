@@ -1,5 +1,5 @@
 Name: regataos-update-manager
-Version: 2.0
+Version: 4.0
 Release: 0
 Url: https://github.com/regataos/update-manager
 Summary: Regata OS Update Manager
@@ -29,22 +29,15 @@ mkdir -p %{buildroot}/opt/regataos-base/
 cp -f %{SOURCE1} %{buildroot}/opt/regataos-base/%{name}-%{version}.tar.xz
 
 %post
-# Small fix for directory with UI translations.
-if [ -d "/opt/regataos-update-manager/scripts/notifications/en-us" ]; then
-  rm -rf "/opt/regataos-update-manager/scripts/notifications/en-us"
-fi
-
-if [ -d "/opt/regataos-update-manager/scripts/notifications/pt-br" ]; then
-  rm -rf "/opt/regataos-update-manager/scripts/notifications/pt-br"
-fi
-
 # Install app
 if test -e /opt/regataos-base/%{name}-%{version}.tar.xz ; then
 	tar xf /opt/regataos-base/%{name}-%{version}.tar.xz -C /
 fi
 
-rm -f "/opt/magma/regataosupdate"
-cp -f "/opt/magma/nw" "/opt/magma/regataosupdate"
+if test -e "/opt/magma/nw"; then
+	rm -f "/opt/magma/regataosupdate"
+	cp -f "/opt/magma/nw" "/opt/magma/regataosupdate"
+fi
 
 if test ! -e "/usr/bin/regataosupdate"; then
 	ln -sf "/opt/magma/regataosupdate" "/usr/bin/regataosupdate"
