@@ -657,7 +657,7 @@ h1 {
 }
 
 .updated-img {
-    display: block;
+    display: none;
     position: relative;
     float: left;
     height: 22px;

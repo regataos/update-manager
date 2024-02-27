@@ -63,6 +63,7 @@ function systemUpdateStatus() {
     const fs = require('fs');
     const updatedAppsFile = "/tmp/regataos-update/updated-apps.txt";
     const regataosOtherUpdatesLog = "/var/log/regataos-logs/regataos-other-updates.log";
+    const regataosOtherUpdatesFile = "/var/log/regataos-logs/regataos-other-updates.txt";
     const updateSpecificProgressFile = "/tmp/regataos-update/update-specific-in-progress.txt";
 
     if (fs.existsSync(updatedAppsFile)) {
@@ -89,18 +90,48 @@ function systemUpdateStatus() {
         } else if (installingApplication.includes("other-updates")) {
             pendingOtherUpdates.style.display = "none";
             downloadingOtherUpdates.style.display = "none";
-            installingOtherUpdates.style.display = "block";
-            percentageOtherUpdates.style.display = "block";
             updateAppOtherUpdates.style.display = "none";
             concludedOtherUpdates.style.display = "none";
 
+            if (fs.existsSync(regataosOtherUpdatesFile)) {
+                const status = fs.readFileSync(regataosOtherUpdatesFile, "utf8");
+                const lines = status.split('\n');
+
+                if (lines[lines.length - 1].includes("Checking")) {
+                    installingOtherUpdates.style.display = "none";
+                    percentageOtherUpdates.style.display = "none";
+                    console.log(lines[lines.length - 1]);
+                } else {
+                    installingOtherUpdates.style.display = "block";
+                    percentageOtherUpdates.style.display = "block";
+                }
+            } else {
+                installingOtherUpdates.style.display = "block";
+                percentageOtherUpdates.style.display = "block";
+            }
+
         } else if (downloadableApplication.includes("other-updates")) {
             pendingOtherUpdates.style.display = "none";
-            downloadingOtherUpdates.style.display = "block";
             installingOtherUpdates.style.display = "none";
-            percentageOtherUpdates.style.display = "block";
             updateAppOtherUpdates.style.display = "none";
             concludedOtherUpdates.style.display = "none";
+
+            if (fs.existsSync(regataosOtherUpdatesFile)) {
+                const status = fs.readFileSync(regataosOtherUpdatesFile, "utf8");
+                const lines = status.split('\n');
+
+                if (lines[lines.length - 1].includes("Checking")) {
+                    downloadingOtherUpdates.style.display = "none";
+                    percentageOtherUpdates.style.display = "none";
+                    console.log(lines[lines.length - 1]);
+                } else {
+                    downloadingOtherUpdates.style.display = "block";
+                    percentageOtherUpdates.style.display = "block";
+                }
+            } else {
+                downloadingOtherUpdates.style.display = "block";
+                percentageOtherUpdates.style.display = "block";
+            }
 
         } else if (updatedApplication.includes("other-updates")) {
             pendingOtherUpdates.style.display = "none";
@@ -132,7 +163,7 @@ function systemUpdateStatus() {
 systemUpdateStatus();
 
 // Show progress of system updates.
-const systemUpProgress = setInterval(systemUpdatesProgress, 500);
+const systemUpProgress = setInterval(systemUpdatesProgress, 1000);
 function systemUpdatesProgress() {
     const fs = require('fs');
     const exec = require('child_process').exec;
@@ -141,6 +172,24 @@ function systemUpdatesProgress() {
     const regataosOtherUpdatesFile = "/var/log/regataos-logs/regataos-other-updates.txt";
     const downloadableAppOtherUpdates = "/tmp/regataos-update/downloadable-application-other-updates.txt";
     const installingAppOtherUpdates = "/tmp/regataos-update/installing-application-other-updates.txt";
+
+    // Get the current step of the update process.
+    function getStepUpdateProcess() {
+        const regex = /\((\d+\/\d+)\)/;
+        const data = fs.readFileSync(regataosOtherUpdatesFile, 'utf8');
+        const lines = data.split('\n');
+        let updateProcessStep = null;
+        for (const line of lines) {
+            const match = regex.exec(line);
+            if (match) {
+                updateProcessStep = match[0];
+            }
+        }
+
+        if (updateProcessStep !== null) {
+            return updateProcessStep;
+        }
+    }
 
     if (fs.existsSync(statusFile)) {
         const currentStatus = fs.readFileSync(statusFile, "utf8");
@@ -160,12 +209,8 @@ function systemUpdatesProgress() {
                 const commandLine1 = ` echo "" > "${downloadableAppOtherUpdates}"; echo "other-updates" > "${installingAppOtherUpdates}"`;
                 exec(commandLine1, function (error, call, errlog) { });
 
-                const commandLine2 = `grep -r 'Installing:' ${regataosOtherUpdatesFile} | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $1}' | tail -1 | head -1`;
-                exec(commandLine2, (error, stdout, stderr) => {
-                    if (stdout) {
-                        percentageOtherUpdates.innerHTML = stdout;
-                    }
-                });
+                const updateStep = getStepUpdateProcess();
+                percentageOtherUpdates.innerHTML = updateStep;
                 updateAppOtherUpdates.style.display = "none";
             }
 
@@ -190,12 +235,8 @@ function systemUpdatesProgress() {
                 const commandLine1 = `echo "other-updates" > "${downloadableAppOtherUpdates}"; echo "" > "${installingAppOtherUpdates}"`
                 exec(commandLine1, function (error, call, errlog) { });
 
-                const commandLine2 = `grep -r 'Retrieving' ${regataosOtherUpdatesFile} | sed 's/(   /(/' | sed 's/(  /(/' | sed 's/( /(/' | awk '{print $4}' | sed 's/,//' | tail -1 | head -1`;
-                exec(commandLine2, (error, stdout, stderr) => {
-                    if (stdout) {
-                        percentageOtherUpdates.innerHTML = stdout;
-                    }
-                });
+                const updateStep = getStepUpdateProcess();
+                percentageOtherUpdates.innerHTML = updateStep;
                 updateAppOtherUpdates.style.display = "none";
             }
 

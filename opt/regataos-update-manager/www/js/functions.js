@@ -1,3 +1,18 @@
+// Run shell process including scripts and commands
+function runShellProcess(commandLine) {
+	// Keep the process running independently from
+	// the main process using 'spawn'.
+	const { spawn } = require('child_process');
+	const runCommandLine = spawn(commandLine, {
+		shell: true,
+		detached: true,
+		stdio: 'ignore'
+	});
+
+	// Unlink the child process
+	runCommandLine.unref();
+}
+
 // This function lists the updates available automatically
 function installAllApps() {
 	const exec = require('child_process').exec;
@@ -73,7 +88,7 @@ function installAllApps() {
 						exec(commandLine, (error, stdout, stderr) => { });
 					} else {
 						let commandLine = "/opt/regataos-update-manager/scripts/update-functions-icontray -update-option1";
-						exec(commandLine, function (error, call, errlog) { });
+						runShellProcess(commandLine);
 					}
 				} else {
 					let commandLine = 'echo "" > "/tmp/regataos-update/all-auto-update.txt"';
@@ -83,7 +98,7 @@ function installAllApps() {
 		});
 	} else {
 		let commandLine = "/opt/regataos-update-manager/scripts/update-functions-icontray -update-option2";
-		exec(commandLine, function (error, call, errlog) { });
+		runShellProcess(commandLine);
 	}
 }
 
@@ -115,23 +130,21 @@ function startAllAutoUpdate() {
 
 // Cancel installation of all updates
 function cancelAllApps() {
-	const exec = require('child_process').exec;
 	const commandLine = 'rm -f "/tmp/regataos-update/all-auto-update.txt"; \
 	rm -f "/tmp/regataos-update/install-updates.txt" \
 	echo "" > "/tmp/regataos-update/stop-all-update.txt"; \
 	sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh';
-	exec(commandLine, (error, stdout, stderr) => { });
+	runShellProcess(commandLine);
 }
 
 // Install "other updates"
 function installOtherUpdates() {
-	const exec = require('child_process').exec;
 	const commandLine = 'if test ! -e "/tmp/regataos-update/updated-apps.txt"; then \
 	echo "" > "/tmp/regataos-update/updated-apps.txt"; fi; \
 	echo "other-updates" > "/tmp/regataos-update/list-apps-queue.txt"; \
 	rm -f "/tmp/regataos-update/stop-all-update.txt"; \
 	sudo /opt/regataos-update-manager/scripts/regataos-up-other-up.sh';
-	exec(commandLine, function (error, call, errlog) { });
+	runShellProcess(commandLine);
 
 	setTimeout(function () {
 		document.querySelector("div#update-app-other-updates").style.display = "none";
@@ -206,24 +219,22 @@ function updateSystemOrCancelUpdate() {
 
 // Update application individually
 function updateSpecificApp(nickname) {
-	const exec = require('child_process').exec;
 	const commandLine = 'if test ! -e "/tmp/regataos-update/updated-apps.txt"; then \
 	echo "" > "/tmp/regataos-update/updated-apps.txt"; fi; \
 	echo "' + nickname + '" >> "/tmp/regataos-update/list-apps-queue.txt"; \
 	sed -i "/^$/d" "/tmp/regataos-update/list-apps-queue.txt"; \
 	export NICKNAME="' + nickname + '"; \
 	sudo -E /opt/regataos-update-manager/scripts/regataos-up-specific.sh ' + nickname;
-	exec(commandLine, (error, stdout, stderr) => { });
+	runShellProcess(commandLine);
 }
 
 // Update application individually
 function cancelSpecificApp(nickname) {
-	const exec = require('child_process').exec;
 	const commandLine = 'export NICKNAME="' + nickname + '"; \
 	echo "" > "/tmp/regataos-update/cancel-up-' + nickname + '.txt"; \
 	sudo -E /opt/regataos-update-manager/scripts/regataos-cancel-up-specific.sh; \
 	echo "" > "/tmp/regataos-update/cancel-up-' + nickname + '.txt"';
-	exec(commandLine, (error, stdout, stderr) => { });
+	runShellProcess(commandLine);
 }
 
 // Check for updates manually

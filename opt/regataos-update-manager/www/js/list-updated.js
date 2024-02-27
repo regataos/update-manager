@@ -43,8 +43,22 @@ function listUpdated() {
 }
 listUpdated();
 
+// Run shell process including scripts and commands
+function runShellProcess(commandLine) {
+	// Keep the process running independently from
+	// the main process using 'spawn'.
+	const { spawn } = require('child_process');
+	const runCommandLine = spawn(commandLine, {
+		shell: true,
+		detached: true,
+		stdio: 'ignore'
+	});
+
+	// Unlink the child process
+	runCommandLine.unref();
+}
+
 function runApps(appExec) {
-    const exec = require('child_process').exec;
-    const command_line = appExec;
-    exec(command_line, (error, stdout, stderr) => { });
+    const commandLine = appExec;
+    runShellProcess(commandLine);
 }
