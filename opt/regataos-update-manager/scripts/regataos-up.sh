@@ -26,7 +26,6 @@ function search_update() {
         killall install-update.py
         killall check-update.py
         exit 0
-
     else
         if test ! -e "/tmp/regataos-update/already_updated.txt"; then
             if test ! -e "/tmp/regataos-update/update-in-progress.txt"; then
@@ -53,7 +52,12 @@ function search_update() {
                             echo "never-updates" >"/tmp/regataos-update/status.txt"
                             exit 0
                         else
-                            if [[ $(cat "/tmp/regataos-update/status.txt") != *"show-updates"* ]]; then
+                            check_status=$(cat "/tmp/regataos-update/status.txt")
+                            if [[ $(echo "$check_status") == *"show-updates"* ]]; then
+                                exit 0
+                            elif [[ $(echo "$check_status") == *"check-updates"* ]]; then
+                                exit 0
+                            else
                                 echo "check-updates" >"/tmp/regataos-update/status.txt"
                             fi
                         fi
@@ -83,11 +87,11 @@ function search_update() {
 
                             if [ -z $(echo $package | awk '{print $1}' | sed "s/$package_name//") ]; then
                                 if [[ $package == *"$package_name"* ]]; then
-                                    desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1)
+                                    desktop_file=$(rpm -ql $package_name | grep "\.desktop" | head -1 | tail -1)
 
                                     if [ ! -z $desktop_file ]; then
                                         echo "$package_name" >>"/tmp/regataos-update/apps-list.txt"
-                                        icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-)
+                                        icon_name=$(grep -m1 -R "Icon=" "$desktop_file" | cut -d"=" -f 2-)
 
                                         search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1)
                                         search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1)
@@ -131,8 +135,10 @@ function search_update() {
                             if [ $(echo $number_packages) -ge 1 ]; then
                                 echo "There are $number_packages apps to update"
                                 echo "($number_packages)" >"/tmp/regataos-update/number-packages.txt"
-                                echo "show-updates" >"/tmp/regataos-update/status.txt"
                                 echo "" >"/tmp/regataos-update/already_updated.txt"
+                                if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+                                    echo "show-updates" >"/tmp/regataos-update/status.txt"
+                                fi
                             fi
 
                             {
@@ -156,14 +162,18 @@ function search_update() {
                                 if test -e "/tmp/regataos-update/number-packages.txt"; then
                                     echo "There are $(($number_apps + 1)) apps to update"
                                     echo "($(($number_apps + 1)))" >"/tmp/regataos-update/number-apps.txt"
-                                    echo "show-updates" >"/tmp/regataos-update/status.txt"
                                     echo "" >"/tmp/regataos-update/already_updated.txt"
+                                    if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+                                        echo "show-updates" >"/tmp/regataos-update/status.txt"
+                                    fi
 
                                 else
                                     echo "There are $number_apps apps to update"
                                     echo "($number_apps)" >"/tmp/regataos-update/number-apps.txt"
-                                    echo "show-updates" >"/tmp/regataos-update/status.txt"
                                     echo "" >"/tmp/regataos-update/already_updated.txt"
+                                    if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+                                        echo "show-updates" >"/tmp/regataos-update/status.txt"
+                                    fi
                                 fi
                             fi
                         fi
@@ -245,6 +255,7 @@ function check_up_config() {
 function stop_update() {
     echo "never-updates" >"/tmp/regataos-update/status.txt"
     rm -f "/tmp/regataos-update/all-auto-update.txt"
+    rm -f "/tmp/regataos-update/install-updates.txt"
     echo "" >"/tmp/regataos-update/stop-all-update.txt"
     sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh
 

@@ -13,6 +13,9 @@ if test ! -e "/tmp/regataos-update/config"; then
     ln -s "$HOME/.config/regataos-update" "/tmp/regataos-update/config"
 fi
 
+# Check update manager configuration
+auto_up_config=$(grep -r "autoupdate=" /tmp/regataos-update/config/regataos-update.conf | cut -d"=" -f 2-)
+
 # Apply the automatic update configuration
 function update1() {
     if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
@@ -30,7 +33,9 @@ function update1() {
         fi
 
     else
-        echo "show-updates" >"/tmp/regataos-update/status.txt"
+        if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+            echo "show-updates" >"/tmp/regataos-update/status.txt"
+        fi
     fi
 }
 
@@ -50,7 +55,9 @@ function update2() {
         fi
 
     else
-        echo "show-updates" >"/tmp/regataos-update/status.txt"
+        if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+            echo "show-updates" >"/tmp/regataos-update/status.txt"
+        fi
     fi
 }
 
@@ -64,6 +71,7 @@ function update3() {
 
     echo "never-updates" >"/tmp/regataos-update/status.txt"
     rm -f "/tmp/regataos-update/all-auto-update.txt"
+    rm -f "/tmp/regataos-update/install-updates.txt"
     echo "" >"/tmp/regataos-update/stop-all-update.txt"
     sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh
     sudo /opt/regataos-update-manager/scripts/regataos-up.sh -stop-up
@@ -84,9 +92,10 @@ function update_button() {
             rm -f "/tmp/regataos-update/status.txt"
             sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
         fi
-
     else
-        echo "show-updates" >"/tmp/regataos-update/status.txt"
+        if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+            echo "show-updates" >"/tmp/regataos-update/status.txt"
+        fi
     fi
 }
 

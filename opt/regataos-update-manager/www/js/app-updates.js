@@ -18,6 +18,8 @@ showNumberUpdates();
 function autoUpdate() {
     const fs = require('fs');
     const regataosUpConfig = "/tmp/regataos-update/config/regataos-update.conf";
+    const startAutoUpdate = "/tmp/regataos-update/install-updates.txt";
+    const statusFile = "/tmp/regataos-update/status.txt";
     const checkAutoUpdate = fs.readFileSync(regataosUpConfig, "utf8");
     const noAutoUp = document.querySelector(".not-up-auto");
     const withAutoUp = document.querySelector(".yes-update-auto");
@@ -25,6 +27,10 @@ function autoUpdate() {
     if (checkAutoUpdate.includes("autoupdate=1")) {
         noAutoUp.style.display = "none";
         withAutoUp.style.display = "block";
+        const checkStatus = fs.readFileSync(statusFile, "utf8");
+        if ((!checkStatus.includes("installing-updates")) && (checkStatus.includes("show-updates"))) {
+            fs.writeFileSync(startAutoUpdate, "start automatic update");
+        }
     } else {
         noAutoUp.style.display = "block";
         withAutoUp.style.display = "none";
@@ -44,6 +50,7 @@ function currentStatus() {
             document.querySelector(".never-update-title").style.display = "block";
             document.querySelector("#main-never-update").style.display = "block";
             document.querySelector(".check-update-title").style.display = "none";
+            document.querySelector(".search-update-status").style.display = "none";
             document.querySelector("#main-check-update").style.display = "none";
             document.querySelector(".without-update-title").style.display = "none";
             document.querySelector("#main-without-update").style.display = "none";
@@ -56,6 +63,7 @@ function currentStatus() {
             document.querySelector(".never-update-title").style.display = "none";
             document.querySelector("#main-never-update").style.display = "none";
             document.querySelector(".check-update-title").style.display = "block";
+            document.querySelector(".search-update-status").style.display = "block";
             document.querySelector("#main-check-update").style.display = "block";
             document.querySelector(".without-update-title").style.display = "none";
             document.querySelector("#main-without-update").style.display = "none";
@@ -64,10 +72,11 @@ function currentStatus() {
             document.querySelector(".div1-sub").style.display = "none";
             document.querySelector(".updated-system-title").style.display = "none";
 
-        } else if (getCurrentStatus.includes("show-updates")) {
+        } else if ((getCurrentStatus.includes("show-updates")) || (getCurrentStatus.includes("installing-updates"))) {
             document.querySelector(".never-update-title").style.display = "none";
             document.querySelector("#main-never-update").style.display = "none";
             document.querySelector(".check-update-title").style.display = "none";
+            document.querySelector(".search-update-status").style.display = "none";
             document.querySelector("#main-check-update").style.display = "none";
             document.querySelector(".without-update-title").style.display = "none";
             document.querySelector("#main-without-update").style.display = "none";
@@ -85,6 +94,7 @@ function currentStatus() {
             document.querySelector(".never-update-title").style.display = "none";
             document.querySelector("#main-never-update").style.display = "none";
             document.querySelector(".check-update-title").style.display = "none";
+            document.querySelector(".search-update-status").style.display = "none";
             document.querySelector("#main-check-update").style.display = "none";
             document.querySelector("#main-without-update").style.display = "block";
             document.querySelector(".with-update-title").style.display = "none";

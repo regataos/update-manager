@@ -91,10 +91,14 @@ function installAllApps() {
 let timerTrayIcon = setInterval(installUpdatesTrayIcon, 1000);
 function installUpdatesTrayIcon() {
 	const fs = require('fs');
+	const statusFile = "/tmp/regataos-update/status.txt";
 	const installUpdates = "/tmp/regataos-update/install-updates.txt";
 	if (fs.existsSync(installUpdates)) {
 		fs.unlinkSync(installUpdates);
-		installAllApps();
+		const checkStatus = fs.readFileSync(statusFile, "utf8");
+		if ((!checkStatus.includes("installing-updates")) && (checkStatus.includes("show-updates"))) {
+			installAllApps();
+		}
 		clearInterval(timerTrayIcon);
 	}
 }
@@ -113,6 +117,7 @@ function startAllAutoUpdate() {
 function cancelAllApps() {
 	const exec = require('child_process').exec;
 	const commandLine = 'rm -f "/tmp/regataos-update/all-auto-update.txt"; \
+	rm -f "/tmp/regataos-update/install-updates.txt" \
 	echo "" > "/tmp/regataos-update/stop-all-update.txt"; \
 	sudo /opt/regataos-update-manager/scripts/regataos-up-cancel-all.sh';
 	exec(commandLine, (error, stdout, stderr) => { });

@@ -3,14 +3,14 @@
 # Detect system language
 user=$(users | awk '{print $1}')
 
-if test -e "/home/$user/.config/plasma-localerc" ; then
-	language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
+if test -e "/home/$user/.config/plasma-localerc"; then
+    language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
 
-	if [ -z $language ]; then
-    	language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d"." -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
-	fi
+    if [ -z $language ]; then
+        language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d"." -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
+    fi
 
-elif test -e "/home/$user/.config/user-dirs.locale" ; then
+elif test -e "/home/$user/.config/user-dirs.locale"; then
     language=$(cat "/home/$user/.config/user-dirs.locale" | tr [A-Z] [a-z] | sed 's/_/-/')
 
 else
@@ -19,9 +19,9 @@ fi
 
 # Configure application language
 if test -e "/opt/regataos-update-manager/scripts/notifications/$language"; then
-	scriptNotify="/opt/regataos-update-manager/scripts/notifications/$language"
+    scriptNotify="/opt/regataos-update-manager/scripts/notifications/$language"
 else
-	scriptNotify="/opt/regataos-update-manager/scripts/notifications/en-us"
+    scriptNotify="/opt/regataos-update-manager/scripts/notifications/en-us"
 fi
 
 # Installing updates
@@ -29,23 +29,26 @@ function install_updates() {
     killall check-update.py
     killall alert-update.py
 
-    ps -C install-update.py > /dev/null
+    ps -C install-update.py >/dev/null
     if [ $? = 1 ]; then
         cd /opt/regataos-update-manager/tray-icon/
-        ./install-update.py & /bin/bash $scriptNotify -up-system
+        ./install-update.py &
+        /bin/bash $scriptNotify -up-system
     fi
 }
 
 # Functions with update options for system tray icon
 function update1() {
     if test ! -e "/tmp/regataos-update/updated-apps.txt"; then
-        echo "" > "/tmp/regataos-update/updated-apps.txt"
+        echo "" >"/tmp/regataos-update/updated-apps.txt"
     fi
 
     rm -f "/tmp/regataos-update/all-auto-update.txt"
+    rm -f "/tmp/regataos-update/install-updates.txt"
     rm -f "/tmp/regataos-update/stop-all-update.txt"
 
-	install_updates & sudo /opt/regataos-update-manager/scripts/regataos-up-all.sh
+    install_updates &
+    sudo /opt/regataos-update-manager/scripts/regataos-up-all.sh
 
     if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
         /bin/bash $scriptNotify -upd-system
@@ -53,10 +56,13 @@ function update1() {
 }
 
 function update2() {
-    echo "other-updates" > "/tmp/regataos-update/list-apps-queue.txt"
-	rm -f "/tmp/regataos-update/stop-all-update.txt"
+    echo "other-updates" >"/tmp/regataos-update/list-apps-queue.txt"
+    rm -f "/tmp/regataos-update/all-auto-update.txt"
+    rm -f "/tmp/regataos-update/install-updates.txt"
+    rm -f "/tmp/regataos-update/stop-all-update.txt"
 
-	install_updates & sudo /opt/regataos-update-manager/scripts/regataos-other-up.sh
+    install_updates &
+    sudo /opt/regataos-update-manager/scripts/regataos-other-up.sh
 
     if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
         /bin/bash $scriptNotify -upd-system
@@ -65,11 +71,14 @@ function update2() {
 
 # Run options
 case $1 in
-    "-update-option1") update1
-        ;;
-    "-update-option2") update2
-        ;;
-   *) echo "Invalid option!"
-      exit 1
-      ;;
+"-update-option1")
+    update1
+    ;;
+"-update-option2")
+    update2
+    ;;
+*)
+    echo "Invalid option!"
+    exit 1
+    ;;
 esac

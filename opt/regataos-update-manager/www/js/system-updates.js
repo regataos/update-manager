@@ -47,7 +47,7 @@ function showNumberSystemUpdates() {
 
     if (fs.existsSync(statusFile)) {
         const appStatus = fs.readFileSync(statusFile, "utf8");
-        if (appStatus.includes("show-updates")) {
+        if ((appStatus.includes("show-updates")) || (appStatus.includes("installing-updates"))) {
             if (fs.existsSync(numberPackagesFile)) {
                 const numberPackages = fs.readFileSync(numberPackagesFile, "utf8");
                 document.querySelector(".updates-package-number").innerHTML = numberPackages;

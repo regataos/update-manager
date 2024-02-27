@@ -69,3 +69,6 @@ fi
 if test -e "/usr/share/regataos/first-update.txt"; then
     rm -f "/usr/share/regataos/first-update.txt"
 fi
+
+rm -f "/tmp/regataos-update/all-auto-update.txt"
+rm -f "/tmp/regataos-update/install-updates.txt"

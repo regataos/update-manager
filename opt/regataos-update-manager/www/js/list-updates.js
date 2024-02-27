@@ -133,8 +133,8 @@ function listUpdatedQueue() {
 setInterval(function () {
 	const fs = require('fs');
 	if (fs.existsSync("/tmp/regataos-update/apps-list.txt")) {
-		const updstatus = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
-		if (updstatus.includes("show-updates")) {
+		const appStatus = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
+		if ((appStatus.includes("show-updates")) || (appStatus.includes("installing-updates"))) {
 			listUpdatedQueue();
 			return;
 		}

@@ -14,9 +14,10 @@ if test ! -e "/tmp/regataos-update/config"; then
 	ln -sf "$HOME/.config/regataos-update" "/tmp/regataos-update/config"
 fi
 
+# By default just check for update (autoupdate=2).
 if test ! -e "$HOME/.config/regataos-update/regataos-update.conf"; then
 	mkdir -p "$HOME/.config/regataos-update"
-	echo "autoupdate=2" > "$HOME/.config/regataos-update/regataos-update.conf"
+	echo "autoupdate=2" >"$HOME/.config/regataos-update/regataos-update.conf"
 fi
 
 # Check language
@@ -45,10 +46,10 @@ if test ! -e "/tmp/regataos-configs/config/user-dirs.locale"; then
 fi
 
 # Check the theme that should be used
-if test ! -e "/tmp/regataos-configs/config/kdeglobals" ; then
+if test ! -e "/tmp/regataos-configs/config/kdeglobals"; then
 	mkdir -p "/tmp/regataos-configs/config"
-	
-	if test -e "$HOME/.config/kdedefaults/kdeglobals" ; then
+
+	if test -e "$HOME/.config/kdedefaults/kdeglobals"; then
 		ln -sf "$HOME/.config/kdedefaults/kdeglobals" "/tmp/regataos-configs/config/"
 	else
 		ln -sf "$HOME/.config/kdeglobals" "/tmp/regataos-configs/config/"

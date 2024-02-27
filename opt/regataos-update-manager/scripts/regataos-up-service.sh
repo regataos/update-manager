@@ -3,20 +3,15 @@
 cd /
 
 while :; do
-
     # Detect system language
     user=$(users | awk '{print $1}')
-
     if test -e "/home/$user/.config/plasma-localerc"; then
         language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
-
         if [ -z $language ]; then
             language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d"." -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
         fi
-
     elif test -e "/home/$user/.config/user-dirs.locale"; then
         language=$(cat "/home/$user/.config/user-dirs.locale" | tr [A-Z] [a-z] | sed 's/_/-/')
-
     else
         language=$(echo $LANG | tr [A-Z] [a-z] | sed 's/_/-/' | cut -d"." -f -1)
     fi
@@ -34,7 +29,6 @@ while :; do
         function check_updates() {
             killall install-update.py
             killall alert-update.py
-
             ps -C check-update.py >/dev/null
             if [ $? = 1 ]; then
                 cd /opt/regataos-update-manager/tray-icon/
@@ -47,7 +41,6 @@ while :; do
         function install_updates() {
             killall check-update.py
             killall alert-update.py
-
             ps -C install-update.py >/dev/null
             if [ $? = 1 ]; then
                 cd /opt/regataos-update-manager/tray-icon/
@@ -60,7 +53,6 @@ while :; do
         function alert_updates() {
             killall check-update.py
             killall install-update.py
-
             ps -C alert-update.py >/dev/null
             if [ $? = 1 ]; then
                 cd /opt/regataos-update-manager/tray-icon/
@@ -72,27 +64,23 @@ while :; do
         #There are no updates
         function no_updates() {
             /bin/bash $scriptNotify -no-up
-
             sleep 5
             killall check-update.py
             killall install-update.py
             killall alert-update.py
         }
 
-        # Create file with current status
+        # Check update manager configuration
         auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
+
+        # Create file with current status
         if [[ $(echo "$auto_up_config") == *"3"* ]]; then
             echo "never-updates" >"/tmp/regataos-update/status.txt"
-        else
-            if [[ $(cat "/tmp/regataos-update/status.txt") != *"show-updates"* ]]; then
-                echo "check-updates" >"/tmp/regataos-update/status.txt"
-            fi
         fi
 
         ps -C "regataos-up-all.sh | regataos-up-specific.sh | regataos-other-up.sh | regataos-up-other-up.sh | regataos-cancel-up-specific.sh | regataos-up-cancel-all.sh | regataosgcs | regataosupdate | zypper | magma | steam | UbisoftConnect.exe | Launcher.exe | Origin.exe | GalaxyClient.exe | EpicGamesLauncher.exe | Battle.net.exe" >/dev/null
         if [ $? = 1 ]; then
             # Check for updates
-            auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
             if [[ $(echo "$auto_up_config") != *"3"* ]]; then
                 sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
             fi
@@ -104,24 +92,21 @@ while :; do
                 if [ $(echo $number_packages) -ge 1 ]; then
                     echo "" >"/tmp/regataos-update/already_updated.txt"
                 fi
-
             elif test -e "/tmp/regataos-update/apps-list.txt"; then
                 sed -i '/^$/d' "/tmp/regataos-update/apps-list.txt"
                 number_apps=$(wc -l /tmp/regataos-update/apps-list.txt | awk '{print $1}')
                 if [ $(echo $number_apps) -ge 1 ]; then
                     echo "" >"/tmp/regataos-update/already_updated.txt"
                 fi
-
             else
                 echo "No updates found!"
             fi
 
             # Show number of updates and activate the icon in the system tray
             if test -e "/tmp/regataos-update/already_updated.txt"; then
+                # Check update manager configuration
                 auto_up_config=$(grep -r "autoupdate=" $HOME/.config/regataos-update/regataos-update.conf | cut -d"=" -f 2-)
                 if [[ $(echo "$auto_up_config") == *"1"* ]]; then
-                    install_updates
-
                     if test -e "/tmp/regataos-update/apps-list.txt"; then
                         if test ! -e "/tmp/regataos-update/updated-apps.txt"; then
                             echo "" >"/tmp/regataos-update/updated-apps.txt"
@@ -138,8 +123,10 @@ while :; do
                         done
 
                         sed -i '/^$/d' "/tmp/regataos-update/list-apps-queue.txt"
+                        echo "installing-updates" >"/tmp/regataos-update/status.txt"
 
                         rm -f "/tmp/regataos-update/all-auto-update.txt"
+                        rm -f "/tmp/regataos-update/install-updates.txt"
                         rm -f "/tmp/regataos-update/stop-all-update.txt"
 
                         install_updates &
@@ -148,9 +135,11 @@ while :; do
                         if test ! -e "/tmp/regataos-update/stop-all-update.txt"; then
                             /bin/bash $scriptNotify -upd-system
                         fi
-
                     else
+                        echo "installing-updates" >"/tmp/regataos-update/status.txt"
                         echo "other-updates" >"/tmp/regataos-update/list-apps-queue.txt"
+                        rm -f "/tmp/regataos-update/all-auto-update.txt"
+                        rm -f "/tmp/regataos-update/install-updates.txt"
                         rm -f "/tmp/regataos-update/stop-all-update.txt"
 
                         install_updates &
@@ -160,17 +149,16 @@ while :; do
                             /bin/bash $scriptNotify -upd-system
                         fi
                     fi
-
                 elif [[ $(echo "$auto_up_config") == *"2"* ]]; then
                     echo "show-updates" >"/tmp/regataos-update/status.txt"
                     alert_updates
-
                 elif [[ $(echo "$auto_up_config") == *"3"* ]]; then
                     echo "Nothing to do ..."
-
                 else
                     echo "Nothing to do ..."
                 fi
+            else
+                echo "Nothing to do ..."
             fi
         fi
     }
@@ -178,10 +166,8 @@ while :; do
     # Checking internet connection
     if ! ping -c 1 www.google.com.br; then
         echo "Offline!"
-
     else
         ps -C "regataos-up-all.sh | regataos-up-specific.sh | regataos-other-up.sh | regataos-up-other-up.sh | regataos-cancel-up-specific.sh | regataos-up-cancel-all.sh | regataosgcs | zypper | magma | steam | regataos-store | regataos-gcs | rungame | rungame-epicstore | rungame-gog | rungame-steam | runlauncher | runlauncher_exe | UbisoftConnect.exe | Launcher.exe | Origin.exe | GalaxyClient.exe | EpicGamesLauncher.exe | Battle.net.exe | heroic | steamwebhelper | minigalaxy | lutris" >/dev/null
-
         if [ $? = 1 ]; then
             update_service
         fi
