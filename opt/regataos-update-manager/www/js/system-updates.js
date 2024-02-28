@@ -57,8 +57,20 @@ function showNumberSystemUpdates() {
 }
 showNumberSystemUpdates();
 
-// system update status.
-setInterval(systemUpdateStatus, 500);
+// System update status.
+function checkProgress(filePath) {
+    const fs = require('fs');
+    try {
+        const data = fs.readFileSync(filePath, 'utf8');
+        const lines = data.split('\n');
+        return lines[lines.length - 2];
+    } catch (err) {
+        console.error('Error reading the file:', err);
+        return null;
+    }
+}
+
+setInterval(systemUpdateStatus, 1000);
 function systemUpdateStatus() {
     const fs = require('fs');
     const updatedAppsFile = "/tmp/regataos-update/updated-apps.txt";
@@ -94,13 +106,11 @@ function systemUpdateStatus() {
             concludedOtherUpdates.style.display = "none";
 
             if (fs.existsSync(regataosOtherUpdatesFile)) {
-                const status = fs.readFileSync(regataosOtherUpdatesFile, "utf8");
-                const lines = status.split('\n');
+                const status = checkProgress(regataosOtherUpdatesFile);
 
-                if (lines[lines.length - 1].includes("Checking")) {
+                if (status.includes("Checking")) {
                     installingOtherUpdates.style.display = "none";
                     percentageOtherUpdates.style.display = "none";
-                    console.log(lines[lines.length - 1]);
                 } else {
                     installingOtherUpdates.style.display = "block";
                     percentageOtherUpdates.style.display = "block";
@@ -117,13 +127,11 @@ function systemUpdateStatus() {
             concludedOtherUpdates.style.display = "none";
 
             if (fs.existsSync(regataosOtherUpdatesFile)) {
-                const status = fs.readFileSync(regataosOtherUpdatesFile, "utf8");
-                const lines = status.split('\n');
+                const status = checkProgress(regataosOtherUpdatesFile);
 
-                if (lines[lines.length - 1].includes("Checking")) {
+                if (status.includes("Checking")) {
                     downloadingOtherUpdates.style.display = "none";
                     percentageOtherUpdates.style.display = "none";
-                    console.log(lines[lines.length - 1]);
                 } else {
                     downloadingOtherUpdates.style.display = "block";
                     percentageOtherUpdates.style.display = "block";
