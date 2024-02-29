@@ -304,26 +304,30 @@ li.historic {
 }
 
 .div2-other-updates {
-    display: none;
-    background-color: #eff0f1;
-    border-radius: 8px;
-    transition: all 0.3s ease-in-out;
-    padding: 12px;
-    box-shadow: 0 0 2px rgb(0 0 0 / 40%);
     position: relative;
+    display: none;
     grid-template-columns: repeat(1, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 10px;
     justify-content: center;
     align-items: center;
+    background-color: #eff0f1;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 0 2px rgb(0 0 0 / 40%);
     box-sizing: border-box;
     width: 90%;
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
     animation-name: animatebottom;
     animation-duration: .5s;
     margin-bottom: 10px;
+}
+
+.div2-other-updates:hover {
+    background-color: #e2e4e7;
 }
 
 .other-updates {
@@ -383,8 +387,9 @@ h1 {
 
 .update-all-button1 {
     display: none;
-    font: 18px 'Oxygen', sans-serif;
-    font-weight: 400;
+    font-family: Oxygen;
+    font-size: 17px;
+    font-weight: 300;
     text-align: center;
     width: 110px;
     color: #fff;
@@ -393,7 +398,7 @@ h1 {
     background-color: #005fb8;
     background-position: center;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
-    padding: 5px 20px;
+    padding: 13px 20px;
     transition: all 0.5s ease-in-out;
     animation-name: animatebottom;
     animation-duration: .5s;
@@ -411,28 +416,29 @@ h1 {
 
 .update-all-button2 {
     display: none;
-    font: 18px 'Oxygen', sans-serif;
-    font-weight: 400;
+    font-family: Oxygen;
+    font-size: 17px;
+    font-weight: 300;
     text-align: center;
-    color: #333;
-    width: 110px;
+    color: #000;
+    min-width: 80px;
     cursor: pointer;
     border-radius: 2em;
-    border: 1px solid #b5b5b5;
-    background-color: #d3d3d3;
+    background-color: #eff0f1;
     background-position: center;
-    padding: 5px 20px;
+    padding: 12px 20px;
     transition: all 0.5s ease-in-out;
     animation-name: animatebottom;
     animation-duration: .5s;
+    box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 }
 
 .update-all-button2:hover {
-    background: #c1c1c1 radial-gradient(circle, transparent 1%, #c1c1c1 1%) center/15000%;
+    background: #e2e4e7 radial-gradient(circle, transparent 1%, #e2e4e7 1%) center/15000%;
 }
 
 .update-all-button2:active {
-    background-color: #d3d3d3;
+    background-color: #eff0f1;
     background-size: 100%;
     transition: all 0s;
 }
@@ -547,7 +553,7 @@ h1 {
     border-radius: 2em;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     margin-right: 20px;
-    padding: 5px 20px;
+    padding: 5px 23px;
     transition: all 0.5s ease-in-out;
 }
 
@@ -711,7 +717,7 @@ h1 {
 }
 
 .block-app:hover {
-    background-color: #eff0f1;
+    background-color: #e2e4e7;
 }
 
 .app-name {
@@ -798,12 +804,12 @@ h1 {
     position: absolute;
     right: 0;
     cursor: pointer;
-    color: #fff;
+    color: #005fb8;
     font: 16px 'Oxygen', sans-serif;
-    background-color: #005fb8;
+    background-color: #fff;
     background-position: center;
     border-radius: 2em;
-    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    border: 1px solid #abb6c3;
     padding: 5px 20px;
     margin-top: 0px;
     margin-right: 20px;
@@ -816,12 +822,12 @@ h1 {
 
 .update-other:hover,
 .update-app:hover {
-    background: #013260 radial-gradient(circle, transparent 1%, #013260 1%) center/15000%;
+    background: #eff0f1 radial-gradient(circle, transparent 1%, #eff0f1 1%) center/15000%;
 }
 
 .update-other:active,
 .update-app:active {
-    background-color: #005fb8;
+    background-color: #fff;
     background-size: 100%;
     transition: all 0s;
 }
@@ -831,10 +837,10 @@ h1 {
     position: absolute;
     right: 0;
     cursor: pointer;
-    color: #333;
+    color: #4e5864;
     font: 16px 'Oxygen', sans-serif;
-    border: 1px solid #b5b5b5;
-    background-color: #d3d3d3;
+    border: 1px solid #abb6c3;
+    background-color: #fff;
     background-position: center;
     border-radius: 2em;
     padding: 5px 20px;
@@ -844,11 +850,11 @@ h1 {
 }
 
 .cancel-app:hover {
-    background: #c1c1c1 radial-gradient(circle, transparent 1%, #c1c1c1 1%) center/15000%;
+    background: #eff0f1 radial-gradient(circle, transparent 1%, #eff0f1 1%) center/15000%;
 }
 
 .cancel-app:active {
-    background-color: #d3d3d3;
+    background-color: #fff;
     background-size: 100%;
     transition: all 0s;
 }
@@ -993,9 +999,9 @@ h1 {
     background-position: center;
     color: #000;
     font-family: Oxygen;
+    font-size: 16px;
     margin-top: 10px;
     width: auto;
-    font-size: 16px;
     cursor: pointer;
     border: none;
     border-radius: 2em;
@@ -1006,7 +1012,7 @@ h1 {
 }
 
 .button-settings:hover {
-    background: #d3d3d3 radial-gradient(circle, transparent 1%, #d3d3d3 1%) center/15000%;
+    background: #e2e4e7 radial-gradient(circle, transparent 1%, #e2e4e7 1%) center/15000%;
 }
 
 .button-settings:active {
@@ -1040,7 +1046,7 @@ h1 {
     text-align: left;
     margin-left: 10px;
     margin-right: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
     transition: all .3s;
     animation-name: animatemenubottom;
     animation-duration: .1s;
