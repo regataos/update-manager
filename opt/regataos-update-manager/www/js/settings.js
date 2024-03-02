@@ -7,7 +7,7 @@ setTimeout(function () {
 function checkAutoUpdateConfig() {
     const fs = require('fs');
     const regataosUpdateConf = "/tmp/regataos-update/config/regataos-update.conf";
-    const updateConfigButton = document.querySelector("#select-update-config");
+    const updateConfigButton = document.querySelector("#select-update-config span");
     if (fs.existsSync(regataosUpdateConf)) {
         const checkUpdateConf = fs.readFileSync(regataosUpdateConf, "utf8");
         if (checkUpdateConf.includes("1")) {
@@ -66,7 +66,7 @@ function showSpecifiedMenu(buttonId, menuId, optionId) {
         }
     } else {
         extendedMenu.style.display = "none";
-        const buttonText = document.querySelector(`#${optionId}`).textContent;
-        document.querySelector(`#${buttonId}`).textContent = buttonText;
+        const buttonText = document.querySelector(`#${optionId} span`).textContent;
+        document.querySelector(`#${buttonId} span`).textContent = buttonText;
     }
 }

@@ -13,9 +13,6 @@ if test ! -e "/tmp/regataos-update/config"; then
     ln -s "$HOME/.config/regataos-update" "/tmp/regataos-update/config"
 fi
 
-# Check update manager configuration
-auto_up_config=$(grep -r "autoupdate=" /tmp/regataos-update/config/regataos-update.conf | cut -d"=" -f 2-)
-
 # Apply the automatic update configuration
 function update1() {
     if test -e "$HOME/.config/regataos-update/regataos-update.conf"; then
@@ -31,9 +28,13 @@ function update1() {
             rm -f "/tmp/regataos-update/status.txt"
             sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
         fi
-
     else
-        if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+        if test -e "/tmp/regataos-update/status.txt"; then
+            check_current_status=$(cat "/tmp/regataos-update/status.txt")
+            if [[ $(echo "$check_current_status") != *"check-updates"* ]]; then
+                echo "show-updates" >"/tmp/regataos-update/status.txt"
+            fi
+        else
             echo "show-updates" >"/tmp/regataos-update/status.txt"
         fi
     fi
@@ -53,9 +54,13 @@ function update2() {
             rm -f "/tmp/regataos-update/status.txt"
             sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
         fi
-
     else
-        if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+        if test -e "/tmp/regataos-update/status.txt"; then
+            check_current_status=$(cat "/tmp/regataos-update/status.txt")
+            if [[ $(echo "$check_current_status") != *"check-updates"* ]]; then
+                echo "show-updates" >"/tmp/regataos-update/status.txt"
+            fi
+        else
             echo "show-updates" >"/tmp/regataos-update/status.txt"
         fi
     fi
@@ -93,7 +98,12 @@ function update_button() {
             sudo /opt/regataos-update-manager/scripts/regataos-up.sh -check-up-config
         fi
     else
-        if [[ $(echo "$auto_up_config") == *"2"* ]]; then
+        if test -e "/tmp/regataos-update/status.txt"; then
+            check_current_status=$(cat "/tmp/regataos-update/status.txt")
+            if [[ $(echo "$check_current_status") != *"check-updates"* ]]; then
+                echo "show-updates" >"/tmp/regataos-update/status.txt"
+            fi
+        else
             echo "show-updates" >"/tmp/regataos-update/status.txt"
         fi
     fi
