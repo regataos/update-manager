@@ -1245,6 +1245,8 @@ h1 {
     .open-app {
         color: #fff;
         background-color: #3daee9;
+        box-shadow: 0 0 2px rgb(0 0 0 / 40%);
+        border: none;
     }
 
     .update-other:hover,
