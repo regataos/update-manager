@@ -93,9 +93,9 @@ function search_update() {
                                         echo "$package_name" >>"/tmp/regataos-update/apps-list.txt"
                                         icon_name=$(grep -m1 -R "Icon=" "$desktop_file" | cut -d"=" -f 2-)
 
-                                        search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1)
-                                        search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1)
-                                        search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1)
+                                        search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1)
+                                        search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1)
+                                        search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1)
 
                                         if [ -z $search_icon_directory_svg ]; then
                                             size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
@@ -114,7 +114,7 @@ function search_update() {
                                                 search_icon_directory=$(echo $search_icon_directory_png2)
 
                                             else
-                                                search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
+                                                search_icon_directory="/usr/share/icons/breeze-dark/apps/apps/48/ktip.svg"
                                             fi
 
                                         else
