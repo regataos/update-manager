@@ -114,7 +114,7 @@ function search_update() {
                                                 search_icon_directory=$(echo $search_icon_directory_png2)
 
                                             else
-                                                search_icon_directory="/usr/share/icons/breeze-dark/apps/apps/48/ktip.svg"
+                                                search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
                                             fi
 
                                         else
