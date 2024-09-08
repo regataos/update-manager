@@ -62,8 +62,8 @@ if test -e "$HOME/.config/Regata OS Update/Default/GPUCache/index"; then
 fi
 
 # Run application
-if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
-	regataosupdate --disable-gpu /opt/regataos-update-manager
-else
+#if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
+#	regataosupdate --disable-gpu /opt/regataos-update-manager
+#else
 	regataosupdate /opt/regataos-update-manager
-fi
+#fi
