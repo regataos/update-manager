@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Prevent multiple simultaneous instances
+LOCKFILE="/tmp/regataos-up.lock"
+exec 9>"$LOCKFILE"
+if ! flock -n 9; then
+    echo "regataos-up.sh is already running. Exiting."
+    exit 0
+fi
+
 # This script is used by the "Regata OS Update" application to update the
 # local cache of software repositories, list available package updates and
 # install new software versions.
