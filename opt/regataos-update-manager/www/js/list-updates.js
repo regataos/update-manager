@@ -44,10 +44,45 @@ function listUpdates() {
 							let allBlocks = document.querySelector("div#all-apps");
 							allBlocks.appendChild(newAppBlocks);
 							applyTranslationPages();
+							cacheAppQueueElements();
 						}
 					}
 				}
 				return;
+			}
+		});
+	});
+}
+
+// Cache of DOM elements per app — populated once when the app list is rendered.
+const appQueueElements = {};
+
+function cacheAppQueueElements() {
+	const fs = require('fs');
+	const appsListFile = "/tmp/regataos-update/apps-list.txt";
+	if (!fs.existsSync(appsListFile)) return;
+
+	fs.readdirSync("/opt/regataos-store/apps-list").forEach(file => {
+		fs.readFile("/opt/regataos-store/apps-list/" + file, "utf8", function (err, data) {
+			if (err) return;
+			const apps = JSON.parse(data);
+			const appsListContent = fs.readFileSync(appsListFile, "utf8");
+			for (let i = 0; i < apps.length; i++) {
+				const nickname = apps[i].nickname;
+				if (appQueueElements[nickname]) continue;
+				// Only cache apps that are in the update list and rendered in the DOM.
+				if (!appsListContent.includes(apps[i].package)) continue;
+				const pending = document.querySelector("div#pending-" + nickname);
+				if (pending === null) continue;
+				appQueueElements[nickname] = {
+					pending:     pending,
+					downloading: document.querySelector("div#downloading-" + nickname),
+					installing:  document.querySelector("div#installing-" + nickname),
+					updateApp:   document.querySelector("div#update-app-" + nickname),
+					cancelApp:   document.querySelector("div.cancel-app-" + nickname),
+					concluded:   document.querySelector("div#concluded-" + nickname),
+					_state:      null,
+				};
 			}
 		});
 	});
@@ -56,78 +91,53 @@ function listUpdates() {
 // List of applications in the queue and downloading
 function listUpdatedQueue() {
 	const fs = require('fs');
-	let files = [];
 
-	// Read the app store's JSON files
-	fs.readdirSync("/opt/regataos-store/apps-list").forEach(files => {
-		fs.readFile("/opt/regataos-store/apps-list/" + files, "utf8", function (err, data) {
-			if (!err) {
-				let apps = JSON.parse(data);
-				for (let i = 0; i < apps.length; i++) {
-					let packageNickname = apps[i].nickname;
-					let listAppsQueue = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
-					let downloadableApplication = fs.readFileSync("/tmp/regataos-update/downloadable-application.txt", "utf8");
-					let installingApplication = fs.readFileSync("/tmp/regataos-update/installing-application.txt", "utf8");
-					let updatedApplication = fs.readFileSync("/tmp/regataos-update/updated-apps.txt", "utf8");
+	// Nothing cached yet — nothing to update.
+	if (Object.keys(appQueueElements).length === 0) return;
 
-					const appPending = document.querySelector("div#pending-" + packageNickname);
-					const downloading = document.querySelector("div#downloading-" + packageNickname);
-					const installing = document.querySelector("div#installing-" + packageNickname);
-					const updateApp = document.querySelector("div#update-app-" + packageNickname);
-					const cancelApp = document.querySelector("div.cancel-app-" + packageNickname);
-					const concluded = document.querySelector("div#concluded-" + packageNickname);
+	// Read each status file once, outside the loop.
+	const listAppsQueue           = fs.readFileSync("/tmp/regataos-update/list-apps-queue.txt", "utf8");
+	const downloadableApplication = fs.readFileSync("/tmp/regataos-update/downloadable-application.txt", "utf8");
+	const installingApplication   = fs.readFileSync("/tmp/regataos-update/installing-application.txt", "utf8");
+	const updatedApplication      = fs.readFileSync("/tmp/regataos-update/updated-apps.txt", "utf8");
+	const otherUpInProgress       = fs.existsSync('/tmp/regataos-update/other-updates-in-progress.txt');
 
-					if (listAppsQueue.includes(packageNickname)) {
-						appPending.style.display = "block";
-						downloading.style.display = "none";
-						installing.style.display = "none";
-						updateApp.style.display = "none";
-						setTimeout(function () {
-							cancelApp.style.display = "block";
-						}, 500);
-						concluded.style.display = "none";
-					} else if (downloadableApplication.includes(packageNickname)) {
-						appPending.style.display = "none";
-						downloading.style.display = "block";
-						installing.style.display = "none";
-						updateApp.style.display = "none";
-						setTimeout(function () {
-							cancelApp.style.display = "block";
-						}, 500);
-						concluded.style.display = "none";
-					} else if (installingApplication.includes(packageNickname)) {
-						appPending.style.display = "none";
-						downloading.style.display = "none";
-						installing.style.display = "block";
-						updateApp.style.display = "none";
-						cancelApp.style.display = "none";
-						concluded.style.display = "none";
-					} else if (updatedApplication.includes(packageNickname)) {
-						appPending.style.display = "none";
-						downloading.style.display = "none";
-						installing.style.display = "none";
-						updateApp.style.display = "none";
-						cancelApp.style.display = "none";
-						concluded.style.display = "block";
-					} else {
-						appPending.style.display = "none";
-						downloading.style.display = "none";
-						installing.style.display = "none";
-						if (fs.existsSync('/tmp/regataos-update/other-updates-in-progress.txt')) {
-							updateApp.style.display = "none";
-						} else {
-							setTimeout(function () {
-								updateApp.style.display = "block";
-							}, 500);
-						}
-						cancelApp.style.display = "none";
-						concluded.style.display = "none";
-					}
-				}
-				return;
-			}
-		});
-	});
+	for (const nickname in appQueueElements) {
+		const els = appQueueElements[nickname];
+
+		// Resolve the new state for this app.
+		let newState;
+		if      (listAppsQueue.includes(nickname))            newState = "pending";
+		else if (downloadableApplication.includes(nickname))  newState = "downloading";
+		else if (installingApplication.includes(nickname))    newState = "installing";
+		else if (updatedApplication.includes(nickname))       newState = "concluded";
+		else                                                   newState = otherUpInProgress ? "none" : "update";
+
+		// Skip DOM update if state hasn't changed since last tick.
+		if (els._state === newState) continue;
+		els._state = newState;
+
+		els.pending.style.display     = "none";
+		els.downloading.style.display = "none";
+		els.installing.style.display  = "none";
+		els.updateApp.style.display   = "none";
+		els.cancelApp.style.display   = "none";
+		els.concluded.style.display   = "none";
+
+		if (newState === "pending") {
+			els.pending.style.display = "block";
+			setTimeout(() => { els.cancelApp.style.display = "block"; }, 500);
+		} else if (newState === "downloading") {
+			els.downloading.style.display = "block";
+			setTimeout(() => { els.cancelApp.style.display = "block"; }, 500);
+		} else if (newState === "installing") {
+			els.installing.style.display = "block";
+		} else if (newState === "concluded") {
+			els.concluded.style.display = "block";
+		} else if (newState === "update") {
+			setTimeout(() => { els.updateApp.style.display = "block"; }, 500);
+		}
+	}
 }
 
 setInterval(function () {
@@ -136,7 +146,7 @@ setInterval(function () {
 		const appStatus = fs.readFileSync("/tmp/regataos-update/status.txt", "utf8");
 		if ((appStatus.includes("show-updates")) || (appStatus.includes("installing-updates"))) {
 			listUpdatedQueue();
-			return;
+				return;
+			}
 		}
-	}
 }, 1000);

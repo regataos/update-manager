@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Prevent multiple simultaneous instances
-LOCKFILE="/tmp/regataos-up.lock"
-exec 9>"$LOCKFILE"
-if ! flock -n 9; then
-    echo "regataos-up.sh is already running. Exiting."
-    exit 0
-fi
-
 # This script is used by the "Regata OS Update" application to update the
 # local cache of software repositories, list available package updates and
 # install new software versions.
@@ -223,7 +215,14 @@ function update_packages() {
         export LC_ALL="en_US.UTF-8"
         export LANG="en_US.UTF-8"
         export LANGUAGE="en_US"
-        retry -r 20 -- zypper --non-interactive --no-gpg-checks update --auto-agree-with-licenses
+        retry -r 20 -- zypper --non-interactive --no-gpg-checks update --allow-downgrade --auto-agree-with-licenses
+    } 2>&1 | tee "/var/log/regataos-logs/regataos-update-packages.log"
+
+    {
+        export LC_ALL="en_US.UTF-8"
+        export LANG="en_US.UTF-8"
+        export LANGUAGE="en_US"
+        retry -r 20 -- zypper --non-interactive up --allow-downgrade regataos-base plasma6-desktop plasma6-session plasma6-session-x11
     } 2>&1 | tee "/var/log/regataos-logs/regataos-update-packages.log"
 
     # Run additional application settings
