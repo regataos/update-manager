@@ -276,6 +276,29 @@ function systemUpdatesProgress() {
 }
 systemUpdatesProgress();
 
+// Cache of DOM elements per package — populated once when the list is rendered.
+const systemUpdateElements = {};
+
+function cacheSystemUpdateElements() {
+    const fs = require('fs');
+    const listSystemUpdates = "/tmp/regataos-update/package-list.txt";
+    if (!fs.existsSync(listSystemUpdates)) return;
+
+    const lines = fs.readFileSync(listSystemUpdates, "utf8").split('\n');
+    lines.forEach(line => {
+        if (!line || systemUpdateElements[line]) return;
+        const el = document.querySelector(`.otherup-app-status-concluded-${line}`);
+        if (el !== null) {
+            systemUpdateElements[line] = {
+                concluded: el,
+                waiting:   document.querySelector(`.otherup-app-status-waiting-${line}`),
+                install:   document.querySelector(`.otherup-app-status-install-${line}`),
+                download:  document.querySelector(`.otherup-app-status-download-${line}`),
+            };
+        }
+    });
+}
+
 // Functions to show or hide "Other updates" details.
 function displayDetails(display) {
     const fs = require('fs');
@@ -293,7 +316,13 @@ function displayDetails(display) {
         showDetails.style.display = "none";
         hideDetails.style.display = "flex";
         moreDetailsContents.style.display = "block";
+
+        // Rebuild the DOM cache after injecting the new HTML.
+        Object.keys(systemUpdateElements).forEach(k => delete systemUpdateElements[k]);
+        cacheSystemUpdateElements();
     } else {
+        // Clear the DOM cache when the panel is closed.
+        Object.keys(systemUpdateElements).forEach(k => delete systemUpdateElements[k]);
         moreDetailsContents.style.display = "none";
         showDetails.style.display = "flex";
         hideDetails.style.display = "none";
@@ -305,49 +334,40 @@ setInterval(checkInstallStatusOfSystemUpdates, 1000);
 function checkInstallStatusOfSystemUpdates() {
     const fs = require('fs');
     const listSystemUpdates = "/tmp/regataos-update/package-list.txt";
-    const systemUpdateInstalled = "/tmp/regataos-update/system-update-installed.txt"
-    const waitingForInstallation = "/tmp/regataos-update/waiting-for-installation.txt"
-    const installingSystemUpdate = "/tmp/regataos-update/installing-system-update.txt"
-    const downloadingSystemUpdate = "/tmp/regataos-update/downloading-system-update.txt"
 
-    if (fs.existsSync(listSystemUpdates)) {
-        const systemUpdates = fs.readFileSync(listSystemUpdates, "utf8");
-        const fileLines = systemUpdates.split('\n');
-        fileLines.forEach(line => {
-            if (document.querySelector(`.otherup-app-status-concluded-${line}`) !== null) {
-                const installed = fs.readFileSync(systemUpdateInstalled, "utf8");
-                const waiting = fs.readFileSync(waitingForInstallation, "utf8");
-                const installing = fs.readFileSync(installingSystemUpdate, "utf8");
-                const downloading = fs.readFileSync(downloadingSystemUpdate, "utf8");
+    // Panel is closed — nothing to update.
+    if (Object.keys(systemUpdateElements).length === 0) return;
 
-                if (installed.includes(line)) {
-                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "block";
-                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "none";
-                } else if (installing.includes(line)) {
-                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "block";
-                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "none";
-                } else if (waiting.includes(line)) {
-                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "block";
-                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "none";
-                } else if (downloading.includes(line)) {
-                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "block";
-                } else {
-                    document.querySelector(`.otherup-app-status-concluded-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-waiting-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-install-${line}`).style.display = "none";
-                    document.querySelector(`.otherup-app-status-download-${line}`).style.display = "none";
-                }
-            }
-        });
-    }
+    if (!fs.existsSync(listSystemUpdates)) return;
+
+    // Read each status file once, outside the loop.
+    const installed   = fs.readFileSync("/tmp/regataos-update/system-update-installed.txt",  "utf8");
+    const waiting     = fs.readFileSync("/tmp/regataos-update/waiting-for-installation.txt", "utf8");
+    const installing  = fs.readFileSync("/tmp/regataos-update/installing-system-update.txt", "utf8");
+    const downloading = fs.readFileSync("/tmp/regataos-update/downloading-system-update.txt","utf8");
+
+    const lines = fs.readFileSync(listSystemUpdates, "utf8").split('\n');
+    lines.forEach(line => {
+        if (!line) return;
+        const els = systemUpdateElements[line];
+        if (!els) return;
+
+        // Resolve the new state for this package.
+        let newState;
+        if      (installed.includes(line))   newState = "concluded";
+        else if (installing.includes(line))  newState = "install";
+        else if (waiting.includes(line))     newState = "waiting";
+        else if (downloading.includes(line)) newState = "download";
+        else                                 newState = "none";
+
+        // Skip DOM update if the state hasn't changed since last tick.
+        if (els._state === newState) return;
+        els._state = newState;
+
+        els.concluded.style.display = newState === "concluded" ? "block" : "none";
+        els.waiting.style.display   = newState === "waiting"   ? "block" : "none";
+        els.install.style.display   = newState === "install"   ? "block" : "none";
+        els.download.style.display  = newState === "download"  ? "block" : "none";
+    });
 }
 checkInstallStatusOfSystemUpdates();
