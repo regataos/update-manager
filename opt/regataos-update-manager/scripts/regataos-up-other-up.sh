@@ -16,18 +16,21 @@ if [[ $(grep -r "other-updates" "/tmp/regataos-update/list-apps-queue.txt") == *
 
     echo "" >"/tmp/regataos-update/installing-application-other-updates.txt"
 
+    # Fix YaST2 installation
+    sudo zypper --non-interactive rm ruby2.5 ruby2.5-rubygem-abstract_method ruby2.5-rubygem-cfa ruby2.5-rubygem-cfa_grub2 ruby2.5-rubygem-cheetah ruby2.5-rubygem-fast_gettext ruby2.5-rubygem-gem2rpm ruby2.5-rubygem-mini_portile2 ruby2.5-rubygem-nokogiri ruby2.5-rubygem-ruby-augeas ruby2.5-rubygem-ruby-dbus ruby2.5-rubygem-simpleidn ruby2.5-stdlib yast2-snapper
+
     {
         export LC_ALL="en_US.UTF-8"
         export LANG="en_US.UTF-8"
         export LANGUAGE="en_US"
-        retry -r 20 -- zypper --non-interactive --no-gpg-checks update --allow-downgrade --auto-agree-with-licenses $(cat /tmp/regataos-update/package-list.txt | tr '\n' ' ')
+        retry -r 20 -- zypper --non-interactive up --allow-downgrade regataos-base plasma6-desktop plasma6-workspace plasma6-session plasma6-session-x11
     } 2>&1 | tee "/var/log/regataos-logs/regataos-other-updates.log"
 
     {
         export LC_ALL="en_US.UTF-8"
         export LANG="en_US.UTF-8"
         export LANGUAGE="en_US"
-        retry -r 20 -- zypper --non-interactive up --allow-downgrade regataos-base plasma6-desktop plasma6-session plasma6-session-x11
+        retry -r 20 -- zypper --non-interactive --no-gpg-checks update --allow-downgrade --auto-agree-with-licenses $(cat /tmp/regataos-update/package-list.txt | tr '\n' ' ')
     } 2>&1 | tee "/var/log/regataos-logs/regataos-other-updates.log"
 
     # Run additional application settings

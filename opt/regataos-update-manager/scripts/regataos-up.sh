@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Prevent multiple simultaneous instances
-LOCKFILE="/tmp/regataos-up.lock"
-exec 9>"$LOCKFILE"
-if ! flock -n 9; then
-    echo "regataos-up.sh is already running. Exiting."
-    exit 0
-fi
-
 # This script is used by the "Regata OS Update" application to update the
 # local cache of software repositories, list available package updates and
 # install new software versions.
@@ -99,34 +91,44 @@ function search_update() {
 
                                     if [ ! -z $desktop_file ]; then
                                         echo "$package_name" >>"/tmp/regataos-update/apps-list.txt"
-                                        icon_name=$(grep -m1 -R "Icon=" "$desktop_file" | cut -d"=" -f 2-)
 
-                                        search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1)
-                                        search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1)
-                                        search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1)
+                                        # Check if the JSON defines a specific icon path.
+                                        json_icon=$(grep -m1 '"icon":' "$i" | awk -F'"' '{print $4}')
 
-                                        if [ -z $search_icon_directory_svg ]; then
-                                            size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
-                                            size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
+                                        if [ ! -z "$json_icon" ] && [ -f "$json_icon" ]; then
+                                            # Use the icon path from the JSON directly.
+                                            search_icon_directory="$json_icon"
+                                        else
+                                            # Fall back to searching by the name in the .desktop file.
+                                            icon_name=$(grep -m1 -R "Icon=" "$desktop_file" | cut -d"=" -f 2-)
 
-                                            if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
-                                                search_icon_directory=$(echo $search_icon_directory_png1)
+                                            search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1)
+                                            search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1)
+                                            search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/ /usr/share/icons/breeze-dark/apps/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1)
 
-                                            elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
-                                                search_icon_directory=$(echo $search_icon_directory_png2)
+                                            if [ -z $search_icon_directory_svg ]; then
+                                                size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
+                                                size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
 
-                                            elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
-                                                search_icon_directory=$(echo $search_icon_directory_png2)
+                                                if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
+                                                    search_icon_directory=$(echo $search_icon_directory_png1)
 
-                                            elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
-                                                search_icon_directory=$(echo $search_icon_directory_png2)
+                                                elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
+                                                    search_icon_directory=$(echo $search_icon_directory_png2)
+
+                                                elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
+                                                    search_icon_directory=$(echo $search_icon_directory_png2)
+
+                                                elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
+                                                    search_icon_directory=$(echo $search_icon_directory_png2)
+
+                                                else
+                                                    search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
+                                                fi
 
                                             else
-                                                search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
+                                                search_icon_directory=$(echo $search_icon_directory_svg)
                                             fi
-
-                                        else
-                                            search_icon_directory=$(echo $search_icon_directory_svg)
                                         fi
 
                                         echo "file://$search_icon_directory" >"/tmp/regataos-update/$package_name-icon.txt"
@@ -219,18 +221,22 @@ function search_update() {
 
 # Update packages
 function update_packages() {
+
+    # Fix YaST2 installation
+    sudo zypper --non-interactive rm ruby2.5 ruby2.5-rubygem-abstract_method ruby2.5-rubygem-cfa ruby2.5-rubygem-cfa_grub2 ruby2.5-rubygem-cheetah ruby2.5-rubygem-fast_gettext ruby2.5-rubygem-gem2rpm ruby2.5-rubygem-mini_portile2 ruby2.5-rubygem-nokogiri ruby2.5-rubygem-ruby-augeas ruby2.5-rubygem-ruby-dbus ruby2.5-rubygem-simpleidn ruby2.5-stdlib yast2-snapper
+
     {
         export LC_ALL="en_US.UTF-8"
         export LANG="en_US.UTF-8"
         export LANGUAGE="en_US"
-        retry -r 20 -- zypper --non-interactive --no-gpg-checks update --allow-downgrade --auto-agree-with-licenses
+        retry -r 20 -- zypper --non-interactive up --allow-downgrade regataos-base plasma6-desktop plasma6-workspace plasma6-session plasma6-session-x11
     } 2>&1 | tee "/var/log/regataos-logs/regataos-update-packages.log"
 
     {
         export LC_ALL="en_US.UTF-8"
         export LANG="en_US.UTF-8"
         export LANGUAGE="en_US"
-        retry -r 20 -- zypper --non-interactive up --allow-downgrade regataos-base plasma6-desktop plasma6-session plasma6-session-x11
+        retry -r 20 -- zypper --non-interactive --no-gpg-checks update --allow-downgrade --auto-agree-with-licenses
     } 2>&1 | tee "/var/log/regataos-logs/regataos-update-packages.log"
 
     # Run additional application settings

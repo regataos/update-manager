@@ -62,11 +62,11 @@ function checkProgress(filePath) {
     const fs = require('fs');
     try {
         const data = fs.readFileSync(filePath, 'utf8');
-        const lines = data.split('\n');
-        return lines[lines.length - 2];
+        const lines = data.split('\n').filter(l => l.trim() !== '');
+        return lines.length > 0 ? lines[lines.length - 1] : '';
     } catch (err) {
         console.error('Error reading the file:', err);
-        return null;
+        return '';
     }
 }
 
@@ -287,15 +287,17 @@ function cacheSystemUpdateElements() {
     const lines = fs.readFileSync(listSystemUpdates, "utf8").split('\n');
     lines.forEach(line => {
         if (!line || systemUpdateElements[line]) return;
-        const el = document.querySelector(`.otherup-app-status-concluded-${line}`);
-        if (el !== null) {
-            systemUpdateElements[line] = {
-                concluded: el,
-                waiting:   document.querySelector(`.otherup-app-status-waiting-${line}`),
-                install:   document.querySelector(`.otherup-app-status-install-${line}`),
-                download:  document.querySelector(`.otherup-app-status-download-${line}`),
-            };
-        }
+        // Use getElementsByClassName to avoid CSS selector issues with special
+        // characters in package names (e.g. + in libconfig++15).
+        const concluded = document.getElementsByClassName(`otherup-app-status-concluded-${line}`)[0];
+        if (!concluded) return;
+        systemUpdateElements[line] = {
+            concluded: concluded,
+            waiting:   document.getElementsByClassName(`otherup-app-status-waiting-${line}`)[0],
+            install:   document.getElementsByClassName(`otherup-app-status-install-${line}`)[0],
+            download:  document.getElementsByClassName(`otherup-app-status-download-${line}`)[0],
+            _state:    null,
+        };
     });
 }
 
