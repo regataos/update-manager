@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Prevent multiple simultaneous instances
+LOCKFILE="/tmp/regataos-up.lock"
+exec 9>"$LOCKFILE"
+if ! flock -n 9; then
+    echo "regataos-up.sh is already running. Exiting."
+    exit 0
+fi
+
 # This script is used by the "Regata OS Update" application to update the
 # local cache of software repositories, list available package updates and
 # install new software versions.
@@ -221,7 +229,6 @@ function search_update() {
 
 # Update packages
 function update_packages() {
-
     # Fix YaST2 installation
     sudo zypper --non-interactive rm ruby2.5 ruby2.5-rubygem-abstract_method ruby2.5-rubygem-cfa ruby2.5-rubygem-cfa_grub2 ruby2.5-rubygem-cheetah ruby2.5-rubygem-fast_gettext ruby2.5-rubygem-gem2rpm ruby2.5-rubygem-mini_portile2 ruby2.5-rubygem-nokogiri ruby2.5-rubygem-ruby-augeas ruby2.5-rubygem-ruby-dbus ruby2.5-rubygem-simpleidn ruby2.5-stdlib yast2-snapper
 
